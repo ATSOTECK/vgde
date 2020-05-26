@@ -21,7 +21,13 @@
     <ClInclude Include="..\..\src\vec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="draw.h">
+    <ClInclude Include="..\..\src\draw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\vgde.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\rect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -30,6 +36,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\vgde.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

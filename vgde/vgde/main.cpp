@@ -1,38 +1,27 @@
 #include "config.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
+#include "vgde.h"
 #include "draw.h"
 
+#include "vec.h"
+#include "rect.h"
+
 int main() {
-	if (!glfwInit()) {
-		return 1;
+	VGDE *vgde = VGDE::instance();
+	//vgde->init(2560, 1440, "", true);
+	vgde->init();
+
+	drawSetColor(Color::Yellow);
+	drawSetClearColor(Color::Blue);
+
+	while (vgde->running()) {
+		vgde->preRender();
+		drawLine(10, 10, 100, 100);
+		vgde->postRender();
 	}
 
-	GLFWwindow *window = glfwCreateWindow(640, 480, "title", null, null);
+	vgde->cleanUp();
 
-	if (!window) {
-		glfwTerminate();
-		return 1;
-	}
-
-	glfwMakeContextCurrent(window);
-	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	glfwSwapInterval(1);
-
-	int width, height;
-	glfwGetFramebufferSize(window, &width, &height);
-	//glViewport(0, 0, width, height);
-
-
-	while (!glfwWindowShouldClose(window)) {
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
-
-	glfwDestroyWindow(window);
-	glfwTerminate();
-
+	//return vgde->run();
 	return 0;
 }

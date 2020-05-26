@@ -40,6 +40,20 @@ public:
 };
 
 template<typename T>
+inline bool operator ==(const vec2<T> &lhs, const vec2<T> &rhs) {
+	return (lhs.x == rhs.x && lhs.y == rhs.y);
+}
+
+template<typename T>
+inline bool operator !=(const vec2<T> &lhs, const vec2<T> &rhs) {
+	return !(lhs == rhs);
+}
+
+typedef vec2<int>    vec2i;
+typedef vec2<uint32> vec2u;
+typedef vec2<float>  vec2f;
+
+template<typename T>
 class vec3 {
 public:
 	inline vec3() :
@@ -67,7 +81,7 @@ public:
 	}
 
 	template<typename U>
-	explicit inline vec3(const vec2<U> &v) :
+	explicit inline vec3(const vec3<U> &v) :
 		x(staticCast(T, v.x)),
 		y(staticCast(T, v.y)),
 		z(staticCast(T, v.z))
@@ -79,5 +93,19 @@ public:
 	T y;
 	T z;
 };
+
+template<typename T>
+inline bool operator ==(const vec3<T> &lhs, const vec3<T> &rhs) {
+	return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.x == rhs.z);
+}
+
+template<typename T>
+inline bool operator !=(const vec3<T> &lhs, const vec3<T> &rhs) {
+	return !(lhs == rhs);
+}
+
+typedef vec3<int>    vec3i;
+typedef vec3<uint32> vec3u;
+typedef vec3<float>  vec3f;
 
 #endif
