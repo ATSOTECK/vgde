@@ -1,6 +1,7 @@
 #include "vgde.h"
 
 #include "draw.h"
+#include "input.h"
 
 #include <iostream>
 
@@ -44,6 +45,11 @@ int VGDE::init() {
 }
 
 int VGDE::init(int width, int height, std::string title, bool fullScreen) {
+	if (_initialized) {
+		vgdewarn("VGDE already initialized!");
+		return 0;
+	}
+
 	glfwSetErrorCallback(glfwErrorCallback);
 
 	if (!glfwInit()) {
@@ -75,6 +81,8 @@ int VGDE::init(int width, int height, std::string title, bool fullScreen) {
 
 	glfwSetWindowSizeCallback(_window, windowSizeCallback);
 
+	inputInit(_window);
+
 	_initialized = true;
 	return 0;
 }
@@ -84,6 +92,8 @@ bool VGDE::running() const {
 }
 
 void VGDE::preRender() {
+	inputUpdate();
+
 	int w, h;
 
 	glfwGetFramebufferSize(_window, &w, &h);
