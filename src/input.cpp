@@ -333,7 +333,8 @@ void setMousePosition(const vec2i &pos) {
 	if (r.left   == b.left  &&
 		r.top    == b.top   &&
 		r.right  == b.right &&
-		r.bottom == b.bottom) {
+		r.bottom == b.bottom) 
+	{
 		titleBarHeight = 0;
 		borderWidth = 0;
 	}
@@ -347,7 +348,6 @@ void setMousePosition(int x, int y) {
 	setMousePosition(vec2i(x, y));
 }
 
-/*
 void moveMouse(const vec2i &offset) {
 	vec2i pos = getMousePosition();
 	setMousePosition(pos + offset);
@@ -356,4 +356,3 @@ void moveMouse(const vec2i &offset) {
 void moveMouse(int xoffset, int yoffset) {
 	moveMouse(vec2i(xoffset, yoffset));
 }
-*/

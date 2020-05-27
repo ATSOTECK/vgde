@@ -156,14 +156,19 @@
     <ClCompile Include="..\..\src\draw.cpp" />
     <ClCompile Include="..\..\src\glad.c" />
     <ClCompile Include="..\..\src\input.cpp" />
+    <ClCompile Include="..\..\src\shader.cpp" />
+    <ClCompile Include="..\..\src\sprite.cpp" />
     <ClCompile Include="..\..\src\vgde.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\config.h" />
     <ClInclude Include="..\..\src\draw.h" />
+    <ClInclude Include="..\..\src\gl.h" />
     <ClInclude Include="..\..\src\input.h" />
     <ClInclude Include="..\..\src\rect.h" />
+    <ClInclude Include="..\..\src\shader.h" />
+    <ClInclude Include="..\..\src\sprite.h" />
     <ClInclude Include="..\..\src\vec.h" />
     <ClInclude Include="..\..\src\vgde.h" />
   </ItemGroup>

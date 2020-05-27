@@ -188,7 +188,7 @@ int getMouseY();
 void setMousePositionGlobal(const vec2i &pos);
 void setMousePosition(const vec2i &pos);
 void setMousePosition(int x, int y);
-//void moveMouse(const vec2i &offset);
-//void moveMouse(int xoffset, int yoffset);
+void moveMouse(const vec2i &offset);
+void moveMouse(int xoffset, int yoffset);
 
 #endif

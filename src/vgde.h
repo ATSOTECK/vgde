@@ -1,8 +1,7 @@
 #ifndef __VGDE_VGDE_H__
 #define __VGDE_VGDE_H__
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "gl.h"
 #include <string>
 
 #include "config.h"
