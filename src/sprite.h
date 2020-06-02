@@ -1,6 +1,8 @@
 #ifndef __VGDE_SPRITE_H__
 #define __VGDE_SPRITE_H__
 
+//Based on https://learnopengl.com/Getting-started/Textures
+
 #include "gl.h"
 #include "shader.h"
 #include "vec.h"
@@ -23,6 +25,7 @@ private:
 	int _height;
 	GLuint _texture;
 	vec2i _positon;
+	Shader *_shader;
 };
 
 #endif

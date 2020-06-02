@@ -56,6 +56,10 @@ int VGDE::init(int width, int height, std::string title, bool fullScreen) {
 		return 1;
 	}
 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	_windowWidth = width;
 	_windowHeight = height;
 	_windowTitle = title;
@@ -77,10 +81,10 @@ int VGDE::init(int width, int height, std::string title, bool fullScreen) {
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	glfwSwapInterval(1);
 
-	glInit();
-
 	glfwSetWindowSizeCallback(_window, windowSizeCallback);
 
+	glInit();
+	drawInit();
 	inputInit(_window);
 
 	_initialized = true;

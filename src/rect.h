@@ -27,7 +27,7 @@ public:
 	inline vrect(const vec2<T> &pos, const vec2<T> &size) :
 		x(pos.x),
 		y(pos.y),
-		width(size.x).
+		width(size.x),
 		height(size.y) 
 	{
 		//

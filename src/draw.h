@@ -31,6 +31,8 @@ public:
 	uint8 a;
 };
 
+void drawInit();
+
 Color drawGetColor();
 void drawSetColor(const Color &c);
 

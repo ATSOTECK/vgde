@@ -1,9 +1,32 @@
 #include "draw.h"
 
+#include "shader.h"
 #include "vgde.h"
+
+#include <string>
 
 namespace {
 VGDE *vgde = VGDE::instance();
+
+Shader *shader;
+
+GLuint vbo;
+
+static const std::string defaultVertexShader = 
+"#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}";
+
+static const std::string defaultFragmentShader = 
+"#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"}";
 }
 
 const Color Color::Black(0, 0, 0);
@@ -29,6 +52,13 @@ Color::Color(uint8 red, uint8 green, uint8 blue, uint8 alpha) :
 	a(alpha)
 {
 	//
+}
+
+void drawInit() {
+	shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
+
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 }
 
 Color drawGetColor() {
@@ -81,6 +111,8 @@ void drawSetAlpa(uint8 a) {
 }
 
 void drawLine(float x, float y, float x1, float y1) {
+	shader->use();
+
 	float coords[] = {x, y, x1, y1};
 	glEnable(GL_LINE_SMOOTH);
 	glDisable(GL_TEXTURE_2D);

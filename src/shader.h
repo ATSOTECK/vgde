@@ -1,6 +1,8 @@
 #ifndef __VGDE_SHADER_H__
 #define __VGDE_SHADER_H__
 
+//Based on https://learnopengl.com/Getting-started/Shaders
+
 #include "gl.h"
 
 #include <iostream>
