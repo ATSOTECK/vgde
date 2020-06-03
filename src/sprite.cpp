@@ -53,7 +53,7 @@ Sprite::Sprite(const std::string &spr) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	} else {
-		vgderr("Failed to load texture")
+		vgderr("Failed to load texture");
 	}
 
 	stbi_image_free(data);

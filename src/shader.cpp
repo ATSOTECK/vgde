@@ -16,12 +16,12 @@ Shader::Shader(const std::string &vert, const std::string &frag, bool path) {
 		fragFile.open(frag);
 		
 		if (!vertFile.is_open()) {
-			vgderr("Could not open vertex shader.")
+			vgderr("Could not open vertex shader.");
 			return;
 		}
 
 		if (!fragFile.is_open()) {
-			vgderr("Could not open fragment shader.")
+			vgderr("Could not open fragment shader.");
 			return;
 		}
 
@@ -43,7 +43,7 @@ Shader::Shader(const std::string &vert, const std::string &frag, bool path) {
 	const char* vShaderCode = vertexCode.c_str();
 	const char * fShaderCode = fragmentCode.c_str();
 	// 2. compile shaders
-	unsigned int vertex, fragment;
+	GLuint vertex, fragment;
 	// vertex shader
 	vertex = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertex, 1, &vShaderCode, NULL);
@@ -59,6 +59,7 @@ Shader::Shader(const std::string &vert, const std::string &frag, bool path) {
 	glAttachShader(_id, vertex);
 	glAttachShader(_id, fragment);
 	glLinkProgram(_id);
+	glValidateProgram(_id);
 	checkCompileErrors(_id, "PROGRAM");
 	// delete the shaders as they're linked into our program now and no longer necessary
 	glDeleteShader(vertex);

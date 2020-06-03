@@ -2,6 +2,7 @@
 
 #include "draw.h"
 #include "input.h"
+#include "vmath.h"
 
 #include <iostream>
 
@@ -56,9 +57,9 @@ int VGDE::init(int width, int height, std::string title, bool fullScreen) {
 		return 1;
 	}
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	_windowWidth = width;
 	_windowHeight = height;
@@ -86,6 +87,7 @@ int VGDE::init(int width, int height, std::string title, bool fullScreen) {
 	glInit();
 	drawInit();
 	inputInit(_window);
+	randomInit();
 
 	_initialized = true;
 	return 0;
@@ -117,7 +119,7 @@ void VGDE::cleanUp() {
 
 int VGDE::run() {
 	if (!_initialized) {
-		vgderr("Must init VDGE before calling run()")
+		vgderr("Must init VDGE before calling run()");
 		return 1;
 	}
 
@@ -183,6 +185,8 @@ void VGDE::glInit() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+
+	db(glGetString(GL_VERSION));
 }
 
 void ::VGDE::resize(int w, int h) {

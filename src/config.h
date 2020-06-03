@@ -51,11 +51,11 @@ typedef size_t sizeT;
 #define constCast(x, y)		  const_cast<x>(y)
 
 #define here std::cerr << "here line # " << __LINE__ << " " __FILE__ << "\n";
-#define vgderr(x) std::cerr << "Error: " << x << " on line # " << __LINE__ << " in " __FILE__ << "\n";
-#define vgdewarn(x) std::cerr << "Warning: " << x << " on line # " << __LINE__ << " in " __FILE__ << "\n";
-#define db(x) std::cerr << x << "\n";
-#define dbln() std::cerr << "\n";
-#define trace(x) std::cerr << __FILE__ << ", " << __LINE__ << ": " << x << "\n";
+#define vgderr(x) std::cerr << "Error: " << x << " on line # " << __LINE__ << " in " __FILE__ << "\n"
+#define vgdewarn(x) std::cerr << "Warning: " << x << " on line # " << __LINE__ << " in " __FILE__ << "\n"
+#define db(x) std::cerr << x << "\n"
+#define dbln() std::cerr << "\n"
+#define trace(x) std::cerr << __FILE__ << ", " << __LINE__ << ": " << x << "\n"
 #define tracemsg() std::cerr << __FILE__ << ", " << __LINE__ << ": "
 
 #endif

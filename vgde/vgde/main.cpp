@@ -8,13 +8,15 @@
 
 #include "input.h"
 
+#include "vmath.h"
+
 int main() {
 	VGDE *vgde = VGDE::instance();
 	//vgde->init(2560, 1440, "", true);
 	vgde->init();
 
-	drawSetColor(Color::Yellow);
-	drawSetClearColor(Color::Blue);
+	//drawSetColor(Color::Red);
+	//drawSetClearColor(Color::Blue);
 
 	while (vgde->running()) {
 		vgde->preRender();

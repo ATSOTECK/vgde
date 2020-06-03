@@ -6,26 +6,26 @@
 #include <string>
 
 namespace {
-VGDE *vgde = VGDE::instance();
+VGDE *_vgde = VGDE::instance();
 
-Shader *shader;
+Shader *_shader;
 
-GLuint vbo;
+GLuint _vbo;
 
 static const std::string defaultVertexShader = 
 "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
+"layout (location = 0) in vec4 pos;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = pos;\n"
 "}";
 
 static const std::string defaultFragmentShader = 
 "#version 330 core\n"
-"out vec4 FragColor;\n"
+"out vec4 color;\n"
 "void main()\n"
 "{\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"   color = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
 "}";
 }
 
@@ -55,10 +55,12 @@ Color::Color(uint8 red, uint8 green, uint8 blue, uint8 alpha) :
 }
 
 void drawInit() {
-	shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
+	_shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
 
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glGenBuffers(1, &_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+
+	_shader->use();
 }
 
 Color drawGetColor() {
@@ -111,17 +113,22 @@ void drawSetAlpa(uint8 a) {
 }
 
 void drawLine(float x, float y, float x1, float y1) {
-	shader->use();
+	float coords[] = {0, 0, 1, 1};//{x, y, x1, y1};
+	glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(float), coords, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
-	float coords[] = {x, y, x1, y1};
+	glDrawArrays(GL_LINES, 0, 2);
+	/*
 	glEnable(GL_LINE_SMOOTH);
 	glDisable(GL_TEXTURE_2D);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, (const GLvoid *)coords);
+	//glVertexPointer(2, GL_FLOAT, 0, (const GLvoid *)coords);
 	glDrawArrays(GL_LINES, 0, (GLsizei)2); // opengl will close the polygon for us
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_LINE_SMOOTH);
+	*/
 }
 
 void drawLine(const vec2f &pos, const vec2f &pos1) {

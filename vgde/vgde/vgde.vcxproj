@@ -156,6 +156,7 @@
     <ClCompile Include="..\..\src\draw.cpp" />
     <ClCompile Include="..\..\src\glad.c" />
     <ClCompile Include="..\..\src\input.cpp" />
+    <ClCompile Include="..\..\src\vmath.cpp" />
     <ClCompile Include="..\..\src\shader.cpp" />
     <ClCompile Include="..\..\src\sprite.cpp" />
     <ClCompile Include="..\..\src\vgde.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="..\..\src\draw.h" />
     <ClInclude Include="..\..\src\gl.h" />
     <ClInclude Include="..\..\src\input.h" />
+    <ClInclude Include="..\..\src\vmath.h" />
     <ClInclude Include="..\..\src\rect.h" />
     <ClInclude Include="..\..\src\shader.h" />
     <ClInclude Include="..\..\src\sprite.h" />
