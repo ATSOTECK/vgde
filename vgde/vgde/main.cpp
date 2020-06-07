@@ -31,6 +31,10 @@ int main() {
 		drawSetColor(Color::Blue);
 		drawLine(300, 0, 300, 23);
 
+		drawRectangle(400, 400, 100, 35);
+		drawSetColor(Color::Yellow);
+		drawRectangle(400, 400, 100, 35, true);
+
 		//setMousePositionGlobal(vec2i(100, 100));
 		if (isKeyDown(vk_space)) {
 			setMousePosition(vec2i(100, 100));

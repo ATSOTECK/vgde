@@ -14,6 +14,7 @@ Shader *_shader;
 
 glm::mat4 _projection;
 GLuint _vbo;
+GLuint _ibo;
 Color _color;
 
 static const std::string defaultVertexShader = 
@@ -61,7 +62,10 @@ Color::Color(uint8 red, uint8 green, uint8 blue, uint8 alpha) :
 	b(blue),
 	a(alpha)
 {
-	//
+	glR = r / 255.f;
+	glG = g / 255.f;
+	glB = b / 255.f;
+	glA = a / 255.f;
 }
 
 void drawInit() {
@@ -70,6 +74,9 @@ void drawInit() {
 
 	glGenBuffers(1, &_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+
+	glGenBuffers(1, &_ibo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
 
 	_shader->use();
 	drawSetProjection(0.0f, (float)_vgde->windowWidth(), (float)_vgde->windowHeight(), 0.0f, -1.0f, 1.0);
@@ -134,13 +141,16 @@ void drawSetAlpa(uint8 a) {
 }
 
 void drawLine(float x, float y, float x1, float y1) {
-	float r = _color.r / 255.f;
-	float g = _color.g / 255.f;
-	float b = _color.b / 255.f;
-	float a = _color.a / 255.f;
+	float r = _color.glR;
+	float g = _color.glG;
+	float b = _color.glB;
+	float a = _color.glA;
 
-	float verts[] = {x, y, r, g, b, a,
-					 x1, y1, r, g, b, a};
+	float verts[] = {
+		x, y, r, g, b, a,
+		x1, y1, r, g, b, a
+	};
+
 	glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), verts, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -154,4 +164,48 @@ void drawLine(float x, float y, float x1, float y1) {
 
 void drawLine(const vec2f &pos, const vec2f &pos1) {
 	drawLine(pos.x, pos.y, pos1.x, pos1.y);
+}
+
+void drawRectangle(float x, float y, float width, float height, bool outline) {
+	float r = _color.glR;
+	float g = _color.glG;
+	float b = _color.glB;
+	float a = _color.glA;
+
+	float verts[] = {
+		x, y + height, r, g, b, a,
+		x + width, y + height, r, g, b, a,
+		x + width, y, r, g, b, a,
+		x, y, r, g, b, a
+	};
+
+	unsigned int inicies[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), verts, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void *)(sizeof(float) * 2));
+
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), inicies, GL_STATIC_DRAW);
+
+	if (outline) {
+		glDrawElements(GL_LINE_STRIP, 6, GL_UNSIGNED_INT, null);
+	}
+	else {
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
+	}
+}
+
+void drawRectangle(const vec2f &pos, const vec2f &size, bool outline) {
+	drawRectangle(pos.x, pos.y, size.x, size.y, outline);
+}
+
+void drawRectangle(const rectf &rect, bool outline) {
+	drawRectangle(rect.x, rect.y, rect.width, rect.height, outline);
 }

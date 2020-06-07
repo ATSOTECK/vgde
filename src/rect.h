@@ -2,6 +2,7 @@
 #define __VGDE_RECT_H__
 
 #include "config.h"
+#include "vec.h"
 
 template<typename T>
 class vrect {
@@ -67,7 +68,7 @@ public:
 
 template<typename T>
 inline bool operator ==(const vrect<T> &lhs, const vrect<T> &rhs) {
-	return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.width == rhs.width);
+	return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.width == rhs.width && lhs.height == rhs.height);
 }
 
 template<typename T>

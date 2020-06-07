@@ -2,6 +2,7 @@
 #define __VGDE_DRAW_H__
 
 #include "config.h"
+#include "rect.h"
 #include "sprite.h"
 #include "vec.h"
 
@@ -29,6 +30,24 @@ public:
 	uint8 g;
 	uint8 b;
 	uint8 a;
+
+	float glR;
+	float glG;
+	float glB;
+	float glA;
+};
+
+class Vertex {
+public:
+	Vertex(float x, float y, float r, float g, float b, float a);
+
+	float x;
+	float y;
+
+	float r;
+	float g;
+	float b;
+	float a;
 };
 
 void drawInit();
@@ -46,6 +65,10 @@ void drawSetAlpa(uint8 a);
 
 void drawLine(float x, float y, float x1, float y1);
 void drawLine(const vec2f &pos, const vec2f &pos1);
+
+void drawRectangle(float x, float y, float width, float height, bool outline = false);
+void drawRectangle(const vec2f &pos, const vec2f &size, bool outline  = false);
+void drawRectangle(const rectf &rect, bool outline = false);
 
 void drawSprite(const Sprite &spr);
 
