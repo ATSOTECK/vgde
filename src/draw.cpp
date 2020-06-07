@@ -2,6 +2,7 @@
 
 #include "shader.h"
 #include "vgde.h"
+#include "vmath.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -67,6 +68,70 @@ Color::Color(uint8 red, uint8 green, uint8 blue, uint8 alpha) :
 	glB = b / 255.f;
 	glA = a / 255.f;
 }
+
+Color &Color::operator= (const Color &other) {
+	if (this == &other) {
+		return *this;
+	}
+
+	r = other.r;
+	g = other.g;
+	b = other.b;
+	a = other.a;
+
+	glR = other.glR;
+	glG = other.glG;
+	glB = other.glB;
+	glA = other.glA;
+
+	return *this;
+}
+
+bool operator ==(const Color &lhs, const Color &rhs) {
+	return (lhs.r == rhs.r) &&
+		   (lhs.g == rhs.g) &&
+		   (lhs.b == rhs.b) &&
+		   (lhs.a == rhs.a);
+}
+
+bool operator !=(const Color &lhs, const Color &rhs) {
+	return !(lhs == rhs);
+}
+
+Color operator +(const Color &lhs, const Color &rhs) {
+	return Color(clampc(lhs.r + rhs.r),
+				 clampc(lhs.g + rhs.g),
+				 clampc(lhs.b + rhs.b),
+				 clampc(lhs.a + rhs.a));
+}
+
+Color operator -(const Color &lhs, const Color &rhs) {
+	return Color(clampc(lhs.r - rhs.r),
+				 clampc(lhs.g - rhs.g),
+				 clampc(lhs.b - rhs.b),
+				 clampc(lhs.a - rhs.a));
+}
+
+Color operator *(const Color &lhs, const Color &rhs) {
+	return Color(clampc(lhs.r * rhs.r),
+				 clampc(lhs.g * rhs.g),
+				 clampc(lhs.b * rhs.b),
+				 clampc(lhs.a * rhs.a));
+}
+
+Color &operator +=(Color &lhs, const Color &rhs) {
+	return lhs = lhs + rhs;
+}
+
+Color &operator -=(Color &lhs, const Color &rhs) {
+	return lhs = lhs - rhs;
+}
+
+Color &operator *=(Color &lhs, const Color &rhs) {
+	return lhs = lhs * rhs;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void drawInit() {
 	_shader = new Shader(defaultVertexShader, defaultFragmentShader, false);

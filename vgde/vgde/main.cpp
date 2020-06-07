@@ -3,9 +3,6 @@
 #include "vgde.h"
 #include "draw.h"
 
-#include "vec.h"
-#include "rect.h"
-
 #include "input.h"
 
 #include "vmath.h"
@@ -17,6 +14,8 @@ int main() {
 
 	drawSetColor(Color::Red);
 	//drawSetClearColor(Color::Blue);
+
+	int c = clampi(12, 0, 10);
 
 	while (vgde->running()) {
 		vgde->preRender();
@@ -32,7 +31,7 @@ int main() {
 		drawLine(300, 0, 300, 23);
 
 		drawRectangle(400, 400, 100, 35);
-		drawSetColor(Color::Yellow);
+		drawSetColor(Color::Red + Color::Blue);
 		drawRectangle(400, 400, 100, 35, true);
 
 		//setMousePositionGlobal(vec2i(100, 100));
@@ -46,7 +45,5 @@ int main() {
 	}
 
 	vgde->cleanUp();
-
-	//return vgde->run();
 	return 0;
 }

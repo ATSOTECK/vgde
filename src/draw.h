@@ -26,6 +26,8 @@ public:
 	static const Color Transparent;
 	static const Color None;
 
+	Color &operator=(const Color &other);
+
 	uint8 r;
 	uint8 g;
 	uint8 b;
@@ -36,6 +38,15 @@ public:
 	float glB;
 	float glA;
 };
+
+bool operator ==(const Color &lhs, const Color &rhs);
+bool operator !=(const Color &lhs, const Color &rhs);
+Color operator +(const Color &lhs, const Color &rhs);
+Color operator -(const Color &lhs, const Color &rhs);
+Color operator *(const Color &lhs, const Color &rhs);
+Color &operator +=(Color &lhs, const Color &rhs);
+Color &operator -=(Color &lhs, const Color &rhs);
+Color &operator *=(Color &lhs, const Color &rhs);
 
 class Vertex {
 public:

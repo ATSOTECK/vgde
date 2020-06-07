@@ -2,6 +2,7 @@
 
 #include "config.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <time.h>
 
@@ -46,18 +47,14 @@ int randomRangei(int n, int n1) {
 	return r + n;
 }
 
-/*
-template<class T>
-T choose(int count, T t, ...) {
-	std::vector<T> retVec;
-	va_list args;
-
-	va_start(args, t);
-	for (int i = 0; i < count; ++i) {
-		retVec.push_back(va_arg(args, T));
-	}
-	va_end(args);
-
-	return retVec.at(randomi(count));
+uint8 clampc(uint8 val) {
+	return vclamp<uint8>(val, 0, 255);
 }
-*/
+
+float degToRad(float val) {
+	return (M_PI / 180) * val;
+}
+
+float radToDeg(float val) {
+	return (float)(180 / M_PI) * val;
+}
