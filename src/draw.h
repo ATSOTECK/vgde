@@ -33,6 +33,8 @@ public:
 
 void drawInit();
 
+void drawSetProjection(float left, float right, float bottom, float top, float zNear, float zFar);
+
 Color drawGetColor();
 void drawSetColor(const Color &c);
 

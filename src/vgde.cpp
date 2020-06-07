@@ -89,6 +89,8 @@ int VGDE::init(int width, int height, std::string title, bool fullScreen) {
 	inputInit(_window);
 	randomInit();
 
+	db("OpenGL version " << glGetString(GL_VERSION));
+
 	_initialized = true;
 	return 0;
 }
@@ -185,8 +187,6 @@ void VGDE::glInit() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
-
-	db(glGetString(GL_VERSION));
 }
 
 void ::VGDE::resize(int w, int h) {
@@ -194,4 +194,6 @@ void ::VGDE::resize(int w, int h) {
 	_windowHeight = h;
 
 	glInit();
+
+	drawSetProjection(0.0f, (float)_windowWidth, (float)_windowHeight, 0.0f, -1.0f, 1.0);
 }

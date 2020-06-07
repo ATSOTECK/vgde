@@ -15,7 +15,7 @@ int main() {
 	//vgde->init(2560, 1440, "", true);
 	vgde->init();
 
-	//drawSetColor(Color::Red);
+	drawSetColor(Color::Red);
 	//drawSetClearColor(Color::Blue);
 
 	while (vgde->running()) {
@@ -25,8 +25,10 @@ int main() {
 			vgde->exit();
 		}
 
+		drawSetColor(Color::Red);
 		drawLine(10, 10, 100, 100);
 
+		drawSetColor(Color::Blue);
 		drawLine(300, 0, 300, 23);
 
 		//setMousePositionGlobal(vec2i(100, 100));
