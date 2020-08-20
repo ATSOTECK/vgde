@@ -1,0 +1,3 @@
+C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir
+C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/edit_cache.dir

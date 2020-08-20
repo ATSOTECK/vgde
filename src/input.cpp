@@ -26,6 +26,8 @@ bool inputInit(GLFWwindow *window) {
 		_currentButtonState  [j] = false;
 		_previousButtonState [j] = false;
 	}
+
+	return true;
 }
 
 void inputUpdate() {
