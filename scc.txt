@@ -1,4 +1,4 @@
-http://cloc.sourceforge.net v 1.62  T=0.04 s (582.0 files/s, 62049.0 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.04 s (572.5 files/s, 63716.4 lines/s)
 ----------------------------------------------------------------------------------
 File                                blank        comment           code
 ----------------------------------------------------------------------------------
@@ -7,6 +7,7 @@ File                                blank        comment           code
 .\src\draw.cpp                         59              6            210
 .\src\input.h                          21              1            172
 .\src\vgde.cpp                         52              5            158
+.\src\util\vtime.cpp                   30              2             97
 .\src\shader.cpp                       19              5             88
 .\src\sprite.cpp                       24              1             87
 .\src\util\clock.cpp                   28              1             80
@@ -15,16 +16,15 @@ File                                blank        comment           code
 .\src\config.h                          9              0             52
 .\src\util\vmath.cpp                   14              0             46
 .\src\texture.cpp                      13              0             46
+.\src\util\vtime.h                      9              0             44
 .\src\vgde.h                           19              0             44
 .\main.cpp                             18              4             39
 .\src\util\vmath.h                     15             15             33
-.\src\util\vtime.cpp                   10              2             31
 .\src\util\clock.h                     10              0             26
 .\src\sprite.h                          9              1             25
 .\src\texture.h                         8              0             22
-.\src\util\vtime.h                      9              0             22
 .\src\shader.h                          8              1             21
 .\src\gl.h                              2              0              5
 ----------------------------------------------------------------------------------
-SUM:                                  502             58           1892
+SUM:                                  522             58           1980
 ----------------------------------------------------------------------------------

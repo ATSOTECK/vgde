@@ -38,6 +38,92 @@ Time microseconds(int64 microseconds) {
     return Time(microseconds);
 }
 
+bool operator==(const Time &left, const Time &right) {
+    return left.asMicroseconds() == right.asMicroseconds();
+}
+
+bool operator!=(const Time &left, const Time &right) {
+    return left.asMicroseconds() != right.asMicroseconds();
+}
+
+bool operator >(const Time &left, const Time &right) {
+    return left.asMicroseconds() > right.asMicroseconds();
+}
+
+bool operator <(const Time &left, const Time &right) {
+    return left.asMicroseconds() < right.asMicroseconds();
+}
+
+bool operator>=(const Time &left, const Time &right) {
+    return left.asMicroseconds() >= right.asMicroseconds();
+}
+
+bool operator<=(const Time &left, const Time &right) {
+    return left.asMicroseconds() <= right.asMicroseconds();
+}
+
+Time operator -(const Time &right) {
+    return microseconds(-right.asMicroseconds());
+}
+Time operator +(const Time &left, const Time &right) {
+    return microseconds(left.asMicroseconds() + right.asMicroseconds());
+}
+
+Time &operator+=(Time &left, const Time &right) {
+    return left = left + right;
+}
+
 Time operator -(const Time &left, const Time &right) {
     return microseconds(left.asMicroseconds() - right.asMicroseconds());
+}
+
+Time &operator-=(Time &left, const Time &right) {
+    return left = left - right;
+}
+
+Time operator *(const Time &left, float right) {
+    return seconds(left.asSeconds() * right);
+}
+
+Time operator *(const Time &left, int64 right) {
+    return microseconds(left.asMicroseconds() * right);
+}
+
+Time operator *(float left, const Time &right) {
+    return right * left;
+}
+
+Time operator *(int64 left, const Time &right) {
+    return right * left;
+}
+
+Time &operator*=(Time &left, float right) {
+    return left = left * right;
+}
+
+Time &operator*=(Time &left, int64 right) {
+    return left = left * right;
+}
+
+Time operator /(const Time &left, float right) {
+    return seconds(left.asSeconds() / right);
+}
+
+Time operator /(const Time &left, int64 right) {
+    return microseconds(left.asMicroseconds() / right);
+}
+
+Time &operator/=(Time &left, float right) {
+    return left = left / right;
+}
+
+Time &operator/=(Time &left, int64 right) {
+    return left = left / right;
+}
+
+Time operator %(const Time &left, const Time &right) {
+    return microseconds(left.asMicroseconds() % right.asMicroseconds());
+}
+Time &operator%=(Time &left, const Time &right) {
+    return left = left % right;
 }
