@@ -151,6 +151,33 @@ include\glm\detail\glm.cpp.s:
 	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\include\glm\detail\glm.cpp.s
 .PHONY : include\glm\detail\glm.cpp.s
 
+main.obj: main.cpp.obj
+
+.PHONY : main.obj
+
+# target to build an object file
+main.cpp.obj:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\main.cpp.obj
+.PHONY : main.cpp.obj
+
+main.i: main.cpp.i
+
+.PHONY : main.i
+
+# target to preprocess a source file
+main.cpp.i:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\main.cpp.i
+.PHONY : main.cpp.i
+
+main.s: main.cpp.s
+
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.cpp.s:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\main.cpp.s
+.PHONY : main.cpp.s
+
 src\draw.obj: src\draw.cpp.obj
 
 .PHONY : src\draw.obj
@@ -286,6 +313,114 @@ src\sprite.cpp.s:
 	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\sprite.cpp.s
 .PHONY : src\sprite.cpp.s
 
+src\texture.obj: src\texture.cpp.obj
+
+.PHONY : src\texture.obj
+
+# target to build an object file
+src\texture.cpp.obj:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\texture.cpp.obj
+.PHONY : src\texture.cpp.obj
+
+src\texture.i: src\texture.cpp.i
+
+.PHONY : src\texture.i
+
+# target to preprocess a source file
+src\texture.cpp.i:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\texture.cpp.i
+.PHONY : src\texture.cpp.i
+
+src\texture.s: src\texture.cpp.s
+
+.PHONY : src\texture.s
+
+# target to generate assembly for a file
+src\texture.cpp.s:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\texture.cpp.s
+.PHONY : src\texture.cpp.s
+
+src\util\clock.obj: src\util\clock.cpp.obj
+
+.PHONY : src\util\clock.obj
+
+# target to build an object file
+src\util\clock.cpp.obj:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\util\clock.cpp.obj
+.PHONY : src\util\clock.cpp.obj
+
+src\util\clock.i: src\util\clock.cpp.i
+
+.PHONY : src\util\clock.i
+
+# target to preprocess a source file
+src\util\clock.cpp.i:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\util\clock.cpp.i
+.PHONY : src\util\clock.cpp.i
+
+src\util\clock.s: src\util\clock.cpp.s
+
+.PHONY : src\util\clock.s
+
+# target to generate assembly for a file
+src\util\clock.cpp.s:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\util\clock.cpp.s
+.PHONY : src\util\clock.cpp.s
+
+src\util\vmath.obj: src\util\vmath.cpp.obj
+
+.PHONY : src\util\vmath.obj
+
+# target to build an object file
+src\util\vmath.cpp.obj:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\util\vmath.cpp.obj
+.PHONY : src\util\vmath.cpp.obj
+
+src\util\vmath.i: src\util\vmath.cpp.i
+
+.PHONY : src\util\vmath.i
+
+# target to preprocess a source file
+src\util\vmath.cpp.i:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\util\vmath.cpp.i
+.PHONY : src\util\vmath.cpp.i
+
+src\util\vmath.s: src\util\vmath.cpp.s
+
+.PHONY : src\util\vmath.s
+
+# target to generate assembly for a file
+src\util\vmath.cpp.s:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\util\vmath.cpp.s
+.PHONY : src\util\vmath.cpp.s
+
+src\util\vtime.obj: src\util\vtime.cpp.obj
+
+.PHONY : src\util\vtime.obj
+
+# target to build an object file
+src\util\vtime.cpp.obj:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\util\vtime.cpp.obj
+.PHONY : src\util\vtime.cpp.obj
+
+src\util\vtime.i: src\util\vtime.cpp.i
+
+.PHONY : src\util\vtime.i
+
+# target to preprocess a source file
+src\util\vtime.cpp.i:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\util\vtime.cpp.i
+.PHONY : src\util\vtime.cpp.i
+
+src\util\vtime.s: src\util\vtime.cpp.s
+
+.PHONY : src\util\vtime.s
+
+# target to generate assembly for a file
+src\util\vtime.cpp.s:
+	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\util\vtime.cpp.s
+.PHONY : src\util\vtime.cpp.s
+
 src\vgde.obj: src\vgde.cpp.obj
 
 .PHONY : src\vgde.obj
@@ -313,60 +448,6 @@ src\vgde.cpp.s:
 	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\vgde.cpp.s
 .PHONY : src\vgde.cpp.s
 
-src\vmath.obj: src\vmath.cpp.obj
-
-.PHONY : src\vmath.obj
-
-# target to build an object file
-src\vmath.cpp.obj:
-	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\vmath.cpp.obj
-.PHONY : src\vmath.cpp.obj
-
-src\vmath.i: src\vmath.cpp.i
-
-.PHONY : src\vmath.i
-
-# target to preprocess a source file
-src\vmath.cpp.i:
-	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\vmath.cpp.i
-.PHONY : src\vmath.cpp.i
-
-src\vmath.s: src\vmath.cpp.s
-
-.PHONY : src\vmath.s
-
-# target to generate assembly for a file
-src\vmath.cpp.s:
-	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\src\vmath.cpp.s
-.PHONY : src\vmath.cpp.s
-
-vgde\vgde\main.obj: vgde\vgde\main.cpp.obj
-
-.PHONY : vgde\vgde\main.obj
-
-# target to build an object file
-vgde\vgde\main.cpp.obj:
-	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\vgde\vgde\main.cpp.obj
-.PHONY : vgde\vgde\main.cpp.obj
-
-vgde\vgde\main.i: vgde\vgde\main.cpp.i
-
-.PHONY : vgde\vgde\main.i
-
-# target to preprocess a source file
-vgde\vgde\main.cpp.i:
-	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\vgde\vgde\main.cpp.i
-.PHONY : vgde\vgde\main.cpp.i
-
-vgde\vgde\main.s: vgde\vgde\main.cpp.s
-
-.PHONY : vgde\vgde\main.s
-
-# target to generate assembly for a file
-vgde\vgde\main.cpp.s:
-	$(MAKE) -f CMakeFiles\vgde.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\vgde.dir\vgde\vgde\main.cpp.s
-.PHONY : vgde\vgde\main.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -379,6 +460,9 @@ help:
 	@echo ... include/glm/detail/glm.obj
 	@echo ... include/glm/detail/glm.i
 	@echo ... include/glm/detail/glm.s
+	@echo ... main.obj
+	@echo ... main.i
+	@echo ... main.s
 	@echo ... src/draw.obj
 	@echo ... src/draw.i
 	@echo ... src/draw.s
@@ -394,15 +478,21 @@ help:
 	@echo ... src/sprite.obj
 	@echo ... src/sprite.i
 	@echo ... src/sprite.s
+	@echo ... src/texture.obj
+	@echo ... src/texture.i
+	@echo ... src/texture.s
+	@echo ... src/util/clock.obj
+	@echo ... src/util/clock.i
+	@echo ... src/util/clock.s
+	@echo ... src/util/vmath.obj
+	@echo ... src/util/vmath.i
+	@echo ... src/util/vmath.s
+	@echo ... src/util/vtime.obj
+	@echo ... src/util/vtime.i
+	@echo ... src/util/vtime.s
 	@echo ... src/vgde.obj
 	@echo ... src/vgde.i
 	@echo ... src/vgde.s
-	@echo ... src/vmath.obj
-	@echo ... src/vmath.i
-	@echo ... src/vmath.s
-	@echo ... vgde/vgde/main.obj
-	@echo ... vgde/vgde/main.i
-	@echo ... vgde/vgde/main.s
 .PHONY : help
 
 

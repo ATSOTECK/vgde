@@ -2,7 +2,7 @@
 
 #include "shader.h"
 #include "vgde.h"
-#include "vmath.h"
+#include "util/vmath.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -219,7 +219,7 @@ void drawLine(float x, float y, float x1, float y1) {
 	glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), verts, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, null);
 
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(sizeof(float) * 2));
@@ -231,20 +231,20 @@ void drawLine(const vec2f &pos, const vec2f &pos1) {
 	drawLine(pos.x, pos.y, pos1.x, pos1.y);
 }
 
-void drawRectangle(float x, float y, float width, float height, bool outline) {
+void drawRectangle(float x, float y, float w, float h, bool outline) {
 	float r = _color.glR;
 	float g = _color.glG;
 	float b = _color.glB;
 	float a = _color.glA;
 
 	float verts[] = {
-		x, y + height, r, g, b, a,
-		x + width, y + height, r, g, b, a,
-		x + width, y, r, g, b, a,
-		x, y, r, g, b, a
+            x,     y + h, r, g, b, a,
+            x + w, y + h, r, g, b, a,
+            x + w, y,     r, g, b, a,
+            x,     y,     r, g, b, a
 	};
 
-	unsigned int inicies[] = {
+	unsigned int indicies[] = {
 		0, 1, 2,
 		2, 3, 0
 	};
@@ -252,17 +252,16 @@ void drawRectangle(float x, float y, float width, float height, bool outline) {
 	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), verts, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, null);
 
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void *)(sizeof(float) * 2));
 
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), inicies, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
 
 	if (outline) {
 		glDrawElements(GL_LINE_STRIP, 6, GL_UNSIGNED_INT, null);
-	}
-	else {
+	} else {
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
 	}
 }

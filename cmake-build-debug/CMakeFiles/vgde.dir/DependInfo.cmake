@@ -25,13 +25,16 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   )
 set(CMAKE_DEPENDS_CHECK_CXX
   "C:/Users/Skyler/Documents/vgde/include/glm/detail/glm.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/include/glm/detail/glm.cpp.obj"
+  "C:/Users/Skyler/Documents/vgde/main.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/main.cpp.obj"
   "C:/Users/Skyler/Documents/vgde/src/draw.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/draw.cpp.obj"
   "C:/Users/Skyler/Documents/vgde/src/input.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/input.cpp.obj"
   "C:/Users/Skyler/Documents/vgde/src/shader.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/shader.cpp.obj"
   "C:/Users/Skyler/Documents/vgde/src/sprite.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/sprite.cpp.obj"
+  "C:/Users/Skyler/Documents/vgde/src/texture.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/texture.cpp.obj"
+  "C:/Users/Skyler/Documents/vgde/src/util/clock.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/util/clock.cpp.obj"
+  "C:/Users/Skyler/Documents/vgde/src/util/vmath.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/util/vmath.cpp.obj"
+  "C:/Users/Skyler/Documents/vgde/src/util/vtime.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/util/vtime.cpp.obj"
   "C:/Users/Skyler/Documents/vgde/src/vgde.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/vgde.cpp.obj"
-  "C:/Users/Skyler/Documents/vgde/src/vmath.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/src/vmath.cpp.obj"
-  "C:/Users/Skyler/Documents/vgde/vgde/vgde/main.cpp" "C:/Users/Skyler/Documents/vgde/cmake-build-debug/CMakeFiles/vgde.dir/vgde/vgde/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "MSVC")
 

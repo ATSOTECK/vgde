@@ -5,13 +5,15 @@
 
 #include "gl.h"
 #include "shader.h"
+#include "texture.h"
 #include "vec.h"
 
 #include <string>
 
 class Sprite {
 public:
-	Sprite(const std::string &spr);
+	explicit Sprite(const std::string &spr);
+	explicit Sprite(Texture *texture);
 
 	void draw();
 
@@ -21,10 +23,12 @@ public:
 	void setPosition(const vec2i &pos);
 
 private:
+    void init();
+
+    Texture *_texture;
 	int _width;
 	int _height;
-	GLuint _texture;
-	vec2i _positon;
+	vec2i _position;
 	Shader *_shader;
 };
 

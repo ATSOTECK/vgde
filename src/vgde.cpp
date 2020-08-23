@@ -2,7 +2,8 @@
 
 #include "draw.h"
 #include "input.h"
-#include "vmath.h"
+#include "util/clock.h"
+#include "util/vmath.h"
 
 #include <iostream>
 
@@ -28,7 +29,10 @@ VGDE::VGDE() :
 	_windowWidth(DEFAULT_WINDOW_WIDTH),
 	_windowHeight(DEFAULT_WINDOW_HEIGHT),
 	_windowTitle("vgde"),
-	_fullScreen(false)
+	_fullScreen(false),
+	_frames(0),
+	_frameRate(0),
+	_time(Clock::getTimeAsMilliseconds())
 {
 	//
 }
@@ -45,7 +49,7 @@ int VGDE::init() {
 	return init(_windowWidth, _windowHeight, _windowTitle);
 }
 
-int VGDE::init(int width, int height, std::string title, bool fullScreen) {
+int VGDE::init(int width, int height, const std::string &title, bool fullScreen) {
 	if (_initialized) {
 		vgdewarn("VGDE already initialized!");
 		return 0;
@@ -112,6 +116,8 @@ void VGDE::preRender() {
 void VGDE::postRender() {
 	glfwSwapBuffers(_window);
 	glfwPollEvents();
+
+	++_frames;
 }
 
 void VGDE::cleanUp() {
@@ -170,6 +176,16 @@ void VGDE::setWindowTitle(const std::string &title) {
 
 void VGDE::windowMaximize() const {
 	glfwMaximizeWindow(_window);
+}
+
+int VGDE::fps() {
+    if (Clock::getTimeAsMilliseconds() >= (_time + 1000)) {
+        _time = Clock::getTimeAsMilliseconds();
+        _frameRate = _frames;
+        _frames = 0;
+    }
+
+    return _frameRate;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

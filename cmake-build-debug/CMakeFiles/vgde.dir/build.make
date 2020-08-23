@@ -191,42 +191,99 @@ CMakeFiles\vgde.dir\src\vgde.cpp.s: cmake_force
  /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\vgde.dir\src\vgde.cpp.s /c C:\Users\Skyler\Documents\vgde\src\vgde.cpp
 <<
 
-CMakeFiles\vgde.dir\src\vmath.cpp.obj: CMakeFiles\vgde.dir\flags.make
-CMakeFiles\vgde.dir\src\vmath.cpp.obj: ..\src\vmath.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Skyler\Documents\vgde\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/vgde.dir/src/vmath.cpp.obj"
+CMakeFiles\vgde.dir\src\util\vmath.cpp.obj: CMakeFiles\vgde.dir\flags.make
+CMakeFiles\vgde.dir\src\util\vmath.cpp.obj: ..\src\util\vmath.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Skyler\Documents\vgde\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/vgde.dir/src/util/vmath.cpp.obj"
 	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
- /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\vgde.dir\src\vmath.cpp.obj /FdCMakeFiles\vgde.dir\ /FS -c C:\Users\Skyler\Documents\vgde\src\vmath.cpp
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\vgde.dir\src\util\vmath.cpp.obj /FdCMakeFiles\vgde.dir\ /FS -c C:\Users\Skyler\Documents\vgde\src\util\vmath.cpp
 <<
 
-CMakeFiles\vgde.dir\src\vmath.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/vgde.dir/src/vmath.cpp.i"
-	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe > CMakeFiles\vgde.dir\src\vmath.cpp.i @<<
- /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Skyler\Documents\vgde\src\vmath.cpp
+CMakeFiles\vgde.dir\src\util\vmath.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/vgde.dir/src/util/vmath.cpp.i"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe > CMakeFiles\vgde.dir\src\util\vmath.cpp.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Skyler\Documents\vgde\src\util\vmath.cpp
 <<
 
-CMakeFiles\vgde.dir\src\vmath.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/vgde.dir/src/vmath.cpp.s"
+CMakeFiles\vgde.dir\src\util\vmath.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/vgde.dir/src/util/vmath.cpp.s"
 	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
- /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\vgde.dir\src\vmath.cpp.s /c C:\Users\Skyler\Documents\vgde\src\vmath.cpp
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\vgde.dir\src\util\vmath.cpp.s /c C:\Users\Skyler\Documents\vgde\src\util\vmath.cpp
 <<
 
-CMakeFiles\vgde.dir\vgde\vgde\main.cpp.obj: CMakeFiles\vgde.dir\flags.make
-CMakeFiles\vgde.dir\vgde\vgde\main.cpp.obj: ..\vgde\vgde\main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Skyler\Documents\vgde\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/vgde.dir/vgde/vgde/main.cpp.obj"
+CMakeFiles\vgde.dir\main.cpp.obj: CMakeFiles\vgde.dir\flags.make
+CMakeFiles\vgde.dir\main.cpp.obj: ..\main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Skyler\Documents\vgde\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/vgde.dir/main.cpp.obj"
 	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
- /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\vgde.dir\vgde\vgde\main.cpp.obj /FdCMakeFiles\vgde.dir\ /FS -c C:\Users\Skyler\Documents\vgde\vgde\vgde\main.cpp
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\vgde.dir\main.cpp.obj /FdCMakeFiles\vgde.dir\ /FS -c C:\Users\Skyler\Documents\vgde\main.cpp
 <<
 
-CMakeFiles\vgde.dir\vgde\vgde\main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/vgde.dir/vgde/vgde/main.cpp.i"
-	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe > CMakeFiles\vgde.dir\vgde\vgde\main.cpp.i @<<
- /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Skyler\Documents\vgde\vgde\vgde\main.cpp
+CMakeFiles\vgde.dir\main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/vgde.dir/main.cpp.i"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe > CMakeFiles\vgde.dir\main.cpp.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Skyler\Documents\vgde\main.cpp
 <<
 
-CMakeFiles\vgde.dir\vgde\vgde\main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/vgde.dir/vgde/vgde/main.cpp.s"
+CMakeFiles\vgde.dir\main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/vgde.dir/main.cpp.s"
 	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
- /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\vgde.dir\vgde\vgde\main.cpp.s /c C:\Users\Skyler\Documents\vgde\vgde\vgde\main.cpp
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\vgde.dir\main.cpp.s /c C:\Users\Skyler\Documents\vgde\main.cpp
+<<
+
+CMakeFiles\vgde.dir\src\texture.cpp.obj: CMakeFiles\vgde.dir\flags.make
+CMakeFiles\vgde.dir\src\texture.cpp.obj: ..\src\texture.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Skyler\Documents\vgde\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/vgde.dir/src/texture.cpp.obj"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\vgde.dir\src\texture.cpp.obj /FdCMakeFiles\vgde.dir\ /FS -c C:\Users\Skyler\Documents\vgde\src\texture.cpp
+<<
+
+CMakeFiles\vgde.dir\src\texture.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/vgde.dir/src/texture.cpp.i"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe > CMakeFiles\vgde.dir\src\texture.cpp.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Skyler\Documents\vgde\src\texture.cpp
+<<
+
+CMakeFiles\vgde.dir\src\texture.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/vgde.dir/src/texture.cpp.s"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\vgde.dir\src\texture.cpp.s /c C:\Users\Skyler\Documents\vgde\src\texture.cpp
+<<
+
+CMakeFiles\vgde.dir\src\util\vtime.cpp.obj: CMakeFiles\vgde.dir\flags.make
+CMakeFiles\vgde.dir\src\util\vtime.cpp.obj: ..\src\util\vtime.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Skyler\Documents\vgde\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/vgde.dir/src/util/vtime.cpp.obj"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\vgde.dir\src\util\vtime.cpp.obj /FdCMakeFiles\vgde.dir\ /FS -c C:\Users\Skyler\Documents\vgde\src\util\vtime.cpp
+<<
+
+CMakeFiles\vgde.dir\src\util\vtime.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/vgde.dir/src/util/vtime.cpp.i"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe > CMakeFiles\vgde.dir\src\util\vtime.cpp.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Skyler\Documents\vgde\src\util\vtime.cpp
+<<
+
+CMakeFiles\vgde.dir\src\util\vtime.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/vgde.dir/src/util/vtime.cpp.s"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\vgde.dir\src\util\vtime.cpp.s /c C:\Users\Skyler\Documents\vgde\src\util\vtime.cpp
+<<
+
+CMakeFiles\vgde.dir\src\util\clock.cpp.obj: CMakeFiles\vgde.dir\flags.make
+CMakeFiles\vgde.dir\src\util\clock.cpp.obj: ..\src\util\clock.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Skyler\Documents\vgde\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/vgde.dir/src/util/clock.cpp.obj"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\vgde.dir\src\util\clock.cpp.obj /FdCMakeFiles\vgde.dir\ /FS -c C:\Users\Skyler\Documents\vgde\src\util\clock.cpp
+<<
+
+CMakeFiles\vgde.dir\src\util\clock.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/vgde.dir/src/util/clock.cpp.i"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe > CMakeFiles\vgde.dir\src\util\clock.cpp.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Skyler\Documents\vgde\src\util\clock.cpp
+<<
+
+CMakeFiles\vgde.dir\src\util\clock.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/vgde.dir/src/util/clock.cpp.s"
+	C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\vgde.dir\src\util\clock.cpp.s /c C:\Users\Skyler\Documents\vgde\src\util\clock.cpp
 <<
 
 # Object files for target vgde
@@ -238,8 +295,11 @@ vgde_OBJECTS = \
 "CMakeFiles\vgde.dir\src\shader.cpp.obj" \
 "CMakeFiles\vgde.dir\src\sprite.cpp.obj" \
 "CMakeFiles\vgde.dir\src\vgde.cpp.obj" \
-"CMakeFiles\vgde.dir\src\vmath.cpp.obj" \
-"CMakeFiles\vgde.dir\vgde\vgde\main.cpp.obj"
+"CMakeFiles\vgde.dir\src\util\vmath.cpp.obj" \
+"CMakeFiles\vgde.dir\main.cpp.obj" \
+"CMakeFiles\vgde.dir\src\texture.cpp.obj" \
+"CMakeFiles\vgde.dir\src\util\vtime.cpp.obj" \
+"CMakeFiles\vgde.dir\src\util\clock.cpp.obj"
 
 # External object files for target vgde
 vgde_EXTERNAL_OBJECTS =
@@ -251,11 +311,14 @@ vgde.exe: CMakeFiles\vgde.dir\src\input.cpp.obj
 vgde.exe: CMakeFiles\vgde.dir\src\shader.cpp.obj
 vgde.exe: CMakeFiles\vgde.dir\src\sprite.cpp.obj
 vgde.exe: CMakeFiles\vgde.dir\src\vgde.cpp.obj
-vgde.exe: CMakeFiles\vgde.dir\src\vmath.cpp.obj
-vgde.exe: CMakeFiles\vgde.dir\vgde\vgde\main.cpp.obj
+vgde.exe: CMakeFiles\vgde.dir\src\util\vmath.cpp.obj
+vgde.exe: CMakeFiles\vgde.dir\main.cpp.obj
+vgde.exe: CMakeFiles\vgde.dir\src\texture.cpp.obj
+vgde.exe: CMakeFiles\vgde.dir\src\util\vtime.cpp.obj
+vgde.exe: CMakeFiles\vgde.dir\src\util\clock.cpp.obj
 vgde.exe: CMakeFiles\vgde.dir\build.make
 vgde.exe: CMakeFiles\vgde.dir\objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\Skyler\Documents\vgde\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable vgde.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\Skyler\Documents\vgde\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable vgde.exe"
 	"C:\Program Files\JetBrains\CLion 2020.1\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\vgde.dir --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100183~1.0\x64\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100183~1.0\x64\mt.exe --manifests  -- C:\PROGRA~2\MIB055~1\2019\COMMUN~1\VC\Tools\MSVC\1427~1.291\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\vgde.dir\objects1.rsp @<<
  /out:vgde.exe /implib:vgde.lib /pdb:C:\Users\Skyler\Documents\vgde\cmake-build-debug\vgde.pdb /version:0.0  /machine:x64 /debug /INCREMENTAL /subsystem:console   -LIBPATH:C:\Users\Skyler\Documents\vgde\lib  glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib 
 <<

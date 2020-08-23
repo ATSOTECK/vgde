@@ -4,6 +4,7 @@
 #include "config.h"
 #include "rect.h"
 #include "sprite.h"
+#include "texture.h"
 #include "vec.h"
 
 class Color {
@@ -77,7 +78,7 @@ void drawSetAlpa(uint8 a);
 void drawLine(float x, float y, float x1, float y1);
 void drawLine(const vec2f &pos, const vec2f &pos1);
 
-void drawRectangle(float x, float y, float width, float height, bool outline = false);
+void drawRectangle(float x, float y, float w, float h, bool outline = false);
 void drawRectangle(const vec2f &pos, const vec2f &size, bool outline  = false);
 void drawRectangle(const rectf &rect, bool outline = false);
 

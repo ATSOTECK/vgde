@@ -1378,6 +1378,9 @@
 		<Unit filename="C:/Users/Skyler/Documents/vgde/include/stb_image.h">
 			<Option target="vgde"/>
 		</Unit>
+		<Unit filename="C:/Users/Skyler/Documents/vgde/main.cpp">
+			<Option target="vgde"/>
+		</Unit>
 		<Unit filename="C:/Users/Skyler/Documents/vgde/src/config.h">
 			<Option target="vgde"/>
 		</Unit>
@@ -1414,6 +1417,30 @@
 		<Unit filename="C:/Users/Skyler/Documents/vgde/src/sprite.h">
 			<Option target="vgde"/>
 		</Unit>
+		<Unit filename="C:/Users/Skyler/Documents/vgde/src/texture.cpp">
+			<Option target="vgde"/>
+		</Unit>
+		<Unit filename="C:/Users/Skyler/Documents/vgde/src/texture.h">
+			<Option target="vgde"/>
+		</Unit>
+		<Unit filename="C:/Users/Skyler/Documents/vgde/src/util/clock.cpp">
+			<Option target="vgde"/>
+		</Unit>
+		<Unit filename="C:/Users/Skyler/Documents/vgde/src/util/clock.h">
+			<Option target="vgde"/>
+		</Unit>
+		<Unit filename="C:/Users/Skyler/Documents/vgde/src/util/vmath.cpp">
+			<Option target="vgde"/>
+		</Unit>
+		<Unit filename="C:/Users/Skyler/Documents/vgde/src/util/vmath.h">
+			<Option target="vgde"/>
+		</Unit>
+		<Unit filename="C:/Users/Skyler/Documents/vgde/src/util/vtime.cpp">
+			<Option target="vgde"/>
+		</Unit>
+		<Unit filename="C:/Users/Skyler/Documents/vgde/src/util/vtime.h">
+			<Option target="vgde"/>
+		</Unit>
 		<Unit filename="C:/Users/Skyler/Documents/vgde/src/vec.h">
 			<Option target="vgde"/>
 		</Unit>
@@ -1421,15 +1448,6 @@
 			<Option target="vgde"/>
 		</Unit>
 		<Unit filename="C:/Users/Skyler/Documents/vgde/src/vgde.h">
-			<Option target="vgde"/>
-		</Unit>
-		<Unit filename="C:/Users/Skyler/Documents/vgde/src/vmath.cpp">
-			<Option target="vgde"/>
-		</Unit>
-		<Unit filename="C:/Users/Skyler/Documents/vgde/src/vmath.h">
-			<Option target="vgde"/>
-		</Unit>
-		<Unit filename="C:/Users/Skyler/Documents/vgde/vgde/vgde/main.cpp">
 			<Option target="vgde"/>
 		</Unit>
 		<Unit filename="C:/Users/Skyler/Documents/vgde/CMakeLists.txt">

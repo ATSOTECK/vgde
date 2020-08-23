@@ -5,7 +5,8 @@
 
 #include "input.h"
 
-#include "vmath.h"
+#include "util/vmath.h"
+#include "util/clock.h"
 
 int main() {
 	VGDE *vgde = VGDE::instance();
@@ -16,6 +17,14 @@ int main() {
 	//drawSetClearColor(Color::Blue);
 
 	int c = clampi(12, 0, 10);
+
+	if (Clock::isPM()) {
+	    db(Clock::getHour(true) << ":" << Clock::getMinute() << ":" << Clock::getSecond() << ":" << Clock::getMillisecond() << " pm");
+	} else {
+        db(Clock::getHour(true) << ":" << Clock::getMinute() << ":" << Clock::getSecond() << ":" << Clock::getMillisecond() << " am");
+	}
+
+	//Sprite spr("hot.png");
 
 	while (vgde->running()) {
 		vgde->preRender();
@@ -34,7 +43,10 @@ int main() {
 		drawSetColor(Color::Red + Color::Blue);
 		drawRectangle(400, 400, 100, 35, true);
 
-		//setMousePositionGlobal(vec2i(100, 100));
+		//spr.draw();
+
+		vgde->setWindowTitle("vgde " + std::to_string(vgde->fps()));
+
 		if (isKeyDown(vk_space)) {
 			setMousePosition(vec2i(100, 100));
 		} else if (isKeyDown(vk_z)) {

@@ -15,7 +15,7 @@ public:
 	static VGDE *instance();
 
 	int init();
-	int init(int width, int height, std::string title, bool fullScreen = false);
+	int init(int width, int height, const std::string &title, bool fullScreen = false);
 
 	bool running() const;
 	void preRender();
@@ -37,6 +37,8 @@ public:
 
 	void windowMaximize() const;
 
+	int fps();
+
 private:
 	friend void windowSizeCallback(GLFWwindow *, int, int);
 
@@ -52,6 +54,10 @@ private:
 	int _windowHeight;
 	std::string _windowTitle;
 	bool _fullScreen;
+
+	int _frames;
+	int _frameRate;
+	int _time;
 };
 
 #endif
