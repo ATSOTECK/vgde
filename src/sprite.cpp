@@ -42,24 +42,13 @@ Sprite::Sprite(const std::string &spr) {
         return;
     }
 
-    _width = _texture->width();
-    _height = _texture->height();
-
-    _position = vec2i();
-
-    _shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
     init();
 }
 
 Sprite::Sprite(Texture *texture) {
     _texture = texture;
 
-    _width = _texture->width();
-    _height = _texture->height();
-
-    _position = vec2i();
-
-    _shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
+    init();
 }
 
 void Sprite::init() {
@@ -70,6 +59,14 @@ void Sprite::init() {
     uint ebo;
     glGenBuffers(1, &ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+    _width = _texture->width();
+    _height = _texture->height();
+
+    _position = vec2i();
+    _scale = 1.f;
+
+    _shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
 
     _shader->use();
     glm::mat4 projection = drawGetProjection();
@@ -133,4 +130,23 @@ vec2i Sprite::position() const {
 
 void Sprite::setPosition(const vec2i &pos) {
 	_position = pos;
+}
+
+vec2i Sprite::size() const {
+    return {_width, _height};
+}
+
+void Sprite::setSize(const vec2i &size) {
+    _width = size.x;
+    _height = size.y;
+}
+
+float Sprite::scale() const {
+    return _scale;
+}
+
+void Sprite::setScale(float scale) {
+    _scale = scale;
+    _width = _texture->width() * _scale;
+    _height = _texture->height() * _scale;
 }

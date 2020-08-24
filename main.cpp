@@ -25,8 +25,10 @@ int main() {
 	}
 
 	Sprite spr("hot.png");
+	spr.setScale(0.25f);
     Sprite fire("fire.png");
 	fire.setPosition({100, 200});
+	fire.setSize({32, 32});
 
 	while (vgde->running()) {
 		vgde->preRender();

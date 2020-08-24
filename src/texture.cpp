@@ -7,6 +7,7 @@
 
 Texture::Texture(const std::string &path) :
         _textureID(0),
+        _slot(0),
         _path(path),
         _data(null),
         _width(0),
@@ -41,8 +42,9 @@ Texture::~Texture() {
     glDeleteTextures(1, &_textureID);
 }
 
-void Texture::bind(uint slot) const {
-    glActiveTexture(GL_TEXTURE0 + slot);
+void Texture::bind(uint slot) {
+    _slot = slot;
+    glActiveTexture(GL_TEXTURE0 + _slot);
     glBindTexture(GL_TEXTURE_2D, _textureID);
 }
 
@@ -58,6 +60,14 @@ int Texture::height() const {
     return _height;
 }
 
+vec2i Texture::size() const {
+    return {_width, _height};
+}
+
 uint Texture::textureID() const {
     return _textureID;
+}
+
+uint Texture::slot() const {
+    return _slot;
 }
