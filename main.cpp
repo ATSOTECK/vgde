@@ -24,7 +24,9 @@ int main() {
         db(Clock::getHour(true) << ":" << Clock::getMinute() << ":" << Clock::getSecond() << ":" << Clock::getMillisecond() << " am");
 	}
 
-	//Sprite spr("hot.png");
+	Sprite spr("hot.png");
+    Sprite fire("fire.png");
+	fire.setPosition({100, 200});
 
 	while (vgde->running()) {
 		vgde->preRender();
@@ -33,17 +35,21 @@ int main() {
 			vgde->exit();
 		}
 
+        spr.draw();
+		fire.draw();
+
 		drawSetColor(Color::Red);
 		drawLine(10, 10, 100, 100);
 
 		drawSetColor(Color::Blue);
 		drawLine(300, 0, 300, 23);
 
+        drawSetColor(Color::White);
+        drawLine(100, 100, 500, 500);
+
 		drawRectangle(400, 400, 100, 35);
 		drawSetColor(Color::Red + Color::Blue);
 		drawRectangle(400, 400, 100, 35, true);
-
-		//spr.draw();
 
 		vgde->setWindowTitle("vgde " + std::to_string(vgde->fps()));
 

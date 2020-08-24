@@ -147,6 +147,10 @@ void drawInit() {
 	drawSetProjection(0.0f, (float)_vgde->windowWidth(), (float)_vgde->windowHeight(), 0.0f, -1.0f, 1.0);
 }
 
+glm::mat4 drawGetProjection() {
+    return _projection;
+}
+
 void drawSetProjection(float left, float right, float bottom, float top, float zNear, float zFar) {
 	_projection = glm::ortho<float>(left, right, bottom, top, zNear, zFar);
 	_shader->setMat4("projection", _projection);
@@ -216,6 +220,7 @@ void drawLine(float x, float y, float x1, float y1) {
 		x1, y1, r, g, b, a
 	};
 
+    _shader->use();
 	glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), verts, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -225,6 +230,7 @@ void drawLine(float x, float y, float x1, float y1) {
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(sizeof(float) * 2));
 
 	glDrawArrays(GL_LINES, 0, 2);
+    _shader->stop();
 }
 
 void drawLine(const vec2f &pos, const vec2f &pos1) {
@@ -249,6 +255,7 @@ void drawRectangle(float x, float y, float w, float h, bool outline) {
 		2, 3, 0
 	};
 
+	_shader->use();
 	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), verts, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -264,6 +271,8 @@ void drawRectangle(float x, float y, float w, float h, bool outline) {
 	} else {
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
 	}
+
+    _shader->stop();
 }
 
 void drawRectangle(const vec2f &pos, const vec2f &size, bool outline) {

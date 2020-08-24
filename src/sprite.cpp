@@ -1,45 +1,33 @@
 #include "sprite.h"
 
 #include "config.h"
+#include "draw.h"
 
 #include <iostream>
 
 namespace {
 const std::string defaultFragmentShader =
 "#version 330 core\n"
-"layout(location = 0) in vec3 aPos;\n"
-"layout(location = 1) in vec3 aColor;\n"
-"layout(location = 2) in vec2 aTexCoord;\n"
-"\n"
-"out vec3 ourColor;\n"
-"out vec2 TexCoord;\n"
+"uniform sampler2D tex;\n"
+"in vec2 fragTexCoord;\n"
+"out vec4 finalColor;\n"
 "\n"
 "void main() {\n"
-"	gl_Position = vec4(aPos, 1.0);\n"
-"	ourColor = aColor;\n"
-"	TexCoord = aTexCoord;\n"
+"	finalColor = texture(tex, fragTexCoord);\n"
 "}";
 
 const std::string defaultVertexShader =
 "#version 330 core\n"
-"out vec4 FragColor;\n"
+"layout (location = 0) in vec2 vert;\n"
+"layout (location = 1) in vec2 vertTexCoord;\n"
+"uniform mat4 projection;"
 "\n"
-"in vec3 ourColor;\n"
-"in vec2 TexCoord;\n"
-"\n"
-"uniform sampler2D ourTexture;\n"
+"out vec2 fragTexCoord;\n"
 "\n"
 "void main() {\n"
-"	FragColor = texture(ourTexture, TexCoord);\n"
+"   fragTexCoord = vertTexCoord;\n"
+"	gl_Position = projection * vec4(vert, 0, 1.0);\n"
 "}";
-
-const GLfloat verts[] = {
-    //  Position  Color                   Texcoords
-    -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Top-left
-     0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, // Top-right
-     0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
-    -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
-};
 
 const GLuint elements[] ={
     0, 1, 2,
@@ -49,7 +37,6 @@ const GLuint elements[] ={
 
 Sprite::Sprite(const std::string &spr) {
     _texture = new Texture(spr);
-    _texture->bind();
 
     if (_texture->width() == 0) {
         return;
@@ -66,7 +53,6 @@ Sprite::Sprite(const std::string &spr) {
 
 Sprite::Sprite(Texture *texture) {
     _texture = texture;
-    _texture->bind();
 
     _width = _texture->width();
     _height = _texture->height();
@@ -77,22 +63,60 @@ Sprite::Sprite(Texture *texture) {
 }
 
 void Sprite::init() {
-    GLuint vbo;
+    uint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    GLuint ebo;
+    uint ebo;
     glGenBuffers(1, &ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+    _shader->use();
+    glm::mat4 projection = drawGetProjection();
+    _shader->setMat4("projection", projection);
 }
 
 void Sprite::draw() {
+    float x = _position.x;
+    float y = _position.y;
+    float w = _width;
+    float h = _height;
+
+    /*
+    float verts[] = {
+            //  Position  Color                   Texcoords
+            x,      y + h, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Top-left
+            x + w,  y + h, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, // Top-right
+            x + w,  y,     0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
+            x,      y,     1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
+    };*/
+
+    float verts[] = {
+            //  Position   Texcoords
+            x,      y + h, 0.0f, 0.0f, // Top-left
+            x + w,  y + h, 1.0f, 0.0f, // Top-right
+            x + w,  y,     1.0f, 1.0f, // Bottom-right
+            x,      y,     0.0f, 1.0f  // Bottom-left
+    };
+
     _shader->use();
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), verts, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), null);
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)(sizeof(float) * 2));
+
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), elements, GL_STATIC_DRAW);
 
+    _texture->bind();
+    //_shader->setInt("tex", 0);
 
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
+
+	_texture->unbind();
+	_shader->stop();
 }
 
 int Sprite::width() const {

@@ -57,3 +57,7 @@ int Texture::width() const {
 int Texture::height() const {
     return _height;
 }
+
+uint Texture::textureID() const {
+    return _textureID;
+}

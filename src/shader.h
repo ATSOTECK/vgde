@@ -16,6 +16,7 @@ public:
 	Shader(const std::string &vert, const std::string &frag, bool path = true);
 
 	void use();
+	void stop();
 
 	void setBool(const std::string &name, bool val) const;
 	void setInt(const std::string &name, int val) const;

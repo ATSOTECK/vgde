@@ -17,6 +17,8 @@ public:
     int width() const;
     int height() const;
 
+    uint textureID() const;
+
 private:
     uint _textureID;
     std::string _path;
