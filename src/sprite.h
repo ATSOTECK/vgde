@@ -1,14 +1,13 @@
 #ifndef __VGDE_SPRITE_H__
 #define __VGDE_SPRITE_H__
 
-//Based on https://learnopengl.com/Getting-started/Textures
-
 #include "gl.h"
 #include "shader.h"
 #include "texture.h"
 #include "vec.h"
 
 #include <string>
+#include <vector>
 
 class Sprite {
 public:
@@ -29,6 +28,7 @@ public:
 
 private:
     void init();
+    void setVerts();
 
     Texture *_texture;
 	int _width;
@@ -36,6 +36,7 @@ private:
 	vec2i _position;
 	float _scale;
 	Shader *_shader;
+	std::vector<float> _verts;
 };
 
 #endif

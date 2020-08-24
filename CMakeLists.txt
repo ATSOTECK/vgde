@@ -460,6 +460,6 @@ add_executable(vgde
         src/vgde.h
         src/util/vmath.cpp
         src/util/vmath.h
-        main.cpp src/texture.cpp src/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h)
+        main.cpp src/texture.cpp src/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/videoMode.h src/videoMode.cpp)
 
 target_link_libraries(vgde glfw3)

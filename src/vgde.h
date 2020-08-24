@@ -3,9 +3,11 @@
 
 #include "gl.h"
 #include <string>
+#include <vector>
 
 #include "config.h"
 #include "vec.h"
+#include "videoMode.h"
 
 static const int DEFAULT_WINDOW_WIDTH  = 1024;
 static const int DEFAULT_WINDOW_HEIGHT = 600;
@@ -15,6 +17,7 @@ public:
 	static VGDE *instance();
 
 	int init();
+	int init(VideoMode mode);
 	int init(int width, int height, const std::string &title, bool fullScreen = false);
 
 	bool running() const;
@@ -22,9 +25,11 @@ public:
 	void postRender();
 	void cleanUp();
 
-	int run();
-
 	void exit();
+
+	std::vector<VideoMode> videoModes() const;
+	VideoMode videoMode() const;
+	VideoMode nativeVideoMode() const;
 
 	vec2i windowSize() const;
 	void setWindowSize(const vec2i &size);

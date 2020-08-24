@@ -10,13 +10,11 @@
 
 int main() {
 	VGDE *vgde = VGDE::instance();
-	//vgde->init(2560, 1440, "", true);
+	//vgde->init(vgde->nativeVideoMode());
 	vgde->init();
 
 	drawSetColor(Color::Red);
 	//drawSetClearColor(Color::Blue);
-
-	int c = clampi(12, 0, 10);
 
 	if (Clock::isPM()) {
 	    db(Clock::getHour(true) << ":" << Clock::getMinute() << ":" << Clock::getSecond() << ":" << Clock::getMillisecond() << " pm");
@@ -31,14 +29,14 @@ int main() {
 	fire.setSize({32, 32});
 
 	while (vgde->running()) {
-		vgde->preRender();
+	    vgde->preRender();
 
 		if (isKeyDown(vk_escape) || isButtonDown(mb_middle) || isKeyReleased(vk_m)) {
 			vgde->exit();
 		}
 
-        spr.draw();
-		fire.draw();
+		spr.draw();
+        fire.draw();
 
 		drawSetColor(Color::Red);
 		drawLine(10, 10, 100, 100);

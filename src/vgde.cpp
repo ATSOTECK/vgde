@@ -49,6 +49,10 @@ int VGDE::init() {
 	return init(_windowWidth, _windowHeight, _windowTitle);
 }
 
+int VGDE::init(VideoMode mode) {
+    return init(mode.width, mode.height, "", true);
+}
+
 int VGDE::init(int width, int height, const std::string &title, bool fullScreen) {
 	if (_initialized) {
 		vgdewarn("VGDE already initialized!");
@@ -60,10 +64,6 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 	if (!glfwInit()) {
 		return 1;
 	}
-
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	_windowWidth = width;
 	_windowHeight = height;
@@ -125,33 +125,42 @@ void VGDE::cleanUp() {
 	glfwTerminate();
 }
 
-int VGDE::run() {
-	if (!_initialized) {
-		vgderr("Must init VDGE before calling run()");
-		return 1;
-	}
-
-	while (running()) {
-		preRender();
-
-		postRender();
-	}
-
-	cleanUp();
-
-	return 0;
-}
-
 void VGDE::exit() {
 	glfwSetWindowShouldClose(_window, GLFW_TRUE);
 }
 
-vec2i VGDE::windowSize() const {
-	vec2i size;
-	size.x = _windowWidth;
-	size.y = _windowHeight;
+std::vector<VideoMode> VGDE::videoModes() const {
+    if (!_initialized) {
+        glfwInit();
+    }
 
-	return size;
+    std::vector<VideoMode> vModes;
+    int count;
+    GLFWvidmode *modes = constCast(GLFWvidmode *, glfwGetVideoModes(glfwGetPrimaryMonitor(), &count));
+
+    vModes.reserve(count);
+    for (int i = 0; i < count; ++i) {
+        vModes.push_back({modes[i].width, modes[i].height, modes[i].refreshRate});
+    }
+
+    return vModes;
+}
+
+VideoMode VGDE::videoMode() const {
+    if (!_initialized) {
+        return {0};
+    }
+
+    GLFWvidmode *mode = constCast(GLFWvidmode *, glfwGetVideoMode(glfwGetPrimaryMonitor()));
+    return {mode->width, mode->height, mode->refreshRate};
+}
+
+VideoMode VGDE::nativeVideoMode() const {
+    return videoModes().back();
+}
+
+vec2i VGDE::windowSize() const {
+	return {_windowWidth, _windowHeight};
 }
 
 void VGDE::setWindowSize(const vec2i &size) {

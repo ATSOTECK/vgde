@@ -297,7 +297,7 @@ vec2i getMousePositionGlobal() {
 	POINT p;
 	GetCursorPos(&p);
 
-	return vec2i(p.x, p.y);
+	return {p.x, p.y};
 }
 
 vec2i getMousePosition() {
@@ -305,7 +305,7 @@ vec2i getMousePosition() {
 	GetCursorPos(&p);
 	ScreenToClient(_hwnd, &p);
 
-	return vec2i(p.x, p.y);
+	return {p.x, p.y};
 }
 
 int getMouseX() {

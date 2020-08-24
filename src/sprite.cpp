@@ -6,16 +6,6 @@
 #include <iostream>
 
 namespace {
-const std::string defaultFragmentShader =
-"#version 330 core\n"
-"uniform sampler2D tex;\n"
-"in vec2 fragTexCoord;\n"
-"out vec4 finalColor;\n"
-"\n"
-"void main() {\n"
-"	finalColor = texture(tex, fragTexCoord);\n"
-"}";
-
 const std::string defaultVertexShader =
 "#version 330 core\n"
 "layout (location = 0) in vec2 vert;\n"
@@ -27,6 +17,16 @@ const std::string defaultVertexShader =
 "void main() {\n"
 "   fragTexCoord = vertTexCoord;\n"
 "	gl_Position = projection * vec4(vert, 0, 1.0);\n"
+"}";
+
+const std::string defaultFragmentShader =
+"#version 330 core\n"
+"uniform sampler2D tex;\n"
+"in vec2 fragTexCoord;\n"
+"out vec4 finalColor;\n"
+"\n"
+"void main() {\n"
+"	finalColor = texture(tex, fragTexCoord);\n"
 "}";
 
 const GLuint elements[] ={
@@ -67,17 +67,29 @@ void Sprite::init() {
     _scale = 1.f;
 
     _shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
+    setVerts();
 
     _shader->use();
     glm::mat4 projection = drawGetProjection();
     _shader->setMat4("projection", projection);
 }
 
-void Sprite::draw() {
+void Sprite::setVerts() {
     float x = _position.x;
     float y = _position.y;
     float w = _width;
     float h = _height;
+
+    _verts = {
+            //  Position   Texcoords
+            x,      y + h, 0.0f, 0.0f, // Top-left
+            x + w,  y + h, 1.0f, 0.0f, // Top-right
+            x + w,  y,     1.0f, 1.0f, // Bottom-right
+            x,      y,     0.0f, 1.0f  // Bottom-left
+    };
+}
+
+void Sprite::draw() {
 
     /*
     float verts[] = {
@@ -88,16 +100,8 @@ void Sprite::draw() {
             x,      y,     1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
     };*/
 
-    float verts[] = {
-            //  Position   Texcoords
-            x,      y + h, 0.0f, 0.0f, // Top-left
-            x + w,  y + h, 1.0f, 0.0f, // Top-right
-            x + w,  y,     1.0f, 1.0f, // Bottom-right
-            x,      y,     0.0f, 1.0f  // Bottom-left
-    };
-
     _shader->use();
-    glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), verts, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), &_verts[0], GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), null);
@@ -130,6 +134,7 @@ vec2i Sprite::position() const {
 
 void Sprite::setPosition(const vec2i &pos) {
 	_position = pos;
+	setVerts();
 }
 
 vec2i Sprite::size() const {
@@ -139,6 +144,7 @@ vec2i Sprite::size() const {
 void Sprite::setSize(const vec2i &size) {
     _width = size.x;
     _height = size.y;
+    setVerts();
 }
 
 float Sprite::scale() const {
@@ -149,4 +155,5 @@ void Sprite::setScale(float scale) {
     _scale = scale;
     _width = _texture->width() * _scale;
     _height = _texture->height() * _scale;
+    setVerts();
 }
