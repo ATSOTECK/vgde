@@ -37,6 +37,8 @@ private:
 	float _scale;
 	Shader *_shader;
 	std::vector<float> _verts;
+	uint _vbo;
+	uint _ebo;
 };
 
 #endif

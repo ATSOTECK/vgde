@@ -7,9 +7,12 @@
 #include "texture.h"
 #include "vec.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 class Color {
 public:
-	Color(uint8 red = 0, uint8 green = 0, uint8 blue = 0, uint8 alpha = 255);
+	explicit Color(uint8 red = 0, uint8 green = 0, uint8 blue = 0, uint8 alpha = 255);
 
 	static const Color Black;
 	static const Color Black100;
@@ -62,6 +65,13 @@ public:
 	float a;
 };
 
+struct Character {
+    uint textureID;
+    vec2i size;
+    vec2i bearing;
+    uint advance;
+};
+
 void drawInit();
 
 glm::mat4 drawGetProjection();
@@ -83,6 +93,6 @@ void drawRectangle(float x, float y, float w, float h, bool outline = false);
 void drawRectangle(const vec2f &pos, const vec2f &size, bool outline  = false);
 void drawRectangle(const rectf &rect, bool outline = false);
 
-void drawSprite(const Sprite &spr);
+void drawText(const std::string &txt, float x, float y, float scale, const Color &color);
 
 #endif

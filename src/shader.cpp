@@ -94,6 +94,18 @@ void Shader::setMat4(const std::string &name, glm::mat4 &val, bool useShader) {
 	glUniformMatrix4fv(glGetUniformLocation(_id, name.c_str()), 1, false, glm::value_ptr(val));
 }
 
+void Shader::setVec3f(const std::string &name, const vec3f &vec, bool useShader) {
+    if (useShader) {
+        use();
+    }
+
+    glUniform3f(glGetUniformLocation(_id, name.c_str()), vec.x, vec.y, vec.z);
+}
+
+uint Shader::getUniformLocation(const std::string &name) {
+    return glGetUniformLocation(_id, name.c_str());
+}
+
 void Shader::checkCompileErrors(unsigned int shader, const std::string &type) {
 	int success;
 	char log[1024];

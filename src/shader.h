@@ -4,6 +4,8 @@
 //Based on https://learnopengl.com/Getting-started/Shaders
 
 #include "gl.h"
+#include "config.h"
+#include "vec.h"
 
 #include <iostream>
 #include <glm/glm.hpp>
@@ -22,6 +24,9 @@ public:
 	void setInt(const std::string &name, int val) const;
 	void setFloat(const std::string &name, float val) const;
 	void setMat4(const std::string &name, glm::mat4 &val, bool useShader = false);
+	void setVec3f(const std::string &name, const vec3f &vec, bool useShader = false);
+
+	uint getUniformLocation(const std::string &name);
 
 private:
 	unsigned int _id;

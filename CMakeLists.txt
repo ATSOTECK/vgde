@@ -463,3 +463,4 @@ add_executable(vgde
         main.cpp src/texture.cpp src/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/videoMode.h src/videoMode.cpp)
 
 target_link_libraries(vgde glfw3)
+target_link_libraries(vgde freetype)

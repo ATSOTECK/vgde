@@ -53,6 +53,11 @@ int main() {
 
 		vgde->setWindowTitle("vgde " + std::to_string(vgde->fps()));
 
+		std::string txt = "fps: " + std::to_string(vgde->fps());
+		drawText(txt, 0, 0, 1, Color::White);
+
+        drawText("The quick brown fox jumped over the lazy dog", 200, 50, 1, Color::Red);
+
 		if (isKeyDown(vk_space)) {
 			setMousePosition(vec2i(100, 100));
 		} else if (isKeyDown(vk_z)) {

@@ -7,18 +7,24 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
+#include <map>
 
 namespace {
 VGDE *_vgde = VGDE::instance();
 
 Shader *_shader;
+Shader *_textShader;
+uint _tvao;
+uint _tvbo;
 
 glm::mat4 _projection;
 GLuint _vbo;
 GLuint _ibo;
 Color _color;
 
-static const std::string defaultVertexShader = 
+std::map<char, Character> _chars;
+
+const std::string defaultVertexShader =
 "#version 330 core\n"
 "layout (location = 0) in vec4 pos;\n"
 "layout (location = 1) in vec4 inColor;\n"
@@ -31,13 +37,37 @@ static const std::string defaultVertexShader =
 "   color = inColor;"
 "}";
 
-static const std::string defaultFragmentShader = 
+const std::string defaultFragmentShader =
 "#version 330 core\n"
 "out vec4 outColor;\n"
 "in vec4 color;"
 "void main()\n"
 "{\n"
 "   outColor = color;\n"
+"}";
+
+const std::string textVertShader =
+"#version 330 core\n"
+"layout (location = 0) in vec2 vertex;\n"
+"layout (location = 1) in vec2 vertTexCoord;\n"
+"out vec2 texCoords;\n"
+"uniform mat4 projection;\n"
+"\n"
+"void main() {\n"
+"   gl_Position = projection * vec4(vertex.xy, 0, 1.0);\n"
+"   texCoords = vertTexCoord;\n"
+"}";
+
+const std::string textFragShader =
+"#version 330 core\n"
+"in vec2 texCoords;\n"
+"out vec4 color;\n"
+"uniform sampler2D text;\n"
+"uniform vec3 textColor;\n"
+"\n"
+"void main() {\n"
+"   vec4 sampled = vec4(1, 1, 1, texture(text, texCoords).r);\n"
+"   color = vec4(textColor, 1) * sampled;\n"
 "}";
 }
 
@@ -135,6 +165,7 @@ Color &operator *=(Color &lhs, const Color &rhs) {
 
 void drawInit() {
 	_shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
+	_textShader = new Shader(textVertShader, textFragShader, false);
 	_color = Color::White;
 
 	glGenBuffers(1, &_vbo);
@@ -143,8 +174,62 @@ void drawInit() {
 	glGenBuffers(1, &_ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
 
-	_shader->use();
 	drawSetProjection(0.0f, (float)_vgde->windowWidth(), (float)_vgde->windowHeight(), 0.0f, -1.0f, 1.0);
+
+	//TODO(Skyler): Move to dedicated font file.
+	FT_Library ft;
+	if (FT_Init_FreeType(&ft)) {
+	    vgderr("Could not init freetype!");
+	}
+
+	FT_Face face;
+	if (FT_New_Face(ft, "liberation-mono.ttf", 0, &face)) {
+	    vgderr("Failed to load font!");
+	}
+
+	FT_Set_Pixel_Sizes(face, 0, 24);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	for (uchar c = 0; c < 128; ++c) {
+	    if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+	        vgderr("Failed to load glyph!");
+	        return;
+	    }
+
+	    uint texture;
+	    glGenTextures(1, &texture);
+	    glBindTexture(GL_TEXTURE_2D, texture);
+	    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width, face->glyph->bitmap.rows,
+	            0, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        Character character = {
+                texture,
+                {(int)face->glyph->bitmap.width, (int)face->glyph->bitmap.rows},
+                {face->glyph->bitmap_left, face->glyph->bitmap_top},
+                (uint)face->glyph->advance.x
+        };
+        _chars.insert(std::pair<char, Character>(c, character));
+    }
+
+    FT_Done_Face(face);
+    FT_Done_FreeType(ft);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+    glGenVertexArrays(1, &_tvao);
+    glGenBuffers(1, &_tvbo);
+    glBindVertexArray(_tvao);
+    glBindBuffer(GL_ARRAY_BUFFER, _tvbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, null, GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), null);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+	glUseProgram(0);
 }
 
 glm::mat4 drawGetProjection() {
@@ -153,7 +238,12 @@ glm::mat4 drawGetProjection() {
 
 void drawSetProjection(float left, float right, float bottom, float top, float zNear, float zFar) {
 	_projection = glm::ortho<float>(left, right, bottom, top, zNear, zFar);
+	_shader->use();
 	_shader->setMat4("projection", _projection);
+	_textShader->use();
+	_textShader->setMat4("projection", _projection);
+
+	glUseProgram(0);
 }
 
 Color drawGetColor() {
@@ -221,6 +311,7 @@ void drawLine(float x, float y, float x1, float y1) {
 	};
 
     _shader->use();
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 	glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), verts, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -256,6 +347,7 @@ void drawRectangle(float x, float y, float w, float h, bool outline) {
 	};
 
 	_shader->use();
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), verts, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -266,6 +358,7 @@ void drawRectangle(float x, float y, float w, float h, bool outline) {
 
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
 
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
 	if (outline) {
 		glDrawElements(GL_LINE_STRIP, 6, GL_UNSIGNED_INT, null);
 	} else {
@@ -281,4 +374,55 @@ void drawRectangle(const vec2f &pos, const vec2f &size, bool outline) {
 
 void drawRectangle(const rectf &rect, bool outline) {
 	drawRectangle(rect.x, rect.y, rect.width, rect.height, outline);
+}
+
+void drawText(const std::string &txt, float x, float y, float scale, const Color &color) {
+    _textShader->use();
+    _textShader->setVec3f("textColor", {color.glR, color.glG, color.glB});
+    glActiveTexture(GL_TEXTURE0);
+    glBindVertexArray(_tvao);
+
+    std::string::const_iterator c;
+    for (c = txt.begin(); c != txt.end(); ++c) {
+        Character ch = _chars[*c];
+
+        float xpos = x + ch.bearing.x * scale;
+        float ypos = y - (ch.bearing.y * scale) + 24; //TODO(Skyler): '24' is the font size. Move this over to a font file.
+        float w = ch.size.x * scale;
+        float h = ch.size.y * scale;
+
+        float verts[] = {
+                //  Position         Texcoords
+                xpos,      ypos + h, 0.0f, 1.0f, // Top-left
+                xpos + w,  ypos + h, 1.0f, 1.0f, // Top-right
+                xpos + w,  ypos,     1.0f, 0.0f, // Bottom-right
+                xpos,      ypos,     0.0f, 0.0f  // Bottom-left
+        };
+
+        unsigned int indicies[] = {
+                0, 1, 2,
+                2, 3, 0
+        };
+
+        glBindTexture(GL_TEXTURE_2D, ch.textureID);
+
+        glBindBuffer(GL_ARRAY_BUFFER, _tvbo);
+        glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), verts, GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), null);
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)(sizeof(float) * 2));
+
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
+        x+= (ch.advance >> 6) * scale;
+    }
+
+    _textShader->stop();
+    glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

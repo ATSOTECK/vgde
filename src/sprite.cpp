@@ -52,13 +52,11 @@ Sprite::Sprite(Texture *texture) {
 }
 
 void Sprite::init() {
-    uint vbo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glGenBuffers(1, &_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 
-    uint ebo;
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glGenBuffers(1, &_ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 
     _width = _texture->width();
     _height = _texture->height();
@@ -101,6 +99,7 @@ void Sprite::draw() {
     };*/
 
     _shader->use();
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
     glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), &_verts[0], GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
@@ -114,10 +113,13 @@ void Sprite::draw() {
     _texture->bind();
     //_shader->setInt("tex", 0);
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
 
 	_texture->unbind();
 	_shader->stop();
+
+    glBindVertexArray(0);
 }
 
 int Sprite::width() const {
