@@ -444,23 +444,23 @@ add_executable(vgde
         include/KHR/khrplatform.h
         include/stb_image.h
         src/config.h
-        src/draw.cpp
-        src/draw.h
-        src/gl.h
-        src/glad.c
+        src/graphics/draw.cpp
+        src/graphics/draw.h
+        src/graphics/gl.h
+        src/graphics/glad.c
         src/input.cpp
         src/input.h
         src/rect.h
-        src/shader.cpp
-        src/shader.h
-        src/sprite.cpp
-        src/sprite.h
+        src/graphics/shader.cpp
+        src/graphics/shader.h
+        src/graphics/sprite.cpp
+        src/graphics/sprite.h
         src/vec.h
         src/vgde.cpp
         src/vgde.h
         src/util/vmath.cpp
         src/util/vmath.h
-        main.cpp src/texture.cpp src/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/videoMode.h src/videoMode.cpp)
+        main.cpp src/graphics/texture.cpp src/graphics/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/graphics/videoMode.h src/graphics/videoMode.cpp src/graphics/font.cpp src/graphics/font.h src/graphics/color.cpp src/graphics/color.h)
 
 target_link_libraries(vgde glfw3)
 target_link_libraries(vgde freetype)

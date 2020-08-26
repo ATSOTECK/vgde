@@ -1,13 +1,13 @@
 #ifndef __VGDE_VGDE_H__
 #define __VGDE_VGDE_H__
 
-#include "gl.h"
+#include "graphics/gl.h"
 #include <string>
 #include <vector>
 
 #include "config.h"
 #include "vec.h"
-#include "videoMode.h"
+#include "graphics/videoMode.h"
 
 static const int DEFAULT_WINDOW_WIDTH  = 1024;
 static const int DEFAULT_WINDOW_HEIGHT = 600;

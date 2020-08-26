@@ -1,6 +1,6 @@
 #include "vgde.h"
 
-#include "draw.h"
+#include "graphics/draw.h"
 #include "input.h"
 #include "util/clock.h"
 #include "util/vmath.h"

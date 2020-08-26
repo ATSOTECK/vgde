@@ -3,7 +3,7 @@
 
 #include "gl.h"
 #include "shader.h"
-#include "texture.h"
+#include "graphics/texture.h"
 #include "vec.h"
 
 #include <string>

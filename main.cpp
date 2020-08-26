@@ -1,7 +1,7 @@
 #include "config.h"
 
 #include "vgde.h"
-#include "draw.h"
+#include "graphics/draw.h"
 
 #include "input.h"
 
@@ -35,7 +35,7 @@ int main() {
 			vgde->exit();
 		}
 
-		spr.draw();
+		//spr.draw();
         fire.draw();
 
 		drawSetColor(Color::Red);
