@@ -5,6 +5,7 @@
 #include "util/clock.h"
 #include "util/vmath.h"
 
+#include <fstream>
 #include <iostream>
 
 VGDE *VGDE::_instance = null;
@@ -17,6 +18,10 @@ static void windowSizeCallback(GLFWwindow *window, int w, int h) {
 	}
 
 	vgde->resize(w, h);
+}
+
+static void windowCloseCallback(GLFWwindow *window) {
+    VGDE::instance()->saveInGameTime();
 }
 
 static void glfwErrorCallback(int error, const char *desc) {
@@ -32,7 +37,9 @@ VGDE::VGDE() :
 	_fullScreen(false),
 	_frames(0),
 	_frameRate(0),
-	_time(Clock::getTimeAsMilliseconds())
+	_time(Clock::timeAsMilliseconds()),
+    _startTime(Clock::timeAsSeconds()),
+    _totalInGameTime(0)
 {
 	//
 }
@@ -84,14 +91,17 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 
 	glfwMakeContextCurrent(_window);
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	glfwSwapInterval(1);
+	glfwSwapInterval(0); //Set to 1 to make max fps 60.
 
 	glfwSetWindowSizeCallback(_window, windowSizeCallback);
+	glfwSetWindowCloseCallback(_window, windowCloseCallback);
 
 	glInit();
 	drawInit();
 	inputInit(_window);
 	randomInit();
+	_clock.restart();
+	loadInGameTime();
 
 	db("OpenGL version " << glGetString(GL_VERSION));
 
@@ -104,6 +114,7 @@ bool VGDE::running() const {
 }
 
 void VGDE::preRender() {
+    _clock.restart();
 	inputUpdate();
 
 	int w, h;
@@ -118,6 +129,7 @@ void VGDE::postRender() {
 	glfwPollEvents();
 
 	++_frames;
+	_frameTime = _clock.restart().asMilliseconds();
 }
 
 void VGDE::cleanUp() {
@@ -126,6 +138,8 @@ void VGDE::cleanUp() {
 }
 
 void VGDE::exit() {
+    saveInGameTime();
+
 	glfwSetWindowShouldClose(_window, GLFW_TRUE);
 }
 
@@ -188,8 +202,8 @@ void VGDE::windowMaximize() const {
 }
 
 int VGDE::fps() {
-    if (Clock::getTimeAsMilliseconds() >= (_time + 1000)) {
-        _time = Clock::getTimeAsMilliseconds();
+    if (Clock::timeAsMilliseconds() >= (_time + 1000)) {
+        _time = Clock::timeAsMilliseconds();
         _frameRate = _frames;
         _frames = 0;
     }
@@ -197,9 +211,22 @@ int VGDE::fps() {
     return _frameRate;
 }
 
+int32 VGDE::frameTime() const {
+    return _frameTime;
+}
+
+float VGDE::inGameTime() const {
+    return Clock::timeAsSeconds() - _startTime;
+}
+
+float VGDE::totalInGameTime() {
+    _totalInGameTime += inGameTime();
+    return _totalInGameTime;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
-void VGDE::glInit() {
+void VGDE::glInit() const {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_POINT_SMOOTH);
@@ -221,4 +248,41 @@ void ::VGDE::resize(int w, int h) {
 	glInit();
 
 	drawSetProjection(0.0f, (float)_windowWidth, (float)_windowHeight, 0.0f, -1.0f, 1.0);
+}
+
+void VGDE::saveInGameTime() const {
+    float inGameTime = 0;
+    std::fstream file;
+
+    file.open("vgdeigt", std::fstream::in);
+
+    if (file.is_open()) {
+        std::string line;
+        std::getline(file, line);
+        if (!line.empty()) {
+            inGameTime = std::stof(line);
+        }
+        file.close();
+    }
+
+    file.open("vgdeigt", std::fstream::out | std::fstream::trunc);
+
+    inGameTime += (Clock::timeAsSeconds() - _startTime);
+    file << std::to_string(inGameTime);
+    file.close();
+}
+
+void VGDE::loadInGameTime() {
+    std::fstream file;
+
+    file.open("vgdeigt", std::fstream::in);
+
+    if (file.is_open()) {
+        std::string line;
+        std::getline(file, line);
+        if (!line.empty()) {
+            _totalInGameTime = std::stof(line);
+        }
+        file.close();
+    }
 }

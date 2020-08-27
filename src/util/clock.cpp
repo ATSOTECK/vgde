@@ -3,12 +3,12 @@
 #include <Windows.h>
 
 Clock::Clock() :
-    _startTime(getTime())
+    _startTime(time())
 {
     //
 }
 
-Time Clock::getTime() {
+Time Clock::time() {
     HANDLE currentThread = GetCurrentThread();
     DWORD_PTR previousMask = SetThreadAffinityMask(currentThread, 1);
 
@@ -22,19 +22,19 @@ Time Clock::getTime() {
     return microseconds(1000000 * time.QuadPart / freq.QuadPart);
 }
 
-float Clock::getTimeAsSeconds() {
-    return getTime().asSeconds();
+float Clock::timeAsSeconds() {
+    return time().asSeconds();
 }
 
-int32 Clock::getTimeAsMilliseconds() {
-    return getTime().asMilliseconds();
+int32 Clock::timeAsMilliseconds() {
+    return time().asMilliseconds();
 }
 
-int64 Clock::getTimeAsMicroseconds() {
-    return getTime().asMicroseconds();
+int64 Clock::timeAsMicroseconds() {
+    return time().asMicroseconds();
 }
 
-int Clock::getHour(bool use12hr) {
+int Clock::hour(bool use12hr) {
     SYSTEMTIME time;
     GetLocalTime(&time);
 
@@ -47,21 +47,21 @@ int Clock::getHour(bool use12hr) {
     return time.wHour;
 }
 
-int Clock::getMinute() {
+int Clock::minute() {
     SYSTEMTIME time;
     GetLocalTime(&time);
 
     return time.wMinute;
 }
 
-int Clock::getSecond() {
+int Clock::second() {
     SYSTEMTIME time;
     GetLocalTime(&time);
 
     return time.wSecond;
 }
 
-int Clock::getMillisecond() {
+int Clock::millisecond() {
     SYSTEMTIME time;
     GetLocalTime(&time);
 
@@ -69,41 +69,41 @@ int Clock::getMillisecond() {
 }
 
 bool Clock::isAM() {
-    int hour = getHour(false);
-    int minute = getMinute();
-    int second = getSecond();
+    int h = hour(false);
+    int m = minute();
+    int s = second();
 
-    return !(hour >= 12 && (minute > 0 || second > 0));
+    return !(h >= 12 && (m > 0 || s > 0));
 }
 
 bool Clock::isPM() {
     return !isAM();
 }
 
-Time Clock::getElapsed() const {
-    return getTime() - _startTime;
+Time Clock::elapsed() const {
+    return time() - _startTime;
 }
 
-float Clock::getElapsedAsSeconds() const {
-    return getElapsed().asSeconds();
+float Clock::elapsedAsSeconds() const {
+    return elapsed().asSeconds();
 }
 
-int32 Clock::getElapsedAsMilliseconds() const {
-    return getElapsed().asMilliseconds();
+int32 Clock::elapsedAsMilliseconds() const {
+    return elapsed().asMilliseconds();
 }
 
-int64 Clock::getElapsedAsMicroseconds() const {
-    return getElapsed().asMicroseconds();
+int64 Clock::elapsedAsMicroseconds() const {
+    return elapsed().asMicroseconds();
 }
 
 Time Clock::restart() {
-    Time now = getTime();
+    Time now = time();
     Time elapsed = now - _startTime;
     _startTime = now;
 
     return elapsed;
 }
 
-Time Clock::getStartTime() const {
+Time Clock::startTime() const {
     return _startTime;
 }

@@ -8,6 +8,7 @@
 #include "config.h"
 #include "vec.h"
 #include "graphics/videoMode.h"
+#include "util/clock.h"
 
 static const int DEFAULT_WINDOW_WIDTH  = 1024;
 static const int DEFAULT_WINDOW_HEIGHT = 600;
@@ -43,15 +44,23 @@ public:
 	void windowMaximize() const;
 
 	int fps();
+	int32 frameTime() const;
+
+	float inGameTime() const;
+	float totalInGameTime();
 
 private:
 	friend void windowSizeCallback(GLFWwindow *, int, int);
+	friend void windowCloseCallback(GLFWwindow *);
 
 	VGDE();
 	static VGDE *_instance;
 
+    void glInit() const;
 	void resize(int w, int h);
-	void glInit();
+
+	void saveInGameTime() const;
+	void loadInGameTime();
 
 	bool _initialized;
 	GLFWwindow *_window;
@@ -63,6 +72,10 @@ private:
 	int _frames;
 	int _frameRate;
 	int _time;
+	Clock _clock;
+	uint32 _frameTime;
+	float _startTime;
+	float _totalInGameTime;
 };
 
 #endif

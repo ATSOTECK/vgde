@@ -7,26 +7,26 @@ class Clock {
 public:
     Clock();
 
-    static Time getTime();
-    static float getTimeAsSeconds();
-    static int32 getTimeAsMilliseconds();
-    static int64 getTimeAsMicroseconds();
+    static Time time();
+    static float timeAsSeconds();
+    static int32 timeAsMilliseconds();
+    static int64 timeAsMicroseconds();
 
-    static int getHour(bool use12hr = false);
-    static int getMinute();
-    static int getSecond();
-    static int getMillisecond();
+    static int hour(bool use12hr = false);
+    static int minute();
+    static int second();
+    static int millisecond();
 
     static bool isAM();
     static bool isPM();
 
-    Time getElapsed() const;
-    float getElapsedAsSeconds() const;
-    int32 getElapsedAsMilliseconds() const;
-    int64 getElapsedAsMicroseconds() const;
+    Time elapsed() const;
+    float elapsedAsSeconds() const;
+    int32 elapsedAsMilliseconds() const;
+    int64 elapsedAsMicroseconds() const;
 
     Time restart();
-    Time getStartTime() const;
+    Time startTime() const;
 
 private:
     Time _startTime;

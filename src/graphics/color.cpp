@@ -23,10 +23,10 @@ Color::Color(uint8 red, uint8 green, uint8 blue, uint8 alpha) :
         b(blue),
         a(alpha)
 {
-    glR = r / 255.f;
-    glG = g / 255.f;
-    glB = b / 255.f;
-    glA = a / 255.f;
+    glR = (float)r / 255.f;
+    glG = (float)g / 255.f;
+    glB = (float)b / 255.f;
+    glA = (float)a / 255.f;
 }
 
 vec3f Color::vec3gl() const {

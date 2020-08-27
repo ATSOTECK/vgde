@@ -17,9 +17,9 @@ int main() {
 	//drawSetClearColor(Color::Blue);
 
 	if (Clock::isPM()) {
-	    db(Clock::getHour(true) << ":" << Clock::getMinute() << ":" << Clock::getSecond() << ":" << Clock::getMillisecond() << " pm");
+	    db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " pm");
 	} else {
-        db(Clock::getHour(true) << ":" << Clock::getMinute() << ":" << Clock::getSecond() << ":" << Clock::getMillisecond() << " am");
+        db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " am");
 	}
 
 	Sprite spr("hot.png");
@@ -35,7 +35,7 @@ int main() {
 			vgde->exit();
 		}
 
-		//spr.draw();
+		spr.draw();
         fire.draw();
 
 		drawSetColor(Color::Red);
@@ -51,9 +51,9 @@ int main() {
 		drawSetColor(Color::Red + Color::Blue);
 		drawRectangle(400, 400, 100, 35, true);
 
-		vgde->setWindowTitle("vgde " + std::to_string(vgde->fps()));
+		//vgde->setWindowTitle("vgde " + std::to_string(vgde->fps()));
 
-		std::string txt = "fps: " + std::to_string(vgde->fps());
+		std::string txt = "fps: " + std::to_string(vgde->fps()) + " " + std::to_string(vgde->frameTime()) + "ms";
 		drawText(txt, 0, 0, 1, Color::White);
 
         drawText("The quick brown fox jumped over the lazy dog", 200, 50, 1, Color::Red);
