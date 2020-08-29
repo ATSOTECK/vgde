@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "draw.h"
+#include "util/resourceManager.h"
 
 #include <iostream>
 
@@ -36,9 +37,9 @@ const GLuint elements[] ={
 }
 
 Sprite::Sprite(const std::string &spr) {
-    _texture = new Texture(spr);
+    _texture = ResourceManager::instance()->loadTexture(spr);
 
-    if (_texture->width() == 0) {
+    if (_texture->width() == 0 || _texture->height() == 0) {
         return;
     }
 

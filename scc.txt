@@ -1,12 +1,12 @@
-http://cloc.sourceforge.net v 1.62  T=0.05 s (570.2 files/s, 57706.2 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.05 s (577.0 files/s, 59932.0 lines/s)
 ------------------------------------------------------------------------------------------
 File                                        blank        comment           code
 ------------------------------------------------------------------------------------------
 .\src\input.cpp                                56              4            300
 .\src\vec.h                                    66              8            252
+.\src\vgde.cpp                                 66              2            220
 .\src\graphics\draw.cpp                        53              7            173
 .\src\input.h                                  21              1            172
-.\src\vgde.cpp                                 53              2            169
 .\src\graphics\sprite.cpp                      36             10            115
 .\src\graphics\shader.cpp                      23              5            100
 .\src\util\vtime.cpp                           30              2             97
@@ -14,9 +14,9 @@ File                                        blank        comment           code
 .\src\graphics\color.cpp                       15              0             81
 .\src\util\clock.cpp                           28              1             80
 .\src\rect.h                                   14              4             65
+.\src\vgde.h                                   21              0             60
 .\src\graphics\texture.cpp                     16              0             57
 .\src\config.h                                  9              0             52
-.\src\vgde.h                                   19              0             49
 .\main.cpp                                     20              3             49
 .\src\util\vmath.cpp                           14              0             46
 .\src\util\vtime.h                              9              0             44
@@ -32,5 +32,5 @@ File                                        blank        comment           code
 .\src\graphics\videoMode.cpp                    3              0             11
 .\src\graphics\gl.h                             2              0              5
 ------------------------------------------------------------------------------------------
-SUM:                                          600             64           2271
+SUM:                                          615             64           2333
 ------------------------------------------------------------------------------------------

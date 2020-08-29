@@ -460,7 +460,7 @@ add_executable(vgde
         src/vgde.h
         src/util/vmath.cpp
         src/util/vmath.h
-        main.cpp src/graphics/texture.cpp src/graphics/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/graphics/videoMode.h src/graphics/videoMode.cpp src/graphics/font.cpp src/graphics/font.h src/graphics/color.cpp src/graphics/color.h)
+        main.cpp src/graphics/texture.cpp src/graphics/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/graphics/videoMode.h src/graphics/videoMode.cpp src/graphics/font.cpp src/graphics/font.h src/graphics/color.cpp src/graphics/color.h src/game/actor.cpp src/game/actor.h src/util/resourceManager.cpp src/util/resourceManager.h)
 
 target_link_libraries(vgde glfw3)
 target_link_libraries(vgde freetype)
