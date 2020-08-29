@@ -13,6 +13,7 @@ class Sprite {
 public:
 	explicit Sprite(const std::string &spr);
 	explicit Sprite(Texture *texture);
+	~Sprite();
 
 	void draw();
 

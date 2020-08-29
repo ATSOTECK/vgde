@@ -4,8 +4,6 @@
 #include "draw.h"
 #include "util/resourceManager.h"
 
-#include <iostream>
-
 namespace {
 const std::string defaultVertexShader =
 "#version 330 core\n"
@@ -50,6 +48,12 @@ Sprite::Sprite(Texture *texture) {
     _texture = texture;
 
     init();
+}
+
+Sprite::~Sprite() {
+    ResourceManager::instance()->unloadTexture(_texture);
+    _shader->stop();
+    delete _shader;
 }
 
 void Sprite::init() {

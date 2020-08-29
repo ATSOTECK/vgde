@@ -1,36 +1,40 @@
-http://cloc.sourceforge.net v 1.62  T=0.05 s (577.0 files/s, 59932.0 lines/s)
-------------------------------------------------------------------------------------------
-File                                        blank        comment           code
-------------------------------------------------------------------------------------------
-.\src\input.cpp                                56              4            300
-.\src\vec.h                                    66              8            252
-.\src\vgde.cpp                                 66              2            220
-.\src\graphics\draw.cpp                        53              7            173
-.\src\input.h                                  21              1            172
-.\src\graphics\sprite.cpp                      36             10            115
-.\src\graphics\shader.cpp                      23              5            100
-.\src\util\vtime.cpp                           30              2             97
-.\src\graphics\font.cpp                        24              1             90
-.\src\graphics\color.cpp                       15              0             81
-.\src\util\clock.cpp                           28              1             80
-.\src\rect.h                                   14              4             65
-.\src\vgde.h                                   21              0             60
-.\src\graphics\texture.cpp                     16              0             57
-.\src\config.h                                  9              0             52
-.\main.cpp                                     20              3             49
-.\src\util\vmath.cpp                           14              0             46
-.\src\util\vtime.h                              9              0             44
-.\src\graphics\color.h                         10              0             42
-.\src\graphics\sprite.h                         9              0             35
-.\src\graphics\draw.h                          13              0             34
-.\src\util\vmath.h                             15             15             33
-.\src\graphics\font.h                           9              0             29
-.\src\graphics\texture.h                        9              0             27
-.\src\util\clock.h                             10              0             26
-.\src\graphics\shader.h                         9              1             26
-.\src\graphics\videoMode.h                      5              0             12
-.\src\graphics\videoMode.cpp                    3              0             11
-.\src\graphics\gl.h                             2              0              5
-------------------------------------------------------------------------------------------
-SUM:                                          615             64           2333
-------------------------------------------------------------------------------------------
+http://cloc.sourceforge.net v 1.62  T=0.05 s (609.3 files/s, 57313.8 lines/s)
+---------------------------------------------------------------------------------
+File                                          blank        comment           code
+---------------------------------------------------------------------------------
+.\src\input.cpp                                  56              4            300
+.\src\vec.h                                      66              8            252
+.\src\vgde.cpp                                   66              2            220
+.\src\graphics\draw.cpp                          53              7            173
+.\src\input.h                                    21              1            172
+.\src\graphics\sprite.cpp                        36             10            120
+.\src\graphics\shader.cpp                        23              5            100
+.\src\util\vtime.cpp                             30              2             97
+.\src\graphics\font.cpp                          24              1             90
+.\src\graphics\color.cpp                         15              0             81
+.\src\util\clock.cpp                             28              1             80
+.\src\rect.h                                     14              4             65
+.\src\vgde.h                                     21              0             60
+.\src\graphics\texture.cpp                       16              0             57
+.\src\config.h                                    9              0             52
+.\main.cpp                                       20              3             49
+.\src\util\vmath.cpp                             14              0             46
+.\src\util\vtime.h                                9              0             44
+.\src\graphics\color.h                           10              0             42
+.\src\graphics\sprite.h                           9              0             36
+.\src\util\resourceManager.cpp                    8              1             35
+.\src\graphics\draw.h                            13              0             34
+.\src\util\vmath.h                               15             15             33
+.\src\graphics\font.h                             9              0             29
+.\src\graphics\texture.h                          9              0             27
+.\src\util\clock.h                               10              0             26
+.\src\graphics\shader.h                           9              1             26
+.\src\util\resourceManager.h                      8              0             21
+.\src\graphics\videoMode.h                        5              0             12
+.\src\graphics\videoMode.cpp                      3              0             11
+.\src\game\actor.h                                4              0              8
+.\src\graphics\gl.h                               2              0              5
+.\src\game\actor.cpp                              0              0              1
+---------------------------------------------------------------------------------
+SUM:                                            635             65           2404
+---------------------------------------------------------------------------------
