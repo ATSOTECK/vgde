@@ -22,7 +22,18 @@ Texture *ResourceManager::loadTexture(const std::string &path) {
         texture = _textureMap[path].obj;
         ++_textureMap[path].count;
     } else {
-        texture = new Texture(path);
+        texture = new Texture(_imgPath + "/" + path);
+
+        if (texture->width() == 0 || texture->height() == 0) {
+            delete texture;
+            texture = new Texture(path);
+
+            if (texture->width() == 0 || texture->height() == 0) {
+                delete texture;
+                return null;
+            }
+        }
+
         _textureMap[path].obj = texture;
         _textureMap[path].count = 1;
     }
@@ -41,4 +52,8 @@ void ResourceManager::unloadTexture(Texture *texture) {
             }
         }
     }
+}
+
+void ResourceManager::setImgPath(const std::string &path) {
+    _imgPath = path;
 }

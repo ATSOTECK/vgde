@@ -8,6 +8,8 @@
 #include "util/vmath.h"
 #include "util/clock.h"
 
+#include "util/resourceManager.h"
+
 int main() {
 	VGDE *vgde = VGDE::instance();
 	//vgde->init(vgde->nativeVideoMode());
@@ -22,11 +24,23 @@ int main() {
         db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " am");
 	}
 
+    ResourceManager::instance()->setImgPath("../res");
+
 	Sprite spr("hot.png");
 	spr.setScale(0.25f);
     Sprite fire("fire.png");
 	fire.setPosition({100, 200});
 	fire.setSize({32, 32});
+
+	Sprite f("f.png");
+	f.setScale(.1);
+	f.setPosition({700, 400});
+
+	vgdewarn("warn yo");
+	here
+	dbln
+	trace("ye");
+	tracemsg << "haw\n";
 
 	while (vgde->running()) {
 	    vgde->preRender();
@@ -37,6 +51,7 @@ int main() {
 
 		spr.draw();
         fire.draw();
+        f.draw();
 
 		drawSetColor(Color::Red);
 		drawLine(10, 10, 100, 100);

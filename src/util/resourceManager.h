@@ -18,11 +18,15 @@ public:
 
     Texture *loadTexture(const std::string &path);
     void unloadTexture(Texture *texture);
+
+    void setImgPath(const std::string &path);
 private:
     ResourceManager();
     static ResourceManager *_resourceManager;
 
-    std::map<std::string, ref<Texture*>> _textureMap;
+    std::map<std::string, ref<Texture*> > _textureMap;
+
+    std::string _imgPath;
 };
 
 

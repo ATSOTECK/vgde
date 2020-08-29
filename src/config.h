@@ -1,7 +1,8 @@
 #ifndef __VGDE_CONFIG_H__
 #define __VGDE_CONFIG_H__
 
-#include <stdint.h>
+#include <cstdint>
+#include <Windows.h>
 
 #define null nullptr
 
@@ -50,12 +51,12 @@ typedef size_t sizeT;
 #define reinterpretCast(x, y) reinterpret_cast<x>(y)
 #define constCast(x, y)		  const_cast<x>(y)
 
-#define here std::cerr << "here line # " << __LINE__ << " " __FILE__ << "\n";
-#define vgderr(x) std::cerr << "Error: " << x << " on line # " << __LINE__ << " in " __FILE__ << "\n"
-#define vgdewarn(x) std::cerr << "Warning: " << x << " on line # " << __LINE__ << " in " __FILE__ << "\n"
-#define db(x) std::cerr << x << "\n"
-#define dbln() std::cerr << "\n"
-#define trace(x) std::cerr << __FILE__ << ", " << __LINE__ << ": " << x << "\n"
-#define tracemsg() std::cerr << __FILE__ << ", " << __LINE__ << ": "
+#define here std::cerr << "here line #" << __LINE__ << " " __FILE__ << std::endl;
+#define vgderr(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); std::cerr << "Error: " << x << " on line #" << __LINE__ << " in " __FILE__ << std::endl; SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15)
+#define vgdewarn(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14); std::cerr << "Warning: " << x << " on line #" << __LINE__ << " in " __FILE__ << std::endl; SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15)
+#define db(x) std::cerr << x << std::endl
+#define dbln std::cerr << std::endl;
+#define trace(x) std::cerr << __FILE__ << ", L" << __LINE__ << ": " << x << std::endl
+#define tracemsg std::cerr << __FILE__ << ", L" << __LINE__ << ": "
 
-#endif
+#endif //__VGDE_CONFIG_H__

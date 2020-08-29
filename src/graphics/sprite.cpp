@@ -37,7 +37,7 @@ const GLuint elements[] ={
 Sprite::Sprite(const std::string &spr) {
     _texture = ResourceManager::instance()->loadTexture(spr);
 
-    if (_texture->width() == 0 || _texture->height() == 0) {
+    if (_texture == null || _texture->width() == 0 || _texture->height() == 0) {
         return;
     }
 
