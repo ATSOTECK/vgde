@@ -1,5 +1,6 @@
 #include "font.h"
 
+#include "color.h"
 #include "gl.h"
 
 #include <iostream>
@@ -69,13 +70,54 @@ void Font::loadFont(const std::string &filename) {
     glUseProgram(0);
 }
 
-void Font::draw(const std::string &txt, float x, float y, float scale) {
+void Font::draw(const std::string &txt, float x, float y, float scale, Shader *shader) {
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(_vao);
+    float ox = x;
 
-    std::string::const_iterator c;
-    for (c = txt.begin(); c != txt.end(); ++c) {
-        Character ch = _chars[*c];
+    for (int i = 0; i < txt.size(); ++i) {
+        if (txt[i] == '\n') {
+            y += 24;
+            x = ox;
+            continue;
+        }
+
+        if (txt[i] == '\t') {
+            x += ((_chars[' '].advance >> 6) * scale) * 4;
+            continue;
+        }
+
+        if (txt[i] == '[' && txt[i - 1] != '\\') {
+            std::string str;
+            while (txt[++i] != ']') {
+                str += txt[i];
+            }
+            ++i;
+
+            if (str == "black") {
+                shader->setVec3f("textColor", Color::Black.vec3gl());
+            } else if (str == "white") {
+                shader->setVec3f("textColor", Color::White.vec3gl());
+            } else if (str == "red") {
+                shader->setVec3f("textColor", Color::Red.vec3gl());
+            } else if (str == "green") {
+                shader->setVec3f("textColor", Color::Green.vec3gl());
+            } else if (str == "blue") {
+                shader->setVec3f("textColor", Color::Blue.vec3gl());
+            } else if (str == "lightBlue") {
+                shader->setVec3f("textColor", Color::LightBlue.vec3gl());
+            } else if (str == "yellow") {
+                shader->setVec3f("textColor", Color::Yellow.vec3gl());
+            } else if (str == "magenta") {
+                shader->setVec3f("textColor", Color::Magenta.vec3gl());
+            } else if (str == "cyan") {
+                shader->setVec3f("textColor", Color::Cyan.vec3gl());
+            } else if (str == "turquoise") {
+                shader->setVec3f("textColor", Color::Turquoise.vec3gl());
+            }
+        }
+
+        Character ch = _chars[txt[i]];
 
         float xpos = x + ch.bearing.x * scale;
         float ypos = y - (ch.bearing.y * scale) + 24; //TODO(Skyler): '24' is the font size. Move this over to a font file.
@@ -110,6 +152,6 @@ void Font::draw(const std::string &txt, float x, float y, float scale) {
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
-        x+= (ch.advance >> 6) * scale;
+        x += (ch.advance >> 6) * scale;
     }
 }

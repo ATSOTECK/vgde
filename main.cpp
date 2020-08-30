@@ -80,9 +80,9 @@ int main() {
 
 		//vgde->setWindowTitle("vgde " + std::to_string(vgde->fps()));
 
-		std::string txt = "fps: " + std::to_string(vgde->fps()) + " " + std::to_string(vgde->frameTime()) + "ms "
-		        + secondsToHHMMSS((int)vgde->totalInGameTime());
-		drawText(txt, 0, 0, 1, Color::Blue);
+		std::string txt = "fps: " + std::to_string(vgde->fps()) + "\t[blue]" + std::to_string(vgde->frameTime()) + "ms\n"
+		        + "[cyan]" + secondsToHHMMSS((int)vgde->totalInGameTime());
+		drawText(txt, 0, 0, 1, Color::Green);
 
         drawText("The quick brown fox jumped over the lazy dog", 200, 50, 1, Color::Red);
 

@@ -2,6 +2,7 @@
 #define __VGDE_FONT_H__
 
 #include "config.h"
+#include "shader.h"
 #include "vec.h"
 
 #include <map>
@@ -23,7 +24,7 @@ class Font {
 public:
     explicit Font(const std::string &fnt);
 
-    void draw(const std::string &txt, float x, float y, float scale);
+    void draw(const std::string &txt, float x, float y, float scale, Shader *shader);
 private:
     void *_lib;
     void *_face;

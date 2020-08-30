@@ -223,7 +223,7 @@ void drawText(const std::string &txt, float x, float y, float scale, const Color
     _textShader->use();
     _textShader->setVec3f("textColor", color.vec3gl());
 
-    _defaultFont->draw(txt, x, y, scale);
+    _defaultFont->draw(txt, x, y, scale, _textShader);
 
     _textShader->stop();
     glBindVertexArray(0);
