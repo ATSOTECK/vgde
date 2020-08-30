@@ -13,7 +13,7 @@
 int main() {
 	VGDE *vgde = VGDE::instance();
 	//vgde->init(vgde->nativeVideoMode());
-	vgde->init(1000, 1000, "");
+	vgde->init();
 
 	drawSetColor(Color::Red);
 	//drawSetClearColor(Color::Blue);

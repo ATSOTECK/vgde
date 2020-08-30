@@ -83,6 +83,6 @@ void ResourceManager::updateShaderProjections() {
     glm::mat4 projection = drawGetProjection();
 
     for (auto shader : _shaders) {
-        shader->setMat4("projection", projection);
+        shader->setMat4("projection", projection, true);
     }
 }
