@@ -7,13 +7,13 @@
 
 #include "util/vmath.h"
 #include "util/clock.h"
-
+#include "util/humanReadable.h"
 #include "util/resourceManager.h"
 
 int main() {
 	VGDE *vgde = VGDE::instance();
 	//vgde->init(vgde->nativeVideoMode());
-	vgde->init();
+	vgde->init(1000, 1000, "");
 
 	drawSetColor(Color::Red);
 	//drawSetClearColor(Color::Blue);
@@ -26,15 +26,20 @@ int main() {
 
     ResourceManager::instance()->setImgPath("../res");
 
-	Sprite spr("hot.png");
-	spr.setScale(0.25f);
+	Sprite spr("tv.png");
+	spr.setOrigin({spr.width() / 2, spr.height() / 2});
+	spr.setPosition({spr.width() / 2, spr.height() / 2});
     Sprite fire("fire.png");
 	fire.setPosition({100, 200});
 	fire.setSize({32, 32});
+	fire.setRotation(90);
 
-	Sprite f("f.png");
-	f.setScale(.1);
+	Sprite f("tst.png");
+	//f.setScale(.1);
 	f.setPosition({700, 400});
+	f.setOrigin({32, 64});
+
+	float a = 0;
 
 	vgdewarn("warn yo");
 	here
@@ -49,6 +54,13 @@ int main() {
 			vgde->exit();
 		}
 
+		f.setRotation(a);
+		a += 0.5f;
+
+		if (a >= 360) {
+		    a = 0;
+		}
+
 		spr.draw();
         fire.draw();
         f.draw();
@@ -60,16 +72,17 @@ int main() {
 		drawLine(300, 0, 300, 23);
 
         drawSetColor(Color::White);
-        drawLine(100, 100, 500, 500);
+        drawLine(0, 0, f.position().x, f.position().y);
 
-		drawRectangle(400, 400, 100, 35);
+		drawRectangle(400, 500, 100, 35);
 		drawSetColor(Color::Red + Color::Blue);
-		drawRectangle(400, 400, 100, 35, true);
+		drawRectangle(400, 500, 100, 35, true);
 
 		//vgde->setWindowTitle("vgde " + std::to_string(vgde->fps()));
 
-		std::string txt = "fps: " + std::to_string(vgde->fps()) + " " + std::to_string(vgde->frameTime()) + "ms";
-		drawText(txt, 0, 0, 1, Color::White);
+		std::string txt = "fps: " + std::to_string(vgde->fps()) + " " + std::to_string(vgde->frameTime()) + "ms "
+		        + secondsToHHMMSS((int)vgde->totalInGameTime());
+		drawText(txt, 0, 0, 1, Color::Blue);
 
         drawText("The quick brown fox jumped over the lazy dog", 200, 50, 1, Color::Red);
 

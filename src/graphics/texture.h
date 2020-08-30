@@ -15,9 +15,9 @@ public:
     void bind(uint slot = 0);
     void unbind() const;
 
-    int width() const;
-    int height() const;
-    vec2i size() const;
+    float width() const;
+    float height() const;
+    vec2f size() const;
 
     uint textureID() const;
     uint slot() const;
@@ -27,8 +27,8 @@ private:
     uint _slot;
     std::string _path;
     uchar *_data;
-    int _width;
-    int _height;
+    float _width;
+    float _height;
     int _bpp;
 };
 

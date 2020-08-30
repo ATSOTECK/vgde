@@ -3,6 +3,7 @@
 #include "graphics/draw.h"
 #include "input.h"
 #include "util/clock.h"
+#include "util/resourceManager.h"
 #include "util/vmath.h"
 
 #include <fstream>
@@ -91,7 +92,7 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 
 	glfwMakeContextCurrent(_window);
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	glfwSwapInterval(0); //Set to 1 to make max fps 60.
+	glfwSwapInterval(1); //Set to 1 to make max fps 60.
 
 	glfwSetWindowSizeCallback(_window, windowSizeCallback);
 	glfwSetWindowCloseCallback(_window, windowCloseCallback);
@@ -219,9 +220,8 @@ float VGDE::inGameTime() const {
     return Clock::timeAsSeconds() - _startTime;
 }
 
-float VGDE::totalInGameTime() {
-    _totalInGameTime += inGameTime();
-    return _totalInGameTime;
+float VGDE::totalInGameTime() const {
+    return _totalInGameTime + inGameTime();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -248,6 +248,7 @@ void ::VGDE::resize(int w, int h) {
 	glInit();
 
 	drawSetProjection(0.0f, (float)_windowWidth, (float)_windowHeight, 0.0f, -1.0f, 1.0);
+	ResourceManager::instance()->updateShaderProjections();
 }
 
 void VGDE::saveInGameTime() const {

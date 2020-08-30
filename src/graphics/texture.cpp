@@ -15,7 +15,10 @@ Texture::Texture(const std::string &path) :
         _bpp(0)
 {
     stbi_set_flip_vertically_on_load(1);
-    _data = stbi_load(_path.c_str(), &_width, &_height, &_bpp, 4);
+    int w = 0, h = 0;
+    _data = stbi_load(_path.c_str(), &w, &h, &_bpp, 4);
+    _width = (float)w;
+    _height = (float)h;
 
     if (_data == null) {
         vgderr("Could not load " << path);
@@ -52,15 +55,15 @@ void Texture::unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-int Texture::width() const {
+float Texture::width() const {
     return _width;
 }
 
-int Texture::height() const {
+float Texture::height() const {
     return _height;
 }
 
-vec2i Texture::size() const {
+vec2f Texture::size() const {
     return {_width, _height};
 }
 

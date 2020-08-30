@@ -47,7 +47,7 @@ public:
 	int32 frameTime() const;
 
 	float inGameTime() const;
-	float totalInGameTime();
+	float totalInGameTime() const;
 
 private:
 	friend void windowSizeCallback(GLFWwindow *, int, int);

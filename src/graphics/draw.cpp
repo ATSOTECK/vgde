@@ -93,10 +93,8 @@ glm::mat4 drawGetProjection() {
 
 void drawSetProjection(float left, float right, float bottom, float top, float zNear, float zFar) {
 	_projection = glm::ortho<float>(left, right, bottom, top, zNear, zFar);
-	_shader->use();
-	_shader->setMat4("projection", _projection);
-	_textShader->use();
-	_textShader->setMat4("projection", _projection);
+	_shader->setMat4("projection", _projection, true);
+	_textShader->setMat4("projection", _projection, true);
 
 	glUseProgram(0);
 }

@@ -1,9 +1,11 @@
 #include "resourceManager.h"
 
+#include "graphics/draw.h"
+
 ResourceManager *ResourceManager::_resourceManager = null;
 
 ResourceManager::ResourceManager() {
-    //
+    _imgPath = "res/img";
 }
 
 ResourceManager *ResourceManager::instance() {
@@ -47,6 +49,8 @@ void ResourceManager::unloadTexture(Texture *texture) {
             if (pair.second.count == 1) {
                 delete texture;
                 _textureMap.erase(pair.first);
+
+                return;
             } else {
                 --pair.second.count;
             }
@@ -56,4 +60,29 @@ void ResourceManager::unloadTexture(Texture *texture) {
 
 void ResourceManager::setImgPath(const std::string &path) {
     _imgPath = path;
+}
+
+void ResourceManager::addShader(Shader *shader) {
+    _shaders.push_back(shader);
+}
+
+void ResourceManager::removeShader(Shader *shader) {
+    auto idx = std::find(_shaders.begin(), _shaders.end(), shader);
+    if (idx == _shaders.end()) {
+        return;
+    }
+
+    _shaders.erase(idx);
+}
+
+void ResourceManager::updateShaderProjections() {
+    if (_shaders.empty()) {
+        return;
+    }
+
+    glm::mat4 projection = drawGetProjection();
+
+    for (auto shader : _shaders) {
+        shader->setMat4("projection", projection);
+    }
 }
