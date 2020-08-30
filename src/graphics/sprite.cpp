@@ -18,7 +18,7 @@ const std::string defaultVertexShader =
 "\n"
 "void main() {\n"
 "   fragTexCoord = vertTexCoord;\n"
-"	gl_Position = transform * projection * vec4(vert, 0, 1.0);\n"
+"	gl_Position = projection * transform * vec4(vert, 0, 1.0);\n"
 "}";
 
 const std::string defaultFragmentShader =
@@ -179,16 +179,10 @@ void Sprite::setScale(const vec2f &scale) {
 }
 
 void Sprite::setRotation(float angle) {
-    //TODO(Skyler): Figure out this mess.
-    //This converts position to clipping space from screen sapce.
-    glm::mat4 proj = drawGetProjection();
-    glm::vec4 vp({_position.x, _position.y, 0.f, 1.f});
-    glm::vec4 result = proj * vp;
-
     _transform = glm::mat4(1.f);
-    _transform = glm::translate(_transform, {result.x, result.y, 0.f});
+    _transform = glm::translate(_transform, {_position.x, _position.y, 0.f});
     _transform = glm::rotate(_transform, glm::radians(angle), {0, 0, 1});
-    _transform = glm::translate(_transform, {-result.x, -result.y, 0.f});
+    _transform = glm::translate(_transform, {-_position.x, -_position.y, 0.f});
     _shader->setMat4("transform", _transform, true);
 }
 
