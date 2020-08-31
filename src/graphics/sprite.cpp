@@ -39,7 +39,9 @@ const GLuint elements[] ={
 
 //TODO(Skyler): Fix sprites not working with the viewport.
 
-Sprite::Sprite(const std::string &spr) {
+Sprite::Sprite(const std::string &spr) :
+    Transform()
+{
     _texture = ResourceManager::instance()->loadTexture(spr);
 
     if (_texture == null || _texture->width() == 0 || _texture->height() == 0) {
@@ -49,7 +51,9 @@ Sprite::Sprite(const std::string &spr) {
     init();
 }
 
-Sprite::Sprite(Texture *texture) {
+Sprite::Sprite(Texture *texture) :
+    Transform()
+{
     _texture = texture;
 
     init();
@@ -69,16 +73,11 @@ void Sprite::init() {
     glGenBuffers(1, &_ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 
-    _size = _texture->size();
-
-    _position = 0.f;
-    _origin = 0.f;
-    _scale = 1.f;
+    setSize(_texture->size());
 
     _shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
     setVerts();
 
-    _transform = glm::mat4(1.f);
     _shader->setMat4("transform", _transform, true);
 
     glm::mat4 projection = drawGetProjection();
@@ -105,6 +104,16 @@ void Sprite::setVerts() {
 void Sprite::draw() {
     if (_texture == null || _texture->width() == 0 || _texture->height() == 0) {
         return;
+    }
+
+    if (_updateVerts) {
+        setVerts();
+        _updateVerts = false;
+    }
+
+    if (_updateTransform) {
+        _shader->setMat4("transform", _transform, true);
+        _updateTransform = false;
     }
 
     /*
@@ -139,54 +148,4 @@ void Sprite::draw() {
 	_shader->stop();
 
     glBindVertexArray(0);
-}
-
-float Sprite::width() const {
-	return _size.x;
-}
-
-float Sprite::height() const {
-	return _size.y;
-}
-
-vec2f Sprite::position() const {
-	return _position;
-}
-
-void Sprite::setPosition(const vec2f &pos) {
-	_position = pos;
-	setVerts();
-}
-
-vec2f Sprite::size() const {
-    return _size;
-}
-
-void Sprite::setSize(const vec2f &size) {
-    _size = size;
-    setVerts();
-}
-
-vec2f Sprite::scale() const {
-    return _scale;
-}
-
-void Sprite::setScale(const vec2f &scale) {
-    _scale = scale;
-    _size.x = _texture->width() * _scale.x;
-    _size.y = _texture->height() * _scale.y;
-    setVerts();
-}
-
-void Sprite::setRotation(float angle) {
-    _transform = glm::mat4(1.f);
-    _transform = glm::translate(_transform, {_position.x, _position.y, 0.f});
-    _transform = glm::rotate(_transform, glm::radians(angle), {0, 0, 1});
-    _transform = glm::translate(_transform, {-_position.x, -_position.y, 0.f});
-    _shader->setMat4("transform", _transform, true);
-}
-
-void Sprite::setOrigin(const vec2f &origin) {
-    _origin = origin;
-    setVerts();
 }

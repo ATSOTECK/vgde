@@ -27,19 +27,18 @@ int main() {
     ResourceManager::instance()->setImgPath("../res");
 
 	Sprite spr("tv.png");
-	spr.setOrigin({spr.width() / 2, spr.height() / 2});
-	spr.setPosition({spr.width() / 2, spr.height() / 2});
+	spr.setOrigin(spr.center());
+	spr.setPosition(spr.center());
     Sprite fire("fire.png");
 	fire.setPosition({100, 200});
 	fire.setSize({32, 32});
 	fire.setRotation(90);
 
 	Sprite f("tst.png");
-	//f.setScale(.1);
 	f.setPosition({700, 400});
-	f.setOrigin({32, 64});
-
-	float a = 0;
+    //f.setScale({0.5f});
+	f.setOrigin(f.center());
+	//f.setScale({0.5f});
 
 	vgdewarn("warn yo");
 	here
@@ -54,12 +53,9 @@ int main() {
 			vgde->exit();
 		}
 
-		f.setRotation(a);
-		a += 0.5f;
-
-		if (a >= 360) {
-		    a = 0;
-		}
+		spr.rotate(-0.5f);
+		f.rotate(1.f);
+		f.move({-.5f, 0.f});
 
 		spr.draw();
         fire.draw();

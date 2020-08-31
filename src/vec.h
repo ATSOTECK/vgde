@@ -47,7 +47,7 @@ inline vec2<T> operator -(const vec2<T> &rhs) {
 }
 
 template<typename T>
-inline vec2<T> operator +=(const vec2<T> &lhs, const vec2<T> &rhs) {
+inline vec2<T> operator +=(vec2<T> &lhs, const vec2<T> &rhs) {
 	lhs.x += rhs.x;
 	lhs.y += rhs.y;
 
@@ -55,7 +55,7 @@ inline vec2<T> operator +=(const vec2<T> &lhs, const vec2<T> &rhs) {
 }
 
 template<typename T>
-inline vec2<T> operator -=(const vec2<T> &lhs, const vec2<T> &rhs) {
+inline vec2<T> operator -=(vec2<T> &lhs, const vec2<T> &rhs) {
 	lhs.x -= rhs.x;
 	lhs.y -= rhs.y;
 
@@ -108,7 +108,7 @@ inline vec2<T> operator *(T lhs, const vec2<T> &rhs) {
 }
 
 template<typename T>
-inline vec2<T> operator *=(const vec2<T> &lhs, const vec2<T> &rhs) {
+inline vec2<T> operator *=(vec2<T> &lhs, const vec2<T> &rhs) {
 	lhs.x *= rhs.x;
 	lhs.y *= rhs.y;
 
@@ -126,7 +126,7 @@ inline vec2<T> operator /(const vec2<T> &lhs, T rhs) {
 }
 
 template<typename T>
-inline vec2<T> operator /=(const vec2<T> &lhs, const vec2<T> &rhs) {
+inline vec2<T> operator /=(vec2<T> &lhs, const vec2<T> &rhs) {
 	lhs.x /= rhs.x;
 	lhs.y /= rhs.y;
 
@@ -134,7 +134,7 @@ inline vec2<T> operator /=(const vec2<T> &lhs, const vec2<T> &rhs) {
 }
 
 template<typename T>
-inline vec2<T> operator /=(const vec2<T> &lhs, T rhs) {
+inline vec2<T> operator /=(vec2<T> &lhs, T rhs) {
 	lhs.x /= rhs;
 	lhs.y /= rhs;
 
@@ -207,7 +207,7 @@ inline vec3<T> operator -(const vec3<T> &rhs) {
 }
 
 template<typename T>
-inline vec3<T> operator +=(const vec3<T> &lhs, const vec3<T> &rhs) {
+inline vec3<T> operator +=(vec3<T> &lhs, const vec3<T> &rhs) {
 	lhs.x += rhs.x;
 	lhs.y += rhs.y;
 	lhs.z += rhs.z;
@@ -216,7 +216,7 @@ inline vec3<T> operator +=(const vec3<T> &lhs, const vec3<T> &rhs) {
 }
 
 template<typename T>
-inline vec3<T> operator -=(const vec3<T> &lhs, const vec3<T> &rhs) {
+inline vec3<T> operator -=(vec3<T> &lhs, const vec3<T> &rhs) {
 	lhs.x -= rhs.x;
 	lhs.y -= rhs.y;
 	lhs.z -= rhs.z;
@@ -270,7 +270,7 @@ inline vec3<T> operator *(T lhs, const vec3<T> &rhs) {
 }
 
 template<typename T>
-inline vec3<T> operator *=(const vec3<T> &lhs, const vec3<T> &rhs) {
+inline vec3<T> operator *=(vec3<T> &lhs, const vec3<T> &rhs) {
 	lhs.x *= rhs.x;
 	lhs.y *= rhs.y;
 	lhs.z *= rhs.z;
@@ -289,7 +289,7 @@ inline vec3<T> operator /(const vec3<T> &lhs, T rhs) {
 }
 
 template<typename T>
-inline vec3<T> operator /=(const vec3<T> &lhs, const vec3<T> &rhs) {
+inline vec3<T> operator /=(vec3<T> &lhs, const vec3<T> &rhs) {
 	lhs.x /= rhs.x;
 	lhs.y /= rhs.y;
 	lhs.z /= rhs.z;
@@ -298,7 +298,7 @@ inline vec3<T> operator /=(const vec3<T> &lhs, const vec3<T> &rhs) {
 }
 
 template<typename T>
-inline vec3<T> operator /=(const vec3<T> &lhs, T rhs) {
+inline vec3<T> operator /=(vec3<T> &lhs, T rhs) {
 	lhs.x /= rhs;
 	lhs.y /= rhs;
 	lhs.z /= rhs;

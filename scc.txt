@@ -1,4 +1,4 @@
-http://cloc.sourceforge.net v 1.62  T=0.06 s (613.5 files/s, 57724.2 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.06 s (632.1 files/s, 55009.9 lines/s)
 ---------------------------------------------------------------------------------
 File                                          blank        comment           code
 ---------------------------------------------------------------------------------
@@ -7,14 +7,15 @@ File                                          blank        comment           cod
 .\src\vgde.cpp                                   66              2            221
 .\src\input.h                                    21              1            172
 .\src\graphics\draw.cpp                          53              7            171
-.\src\graphics\sprite.cpp                        43             14            141
 .\src\graphics\font.cpp                          28              1            128
+.\src\graphics\sprite.cpp                        33             12            106
 .\src\graphics\shader.cpp                        23              5            100
 .\src\util\vtime.cpp                             30              2             97
+.\src\graphics\transform.cpp                     21              1             82
 .\src\graphics\color.cpp                         15              0             81
 .\src\util\clock.cpp                             28              1             80
-.\main.cpp                                       26              4             70
 .\src\util\resourceManager.cpp                   20              0             68
+.\main.cpp                                       24              5             67
 .\src\rect.h                                     14              4             65
 .\src\vgde.h                                     21              0             60
 .\src\graphics\texture.cpp                       16              0             60
@@ -22,7 +23,7 @@ File                                          blank        comment           cod
 .\src\util\vmath.cpp                             14              0             46
 .\src\util\vtime.h                                9              0             44
 .\src\graphics\color.h                           10              0             42
-.\src\graphics\sprite.h                          12              0             39
+.\src\graphics\transform.h                       13              0             37
 .\src\graphics\draw.h                            13              0             34
 .\src\util\vmath.h                               15             15             33
 .\src\graphics\font.h                             9              0             30
@@ -30,13 +31,16 @@ File                                          blank        comment           cod
 .\src\graphics\texture.h                          9              0             27
 .\src\util\clock.h                               10              0             26
 .\src\graphics\shader.h                           9              1             26
+.\src\graphics\sprite.h                           7              0             25
 .\src\graphics\videoMode.h                        5              0             12
+.\src\graphics\camera.h                           5              0             11
 .\src\graphics\videoMode.cpp                      3              0             11
 .\src\util\humanReadable.cpp                      3              1              9
 .\src\game\actor.h                                4              0              8
 .\src\graphics\gl.h                               2              0              5
 .\src\util\humanReadable.h                        3              0              5
+.\src\graphics\camera.cpp                         0              0              1
 .\src\game\actor.cpp                              0              0              1
 ---------------------------------------------------------------------------------
-SUM:                                            677             70           2546
+SUM:                                            699             70           2625
 ---------------------------------------------------------------------------------
