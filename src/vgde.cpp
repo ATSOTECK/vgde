@@ -3,7 +3,6 @@
 #include "graphics/draw.h"
 #include "input.h"
 #include "util/clock.h"
-#include "util/resourceManager.h"
 #include "util/vmath.h"
 
 #include <fstream>
@@ -248,7 +247,6 @@ void ::VGDE::resize(int w, int h) {
 	glInit();
 
 	drawSetProjection(0.0f, (float)_windowWidth, (float)_windowHeight, 0.0f, -1.0f, 1.0);
-	ResourceManager::instance()->updateShaderProjections();
 }
 
 void VGDE::saveInGameTime() const {

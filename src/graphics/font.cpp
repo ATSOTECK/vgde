@@ -132,6 +132,16 @@ void Font::draw(const std::string &txt, float x, float y, float scale, Shader *s
                 xpos,      ypos,     0.0f, 0.0f  // Bottom-left
         };
 
+        //Wrong but looks kinda cool
+        /*
+        float verts[] = {
+                //  Position         Texcoords
+                xpos,      ypos + h, 1.0f, 1.0f, // Top-left
+                xpos + w,  ypos + h, 0.0f, 1.0f, // Top-right
+                xpos + w,  ypos,     1.0f, 0.0f, // Bottom-right
+                xpos,      ypos,     0.0f, 0.0f  // Bottom-left
+        };*/
+
         uint indicies[] = {
                 0, 1, 2,
                 2, 3, 0

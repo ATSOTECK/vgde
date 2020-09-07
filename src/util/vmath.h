@@ -2,10 +2,14 @@
 #define __VGDE_VMATH_H__
 
 #include "config.h"
+#include "vec.h"
 
 #include <cstdarg>
 #include <cstdlib>
 #include <vector>
+
+#define V_PI  3.14159265358979323846
+#define V_TAU 6.28318530718
 
 void randomInit();
 void randomSetSeed(int seed);
@@ -17,6 +21,8 @@ float randomRange(int n, int n1);
 
 int randomi(int n = 100);
 int randomRangei(int n, int n1);
+
+vec2f randomPosition(float x, float y);
 
 template<typename T>
 T vclamp(T val, T min, T max) {

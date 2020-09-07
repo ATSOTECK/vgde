@@ -40,6 +40,17 @@ int main() {
 	f.setOrigin(f.center());
 	//f.setScale({0.5f});
 
+	std::vector<Sprite *> sprs;
+	sprs.reserve(1000);
+	for (int i = 0; i < 1000; ++i) {
+	    Sprite *t = new Sprite("fire.png");
+	    t->setSize({32, 32});
+	    t->setPosition(randomPosition(700, 500));
+	    t->setOrigin(t->center());
+	    t->setRotation(random(360));
+	    sprs.push_back(t);
+	}
+
 	vgdewarn("warn yo");
 	here
 	dbln
@@ -61,6 +72,12 @@ int main() {
         fire.draw();
         f.draw();
 
+        for (auto s : sprs) {
+            s->rotate(random(2));
+            s->setScale(random(2) / 8);
+            s->draw();
+        }
+
 		drawSetColor(Color::Red);
 		drawLine(10, 10, 100, 100);
 
@@ -81,6 +98,18 @@ int main() {
 		drawText(txt, 0, 0, 1, Color::Green);
 
         drawText("The quick brown fox jumped over the lazy dog", 200, 50, 1, Color::Red);
+
+        float mx = getMouseX();
+        float my = getMouseY();
+        drawCircle(mx, my, 25);
+        drawArc(mx, my, 35, 0, 90);
+        drawArc(mx, my, 45, 90, 180);
+        drawArc(mx, my, 35, 180, 270);
+        drawArc(mx, my, 45, 270, 360);
+
+        //glm::mat4 proj = drawGetProjection();
+        //proj = glm::translate(proj, {.5f, 0.f, 0.f});
+        //drawSetProjection(proj);
 
 		if (isKeyDown(vk_space)) {
 			setMousePosition(vec2i(100, 100));

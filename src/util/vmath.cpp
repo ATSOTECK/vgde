@@ -47,14 +47,18 @@ int randomRangei(int n, int n1) {
 	return r + n;
 }
 
+vec2f randomPosition(float x, float y) {
+    return {random((int)x), random((int)y)};
+}
+
 uint8 clampc(uint8 val) {
 	return vclamp<uint8>(val, 0, 255);
 }
 
 float degToRad(float val) {
-	return (M_PI / 180) * val;
+	return 0.01745329251994329576923690768489f * val;
 }
 
 float radToDeg(float val) {
-	return (float)(180 / M_PI) * val;
+	return 57.295779513082320876798154814105f * val;
 }

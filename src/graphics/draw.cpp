@@ -3,6 +3,7 @@
 #include "font.h"
 #include "shader.h"
 #include "vgde.h"
+#include "util/resourceManager.h"
 #include "util/vmath.h"
 
 #include <glm/glm.hpp>
@@ -92,11 +93,17 @@ glm::mat4 drawGetProjection() {
 }
 
 void drawSetProjection(float left, float right, float bottom, float top, float zNear, float zFar) {
-	_projection = glm::ortho<float>(left, right, bottom, top, zNear, zFar);
-	_shader->setMat4("projection", _projection, true);
-	_textShader->setMat4("projection", _projection, true);
+	drawSetProjection(glm::ortho<float>(left, right, bottom, top, zNear, zFar));
+}
 
-	glUseProgram(0);
+void drawSetProjection(const glm::mat4 &proj) {
+    _projection = proj;
+    _shader->setMat4("projection", _projection, true);
+    _textShader->setMat4("projection", _projection, true);
+
+    ResourceManager::instance()->updateShaderProjections();
+
+    glUseProgram(0);
 }
 
 Color drawGetColor() {
@@ -138,8 +145,28 @@ uint8 drawGetAlpha() {
 void drawSetAlpa(uint8 a) {
 	Color c = drawGetColor();
 	c.a = a;
+	c.glA = (float)a / 255;
 
 	drawSetColor(c);
+}
+
+void drawVerts(float *verts, int count, bool outline) {
+    _shader->use();
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+    glBufferData(GL_ARRAY_BUFFER, (VERT_SIZE * count) * sizeof(float), verts, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * VERT_SIZE, null);
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * VERT_SIZE, (void*)(sizeof(float) * 2));
+
+    if (outline) {
+        glDrawArrays(GL_LINE_STRIP, 0, count);
+    } else {
+        glDrawArrays(GL_POLYGON, 0, count);
+    }
+    _shader->stop();
 }
 
 void drawLine(float x, float y, float x1, float y1) {
@@ -153,18 +180,7 @@ void drawLine(float x, float y, float x1, float y1) {
 		x1, y1, r, g, b, a
 	};
 
-    _shader->use();
-    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-	glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), verts, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 6, null);
-
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(sizeof(float) * 2));
-
-	glDrawArrays(GL_LINES, 0, 2);
-    _shader->stop();
+    drawVerts(verts,2, true);
 }
 
 void drawLine(const vec2f &pos, const vec2f &pos1) {
@@ -217,6 +233,114 @@ void drawRectangle(const vec2f &pos, const vec2f &size, bool outline) {
 
 void drawRectangle(const rectf &rect, bool outline) {
 	drawRectangle(rect.x, rect.y, rect.width, rect.height, outline);
+}
+
+void drawCircle(float x, float y, float r, int sides, bool outline) {
+    if (sides < 0) {
+        sides = 1;
+    }
+    float angleShift = ((float)V_TAU / (float)sides);
+    float phi = 0.f;
+
+    float *verts = new float[VERT_SIZE * (sides + 1)];
+    for (int i = 0; i < sides; ++i, phi += angleShift) {
+        verts[VERT_SIZE * i]     = x + r * cos(phi);
+        verts[VERT_SIZE * i + 1] = y + r * sin(phi);
+        verts[VERT_SIZE * i + 2] = _color.glR;
+        verts[VERT_SIZE * i + 3] = _color.glG;
+        verts[VERT_SIZE * i + 4] = _color.glB;
+        verts[VERT_SIZE * i + 5] = _color.glA;
+    }
+
+    verts[VERT_SIZE * sides]     = verts[0];
+    verts[VERT_SIZE * sides + 1] = verts[1];
+    verts[VERT_SIZE * sides + 2] = _color.glR;
+    verts[VERT_SIZE * sides + 3] = _color.glG;
+    verts[VERT_SIZE * sides + 4] = _color.glB;
+    verts[VERT_SIZE * sides + 5] = _color.glA;
+
+    drawVerts(verts, sides + 1, outline);
+
+    delete [] verts;
+}
+
+void drawArc(float x, float y, float r, float a, float a1, int sides, bool radians) {
+    if (sides == 0 || a == a1) {
+        return;
+    }
+
+    if (!radians) {
+        a = degToRad(a);
+        a1 = degToRad(a1);
+    }
+
+    if (fabs(a - a1) >= V_TAU) {
+        drawCircle(x, y, r, sides, true);
+        return;
+    }
+
+    float angleShift = (a - a1) / (float)sides;
+    if (angleShift == 0) {
+        return;
+    }
+
+    float phi = a;
+    float *verts = new float[VERT_SIZE * (sides + 1)];
+
+    for (int i = 0; i <= sides; ++i, phi += angleShift) {
+        verts[VERT_SIZE * i]     = x + r * cos(phi);
+        verts[VERT_SIZE * i + 1] = y + r * sin(phi);
+        verts[VERT_SIZE * i + 2] = _color.glA;
+        verts[VERT_SIZE * i + 3] = _color.glG;
+        verts[VERT_SIZE * i + 4] = _color.glB;
+        verts[VERT_SIZE * i + 5] = _color.glA;
+    }
+
+    drawVerts(verts, sides + 1, true);
+
+}
+
+void drawSlice(float x, float y, float r, float a, float a1, int sides, bool outline, bool radians) {
+    if (sides == 0 || a == a1) {
+        return;
+    }
+
+    if (!radians) {
+        a = degToRad(a);
+        a1 = degToRad(a1);
+    }
+
+    if (fabs(a - a1) >= V_TAU) {
+        drawCircle(x, y, r, sides, outline);
+        return;
+    }
+
+    float angleShift = (a - a1) / sides;
+    if (angleShift == 0) {
+        return;
+    }
+
+    float phi = a;
+    int vertsSize = (sides + 3) * VERT_SIZE;
+    float *verts = new float[vertsSize];
+    verts[0] = verts[vertsSize - VERT_SIZE] = x;
+    verts[1] = verts[vertsSize - 5] = y;
+    verts[2] = verts[vertsSize - 4] = _color.glR;
+    verts[3] = verts[vertsSize - 3] = _color.glG;
+    verts[4] = verts[vertsSize - 2] = _color.glB;
+    verts[5] = verts[vertsSize - 1] = _color.glA;
+
+    for (int i = 0; i <= sides; ++i, phi += angleShift) {
+        verts[VERT_SIZE * (i + 1)] = x + r * cos(phi);
+        verts[VERT_SIZE * (i + 1) + 1] = y + r * sin(phi);
+        verts[VERT_SIZE * (i + 1) + 2] = _color.glA;
+        verts[VERT_SIZE * (i + 1) + 3] = _color.glG;
+        verts[VERT_SIZE * (i + 1) + 4] = _color.glB;
+        verts[VERT_SIZE * (i + 1) + 5] = _color.glA;
+    }
+
+    drawVerts(verts, sides + 3, outline);
+
 }
 
 void drawText(const std::string &txt, float x, float y, float scale, const Color &color) {
