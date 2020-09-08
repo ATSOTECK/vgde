@@ -180,10 +180,10 @@ bool isButtonReleased(int btn, int btn1);
 bool isKeyDownGlobal(int key);
 bool isButtonDownGlobal(int btn);
 
-vec2i getMousePositionGlobal();
-vec2i getMousePosition();
-int getMouseX();
-int getMouseY();
+vec2i mousePositionGlobal();
+vec2i mousePosition();
+int mouseX();
+int mouseY();
 
 void setMousePositionGlobal(const vec2i &pos);
 void setMousePosition(const vec2i &pos);

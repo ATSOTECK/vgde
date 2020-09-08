@@ -293,14 +293,14 @@ bool isButtonDownGlobal(int btn) {
 	return (GetAsyncKeyState(buttonToVKey(btn)) & 0x8000) != 0;
 }
 
-vec2i getMousePositionGlobal() {
+vec2i mousePositionGlobal() {
 	POINT p;
 	GetCursorPos(&p);
 
 	return {p.x, p.y};
 }
 
-vec2i getMousePosition() {
+vec2i mousePosition() {
 	POINT p;
 	GetCursorPos(&p);
 	ScreenToClient(_hwnd, &p);
@@ -308,12 +308,12 @@ vec2i getMousePosition() {
 	return {p.x, p.y};
 }
 
-int getMouseX() {
-	return getMousePosition().x;
+int mouseX() {
+	return mousePosition().x;
 }
 
-int getMouseY() {
-	return getMousePosition().y;
+int mouseY() {
+	return mousePosition().y;
 }
 
 void setMousePositionGlobal(const vec2i &pos) {
@@ -351,7 +351,7 @@ void setMousePosition(int x, int y) {
 }
 
 void moveMouse(const vec2i &offset) {
-	vec2i pos = getMousePosition();
+	vec2i pos = mousePosition();
 	setMousePosition(pos + offset);
 }
 

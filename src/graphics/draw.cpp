@@ -315,7 +315,7 @@ void drawSlice(float x, float y, float r, float a, float a1, int sides, bool out
         return;
     }
 
-    float angleShift = (a - a1) / sides;
+    float angleShift = (a - a1) / (float)sides;
     if (angleShift == 0) {
         return;
     }

@@ -10,6 +10,8 @@
 #include "util/humanReadable.h"
 #include "util/resourceManager.h"
 
+#include "graphics/renderTarget.h"
+
 int main() {
 	VGDE *vgde = VGDE::instance();
 	//vgde->init(vgde->nativeVideoMode());
@@ -51,6 +53,8 @@ int main() {
 	    sprs.push_back(t);
 	}
 
+	RenderTarget rt({100, 100});
+
 	vgdewarn("warn yo");
 	here
 	dbln
@@ -75,6 +79,7 @@ int main() {
         for (auto s : sprs) {
             s->rotate(random(2));
             s->setScale(random(2) / 8);
+            s->setOrigin(s->center());
             s->draw();
         }
 
@@ -88,7 +93,7 @@ int main() {
         drawLine(0, 0, f.position().x, f.position().y);
 
 		drawRectangle(400, 500, 100, 35);
-		drawSetColor(Color::Red + Color::Blue);
+		drawSetColor(Color::Red + Color::Green);
 		drawRectangle(400, 500, 100, 35, true);
 
 		//vgde->setWindowTitle("vgde " + std::to_string(vgde->fps()));
@@ -99,8 +104,8 @@ int main() {
 
         drawText("The quick brown fox jumped over the lazy dog", 200, 50, 1, Color::Red);
 
-        float mx = getMouseX();
-        float my = getMouseY();
+        float mx = mouseX();
+        float my = mouseY();
         drawCircle(mx, my, 25);
         drawArc(mx, my, 35, 0, 90);
         drawArc(mx, my, 45, 90, 180);
