@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(vgde)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 #include_directories(include)
 include_directories(include/glad)
@@ -13,6 +13,7 @@ include_directories(include/glm/gtc)
 include_directories(include/glm/gtx)
 include_directories(include/glm/simd)
 include_directories(include/KHR)
+include_directories(include/vulkan)
 include_directories(src)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -460,7 +461,8 @@ add_executable(vgde
         src/vgde.h
         src/util/vmath.cpp
         src/util/vmath.h
-        main.cpp src/graphics/texture.cpp src/graphics/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/graphics/videoMode.h src/graphics/videoMode.cpp src/graphics/font.cpp src/graphics/font.h src/graphics/color.cpp src/graphics/color.h src/game/actor.cpp src/game/actor.h src/util/resourceManager.cpp src/util/resourceManager.h src/util/humanReadable.cpp src/util/humanReadable.h src/graphics/camera.cpp src/graphics/camera.h src/graphics/transform.cpp src/graphics/transform.h src/graphics/renderTarget.cpp src/graphics/renderTarget.h)
+        main.cpp src/graphics/texture.cpp src/graphics/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/graphics/videoMode.h src/graphics/videoMode.cpp src/graphics/font.cpp src/graphics/font.h src/graphics/color.cpp src/graphics/color.h src/game/actor.cpp src/game/actor.h src/util/resourceManager.cpp src/util/resourceManager.h src/util/humanReadable.cpp src/util/humanReadable.h src/graphics/camera.cpp src/graphics/camera.h src/graphics/transform.cpp src/graphics/transform.h src/graphics/renderTarget.cpp src/graphics/renderTarget.h src/util/utf.h src/util/vstring.cpp src/util/vstring.h src/graphics/vulkan/vk.h src/graphics/vulkan/vk.cpp)
 
+target_link_libraries(vgde vulkan-1)
 target_link_libraries(vgde glfw3)
 target_link_libraries(vgde freetype)

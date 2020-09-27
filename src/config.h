@@ -4,6 +4,10 @@
 #include <cstdint>
 #include <Windows.h>
 
+#ifndef NDEBUG
+#define VDEBUG
+#endif
+
 #define null nullptr
 
 typedef int8_t  int8;
@@ -51,11 +55,11 @@ typedef size_t sizeT;
 #define reinterpretCast(x, y) reinterpret_cast<x>(y)
 #define constCast(x, y)		  const_cast<x>(y)
 
-#define here std::cerr << "here line #" << __LINE__ << " " __FILE__ << std::endl;
+#define here std::cout << "here line #" << __LINE__ << " " __FILE__ << std::endl;
 #define vgderr(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); std::cerr << "Error: " << x << " on line #" << __LINE__ << " in " __FILE__ << std::endl; SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15)
 #define vgdewarn(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14); std::cerr << "Warning: " << x << " on line #" << __LINE__ << " in " __FILE__ << std::endl; SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15)
-#define db(x) std::cerr << x << std::endl
-#define dbln std::cerr << std::endl;
+#define db(x) std::cout << x << std::endl
+#define dbln std::cout << std::endl;
 #define trace(x) std::cerr << __FILE__ << ", L" << __LINE__ << ": " << x << std::endl
 #define tracemsg std::cerr << __FILE__ << ", L" << __LINE__ << ": "
 

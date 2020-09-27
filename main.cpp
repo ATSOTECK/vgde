@@ -1,5 +1,10 @@
 #include "config.h"
 
+#include <GLFW/glfw3.h>
+
+#include <iostream>
+
+/*
 #include "vgde.h"
 #include "graphics/draw.h"
 
@@ -11,7 +16,33 @@
 #include "util/resourceManager.h"
 
 #include "graphics/renderTarget.h"
+ */
 
+#include "graphics/vulkan/vk.h"
+
+int main() {
+    glfwInit();
+
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "vgde vulkan", nullptr, nullptr);
+
+    Vulkan vulkan{};
+    vulkan.init(window, VK_DEBUG);
+    vulkan.displayInfo();
+
+    while(!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+    }
+
+    glfwDestroyWindow(window);
+
+    glfwTerminate();
+
+    //std::cin.get();
+    return 0;
+}
+
+/*
 int main() {
 	VGDE *vgde = VGDE::instance();
 	//vgde->init(vgde->nativeVideoMode());
@@ -104,6 +135,8 @@ int main() {
 
         drawText("The quick brown fox jumped over the lazy dog", 200, 50, 1, Color::Red);
 
+        drawText("我爱你 :)", 800, 100, 1, Color::White);
+
         float mx = mouseX();
         float my = mouseY();
         drawCircle(mx, my, 25);
@@ -127,4 +160,4 @@ int main() {
 
 	vgde->cleanUp();
 	return 0;
-}
+}*/
