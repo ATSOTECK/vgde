@@ -25,6 +25,7 @@ int main() {
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     GLFWwindow* window = glfwCreateWindow(800, 600, "vgde vulkan", nullptr, nullptr);
+    glfwSetFramebufferSizeCallback(window, vkResize);
 
     Vulkan vulkan{};
     vulkan.init(window, VK_DEBUG);

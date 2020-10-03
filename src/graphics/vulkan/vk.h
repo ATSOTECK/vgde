@@ -35,6 +35,8 @@ struct SwapChainSupportDetails {
     std::vector<VkPresentModeKHR> presentModes;
 };
 
+void vkResize(GLFWwindow *, int, int);
+
 class Vulkan {
 public:
     ~Vulkan();
@@ -51,6 +53,10 @@ private:
     void createSurface();
     void pickPhysicalDevice();
     void createLogicalDevice();
+
+    void cleanupSwapChain();
+    void recreateSwapChain();
+
     void createSwapChain();
     void createImageViews();
     void createRenderPass();
@@ -58,6 +64,7 @@ private:
     void createFramebuffers();
     void createCommandPool();
     void createCommandBuffers();
+
     void createSyncObjects();
 
     static bool checkValidationLayerSupport();

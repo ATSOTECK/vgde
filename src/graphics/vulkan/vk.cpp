@@ -11,6 +11,7 @@
 
 namespace {
 const int MAX_FRAMES_IN_FLIGHT = 2;
+bool _frameBufferResized;
 
 const std::vector<const char*> validationLayers = {
         "VK_LAYER_KHRONOS_validation"
@@ -82,10 +83,12 @@ bool checkDeviceExtensionSupport(VkPhysicalDevice device) {
 }
 }
 
+void vkResize(GLFWwindow *, int, int) {
+    _frameBufferResized = true;
+}
+
 Vulkan::~Vulkan() {
-#ifdef VDEBUG
-    destroyDebugUtilsMessengerEXT(_instance, _debugMessenger, null);
-#endif
+    cleanupSwapChain();
 
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
         vkDestroySemaphore(_device, _renderFinishedSemaphores[i], null);
@@ -94,20 +97,12 @@ Vulkan::~Vulkan() {
     }
 
     vkDestroyCommandPool(_device, _commandPool, null);
-
-    for (auto framebuffer : _swapChainFramebuffers) {
-        vkDestroyFramebuffer(_device, framebuffer, null);
-    }
-
-    for (auto imageView : _swapChainImageViews) {
-        vkDestroyImageView(_device, imageView, null);
-    }
-
-    vkDestroyPipeline(_device, _graphicsPipeline, null);
-    vkDestroyPipelineLayout(_device, _pipelineLayout, null);
-    vkDestroyRenderPass(_device, _renderPass, null);
-    vkDestroySwapchainKHR(_device, _swapChain, null);
     vkDestroyDevice(_device, null);
+
+#ifdef VDEBUG
+    destroyDebugUtilsMessengerEXT(_instance, _debugMessenger, null);
+#endif
+
     vkDestroySurfaceKHR(_instance, _surface, null);
     vkDestroyInstance(_instance, null);
 }
@@ -115,6 +110,7 @@ Vulkan::~Vulkan() {
 void Vulkan::init(GLFWwindow *window, bool debug) {
     _window = window;
     _currentFrame = 0;
+    _frameBufferResized = false;
 
     createInstance();
     if (debug) {
@@ -137,7 +133,15 @@ void Vulkan::drawFrame() {
     vkWaitForFences(_device, 1, &_inFlightFences[_currentFrame], VK_TRUE, UINT64_MAX);
 
     uint32 imageIndex;
-    vkAcquireNextImageKHR(_device, _swapChain, UINT64_MAX, _imageAvailableSemaphores[_currentFrame], VK_NULL_HANDLE, &imageIndex);
+    VkResult result = vkAcquireNextImageKHR(_device, _swapChain, UINT64_MAX, _imageAvailableSemaphores[_currentFrame], VK_NULL_HANDLE, &imageIndex);
+
+    if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+        recreateSwapChain();
+        return;
+    } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+        vgderr("Failed to acquire swap chain image!");
+        return;
+    }
 
     if (_imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
         vkWaitForFences(_device, 1, &_imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
@@ -175,7 +179,16 @@ void Vulkan::drawFrame() {
     presentInfo.pImageIndices = &imageIndex;
     presentInfo.pResults = null;
 
-    vkQueuePresentKHR(_presentQueue, &presentInfo);
+    result = vkQueuePresentKHR(_presentQueue, &presentInfo);
+
+    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || _frameBufferResized) {
+        recreateSwapChain();
+        _frameBufferResized = false;
+    } else if (result != VK_SUCCESS) {
+        vgderr("Failed to present swap chain image!");
+        return;
+    }
+
     _currentFrame = (_currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }
 
@@ -326,6 +339,44 @@ void Vulkan::createLogicalDevice() {
 
     vkGetDeviceQueue(_device, indices.graphicsFamily.value(), 0, &_graphicsQueue);
     vkGetDeviceQueue(_device, indices.presentFamily.value(), 0, &_presentQueue);
+}
+
+void Vulkan::cleanupSwapChain() {
+    for (auto framebuffer : _swapChainFramebuffers) {
+        vkDestroyFramebuffer(_device, framebuffer, null);
+    }
+
+    vkFreeCommandBuffers(_device, _commandPool, staticCastu32(_commandBuffers.size()), _commandBuffers.data());
+
+    vkDestroyPipeline(_device, _graphicsPipeline, null);
+    vkDestroyPipelineLayout(_device, _pipelineLayout, null);
+    vkDestroyRenderPass(_device, _renderPass, null);
+
+    for (auto imageView : _swapChainImageViews) {
+        vkDestroyImageView(_device, imageView, null);
+    }
+
+    vkDestroySwapchainKHR(_device, _swapChain, null);
+}
+
+void Vulkan::recreateSwapChain() {
+    int w, h;
+    glfwGetFramebufferSize(_window, &w, &h);
+    while (w == 0 || h == 0) {
+        glfwGetFramebufferSize(_window, &w, &h);
+        glfwWaitEvents();
+    }
+
+    vkDeviceWaitIdle(_device);
+
+    cleanupSwapChain();
+
+    createSwapChain();
+    createImageViews();
+    createRenderPass();
+    createGraphicsPipeline();
+    createFramebuffers();
+    createCommandBuffers();
 }
 
 void Vulkan::createSwapChain() {
@@ -860,7 +911,7 @@ VkExtent2D Vulkan::chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities
     }
 
     int w, h;
-    glfwGetWindowSize(_window, &w, &h);
+    glfwGetFramebufferSize(_window, &w, &h);
     VkExtent2D actualExtent = {staticCastu32(w), staticCastu32(h)};
 
     actualExtent.width = std::max(capabilities.minImageExtent.width,
