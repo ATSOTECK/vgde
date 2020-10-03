@@ -90,6 +90,9 @@ void vkResize(GLFWwindow *, int, int) {
 Vulkan::~Vulkan() {
     cleanupSwapChain();
 
+    vkDestroyBuffer(_device, _vertexBuffer, null);
+    vkFreeMemory(_device, _vertexBufferMemory, null);
+
     for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
         vkDestroySemaphore(_device, _renderFinishedSemaphores[i], null);
         vkDestroySemaphore(_device, _imageAvailableSemaphores[i], null);
@@ -112,6 +115,12 @@ void Vulkan::init(GLFWwindow *window, bool debug) {
     _currentFrame = 0;
     _frameBufferResized = false;
 
+    _verts = {
+            {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+            {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+            {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+    };
+
     createInstance();
     if (debug) {
         initDebug();
@@ -125,6 +134,7 @@ void Vulkan::init(GLFWwindow *window, bool debug) {
     createGraphicsPipeline();
     createFramebuffers();
     createCommandPool();
+    createVertexBuffer();
     createCommandBuffers();
     createSyncObjects();
 }
@@ -520,12 +530,15 @@ void Vulkan::createGraphicsPipeline() {
 
     VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
 
+    auto bindingDescription = Vertex::getBindingDescription();
+    auto attributeDescriptions = Vertex::getAttributeDescriptions();
+
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexBindingDescriptionCount = 0;
-    vertexInputInfo.pVertexBindingDescriptions = null;
-    vertexInputInfo.vertexAttributeDescriptionCount = 0;
-    vertexInputInfo.pVertexAttributeDescriptions = null;
+    vertexInputInfo.vertexBindingDescriptionCount = 1;
+    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+    vertexInputInfo.vertexAttributeDescriptionCount = staticCastu32(attributeDescriptions.size());
+    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -725,7 +738,12 @@ void Vulkan::createCommandBuffers() {
 
         vkCmdBeginRenderPass(_commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         vkCmdBindPipeline(_commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, _graphicsPipeline);
-        vkCmdDraw(_commandBuffers[i], 3, 1, 0, 0);
+
+        VkBuffer vertexBuffers[] = {_vertexBuffer};
+        VkDeviceSize offsets[] = {0};
+        vkCmdBindVertexBuffers(_commandBuffers[i], 0, 1, vertexBuffers, offsets);
+
+        vkCmdDraw(_commandBuffers[i], staticCastu32(_verts.size()), 1, 0, 0);
         vkCmdEndRenderPass(_commandBuffers[i]);
 
         if (vkEndCommandBuffer(_commandBuffers[i]) != VK_SUCCESS) {
@@ -755,6 +773,41 @@ void Vulkan::createSyncObjects() {
             vgderr("Failed to create synchronization objects for a frame!");
         }
     }
+}
+
+void Vulkan::createVertexBuffer() {
+    VkBufferCreateInfo bufferInfo{};
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.size = sizeof(_verts[0]) * _verts.size();
+    bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    bufferInfo.flags = 0;
+
+    if (vkCreateBuffer(_device, &bufferInfo, null, &_vertexBuffer) != VK_SUCCESS) {
+        vgderr("Failed to create a vertex buffer!");
+        return;
+    }
+
+    VkMemoryRequirements memoryRequirements;
+    vkGetBufferMemoryRequirements(_device, _vertexBuffer, &memoryRequirements);
+
+    VkMemoryAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.allocationSize = memoryRequirements.size;
+    allocInfo.memoryTypeIndex = findMemoryType(memoryRequirements.memoryTypeBits,
+                                               VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+    if (vkAllocateMemory(_device, &allocInfo, null, &_vertexBufferMemory) != VK_SUCCESS) {
+        vgderr("Failed to allocate vertex buffer memory!");
+        return;
+    }
+
+    vkBindBufferMemory(_device, _vertexBuffer, _vertexBufferMemory, 0);
+
+    void *data;
+    vkMapMemory(_device, _vertexBufferMemory, 0, bufferInfo.size, 0, &data);
+    memcpy(data, _verts.data(), (size_t)bufferInfo.size);
+    vkUnmapMemory(_device, _vertexBufferMemory);
 }
 
 bool Vulkan::checkValidationLayerSupport() {
@@ -951,4 +1004,20 @@ VkShaderModule Vulkan::createShaderModule(const std::vector<char> &code) {
     }
 
     return shaderModule;
+}
+
+uint32 Vulkan::findMemoryType(uint32 filter, VkMemoryPropertyFlags properties) {
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &memoryProperties);
+
+    for (uint32 i = 0; i < memoryProperties.memoryTypeCount; ++i) {
+        if ((filter & ((uint32)1 << i)) && (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+            return i;
+        }
+    }
+
+    vgderr("Failed to find a suitable memory type!");
+    assert(true == false);
+
+    return 0;
 }

@@ -2,7 +2,9 @@
 #define __VGDE_VK_H__
 
 #include "config.h"
+#include "vec.h"
 
+#include <array>
 #define GLFW_INCLUDE_VULKAN
 #include <glfw3.h>
 #include <optional>
@@ -33,6 +35,34 @@ struct SwapChainSupportDetails {
     VkSurfaceCapabilitiesKHR capabilities;
     std::vector<VkSurfaceFormatKHR> formats;
     std::vector<VkPresentModeKHR> presentModes;
+};
+
+struct Vertex {
+    vec2f pos;
+    vec3f color;
+
+    static VkVertexInputBindingDescription getBindingDescription() {
+        VkVertexInputBindingDescription bindingDescription;
+        bindingDescription.binding = 0;
+        bindingDescription.stride = sizeof(Vertex);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+        return bindingDescription;
+    }
+
+    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
+        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+        attributeDescriptions[0].binding = 0;
+        attributeDescriptions[0].location = 0;
+        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].location = 1;
+        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+        return attributeDescriptions;
+    }
 };
 
 void vkResize(GLFWwindow *, int, int);
@@ -67,6 +97,8 @@ private:
 
     void createSyncObjects();
 
+    void createVertexBuffer();
+
     static bool checkValidationLayerSupport();
     static std::vector<const char *> getRequiredExtensions();
 
@@ -80,6 +112,8 @@ private:
     static std::vector<char> readFile(const std::string &filename);
 
     VkShaderModule createShaderModule(const std::vector<char> &code);
+
+    uint32 findMemoryType(uint32 filter, VkMemoryPropertyFlags properties);
 
     VkInstance _instance;
     VkDebugUtilsMessengerEXT _debugMessenger;
@@ -106,5 +140,9 @@ private:
     std::vector<VkFence> _inFlightFences;
     std::vector<VkFence> _imagesInFlight;
     size_t _currentFrame;
+    VkBuffer _vertexBuffer;
+    VkDeviceMemory _vertexBufferMemory;
+
+    std::vector<Vertex> _verts;
 };
 #endif //__VGDE_VK_H__

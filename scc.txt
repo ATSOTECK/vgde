@@ -1,8 +1,8 @@
-http://cloc.sourceforge.net v 1.62  T=0.08 s (618.8 files/s, 63048.0 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.07 s (628.7 files/s, 64853.5 lines/s)
 ----------------------------------------------------------------------------------
 File                                           blank        comment           code
 ----------------------------------------------------------------------------------
-.\src\graphics\vulkan\vk.cpp                     170             14            719
+.\src\graphics\vulkan\vk.cpp                     182             14            758
 .\src\input.cpp                                   56              4            300
 .\src\graphics\draw.cpp                           77              7            271
 .\src\vec.h                                       66              8            252
@@ -12,7 +12,7 @@ File                                           blank        comment           co
 .\src\graphics\sprite.cpp                         33             12            106
 .\src\graphics\shader.cpp                         23              5            100
 .\src\util\vtime.cpp                              30              2             97
-.\src\graphics\vulkan\vk.h                        17              1             85
+.\src\graphics\vulkan\vk.h                        21              1             88
 .\src\graphics\transform.cpp                      21              1             82
 .\src\graphics\color.cpp                          15              0             81
 .\src\util\clock.cpp                              28              1             80
@@ -35,7 +35,7 @@ File                                           blank        comment           co
 .\src\util\clock.h                                10              0             26
 .\src\graphics\shader.h                            9              1             26
 .\src\graphics\sprite.h                            7              0             25
-.\main.cpp                                        43            104             20
+.\main.cpp                                        43            104             21
 .\src\graphics\renderTarget.h                      5              1             14
 .\src\graphics\videoMode.h                         5              0             12
 .\src\graphics\camera.h                            5              0             11
@@ -50,5 +50,5 @@ File                                           blank        comment           co
 .\src\util\vstring.cpp                             2              4              3
 .\src\game\actor.cpp                               0              0              1
 ----------------------------------------------------------------------------------
-SUM:                                             978            207           3604
+SUM:                                             994            207           3647
 ----------------------------------------------------------------------------------
