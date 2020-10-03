@@ -6,6 +6,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include <glfw3.h>
 #include <optional>
+#include <string>
 #include <vector>
 #include <vulkan.h>
 #include <Windows.h>
@@ -39,6 +40,9 @@ public:
     ~Vulkan();
     void init(GLFWwindow *window, bool debug = false);
 
+    void drawFrame();
+    void wait();
+
     void displayInfo();
 
 private:
@@ -49,7 +53,12 @@ private:
     void createLogicalDevice();
     void createSwapChain();
     void createImageViews();
+    void createRenderPass();
     void createGraphicsPipeline();
+    void createFramebuffers();
+    void createCommandPool();
+    void createCommandBuffers();
+    void createSyncObjects();
 
     static bool checkValidationLayerSupport();
     static std::vector<const char *> getRequiredExtensions();
@@ -60,6 +69,10 @@ private:
     static VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &availableFormats);
     static VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> & availableModes);
     VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities);
+
+    static std::vector<char> readFile(const std::string &filename);
+
+    VkShaderModule createShaderModule(const std::vector<char> &code);
 
     VkInstance _instance;
     VkDebugUtilsMessengerEXT _debugMessenger;
@@ -75,5 +88,16 @@ private:
     VkFormat _swapChainImageFormat;
     VkExtent2D _swapChainExtent;
     std::vector<VkImageView> _swapChainImageViews;
+    VkRenderPass _renderPass;
+    VkPipelineLayout _pipelineLayout;
+    VkPipeline _graphicsPipeline;
+    std::vector<VkFramebuffer> _swapChainFramebuffers;
+    VkCommandPool _commandPool;
+    std::vector<VkCommandBuffer> _commandBuffers;
+    std::vector<VkSemaphore> _imageAvailableSemaphores;
+    std::vector<VkSemaphore> _renderFinishedSemaphores;
+    std::vector<VkFence> _inFlightFences;
+    std::vector<VkFence> _imagesInFlight;
+    size_t _currentFrame;
 };
 #endif //__VGDE_VK_H__

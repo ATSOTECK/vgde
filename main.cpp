@@ -32,7 +32,11 @@ int main() {
 
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+
+        vulkan.drawFrame();
     }
+
+    vulkan.wait();
 
     glfwDestroyWindow(window);
 
