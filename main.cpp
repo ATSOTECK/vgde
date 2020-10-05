@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include "util/clock.h"
 
 /*
 #include "vgde.h"
@@ -31,10 +32,22 @@ int main() {
     vulkan.init(window, VK_DEBUG);
     vulkan.displayInfo();
 
+    int frames = 0;
+    Clock clock;
+    int32 time = clock.restart().asMilliseconds();
+
     while(!glfwWindowShouldClose(window)) {
+        clock.restart();
         glfwPollEvents();
 
         vulkan.drawFrame();
+        ++frames;
+
+        if (Clock::timeAsMilliseconds() > time + 1000) {
+            time = Clock::timeAsMilliseconds();
+            db("fps: " << frames);
+            frames = 0;
+        }
     }
 
     vulkan.wait();

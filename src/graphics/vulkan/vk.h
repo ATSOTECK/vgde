@@ -98,6 +98,9 @@ private:
     void createSyncObjects();
 
     void createVertexBuffer();
+    void createIndexBuffer();
+    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer &buffer, VkDeviceMemory &bufferMemory);
+    void copyBuffer(VkBuffer src, VkBuffer dst, VkDeviceSize size);
 
     static bool checkValidationLayerSupport();
     static std::vector<const char *> getRequiredExtensions();
@@ -142,7 +145,10 @@ private:
     size_t _currentFrame;
     VkBuffer _vertexBuffer;
     VkDeviceMemory _vertexBufferMemory;
+    VkBuffer _indexBuffer;
+    VkDeviceMemory _indexBufferMemory;
 
     std::vector<Vertex> _verts;
+    std::vector<uint16> _indices;
 };
 #endif //__VGDE_VK_H__
