@@ -1,11 +1,9 @@
 #include "config.h"
 
-#include <GLFW/glfw3.h>
-
 #include <iostream>
-#include "util/clock.h"
+//#include "util/clock.h"
 
-/*
+///*
 #include "vgde.h"
 #include "graphics/draw.h"
 
@@ -17,8 +15,9 @@
 #include "util/resourceManager.h"
 
 #include "graphics/renderTarget.h"
- */
-
+ //*/
+/*
+#include <GLFW/glfw3.h>
 #include "graphics/vulkan/vk.h"
 
 int main() {
@@ -45,7 +44,7 @@ int main() {
 
         if (Clock::timeAsMilliseconds() > time + 1000) {
             time = Clock::timeAsMilliseconds();
-            db("fps: " << frames);
+            //db("fps: " << frames);
             frames = 0;
         }
     }
@@ -58,10 +57,44 @@ int main() {
 
     //std::cin.get();
     return 0;
-}
+}*/
 
-/*
+///*
 int main() {
+    String w = "hello world";
+    String h = "hello world";
+    db(w.startsWith("hello"));
+    db(w.endsWith("world"));
+    
+    db((w == h));
+    
+    w.erase(4, 2);
+    db(w);
+    w.erase(0);
+    db(w);
+    String s = "    yo    ";
+    db("sw " << s.startsWith("yo", true));
+    db("sw " << s.startsWith("yo"));
+    
+    db("ew " << s.endsWith("yo", true));
+    db("ew " << s.endsWith("yo"));
+    
+    db("'" << s << "'");
+    s.trimLeadingWhitespace();
+    db("'" << s << "'");
+    s.trimTrailingWhitespace();
+    db("'" << s << "'");
+    
+    String c("我爱你 :)");
+    db(c);
+    db(c.length());
+    db(c.size());
+    for (int i = 0; i < c.length(); ++i) {
+        uint32 cp = c[i];
+        db(cp);
+    }
+    return 0;
+
 	VGDE *vgde = VGDE::instance();
 	//vgde->init(vgde->nativeVideoMode());
 	vgde->init();
@@ -101,6 +134,8 @@ int main() {
 	    t->setRotation(random(360));
 	    sprs.push_back(t);
 	}
+	
+	Font *chinese = new Font("SimSun.ttf");
 
 	RenderTarget rt({100, 100});
 
@@ -126,10 +161,10 @@ int main() {
         f.draw();
 
         for (auto s : sprs) {
-            s->rotate(random(2));
-            s->setScale(random(2) / 8);
-            s->setOrigin(s->center());
-            s->draw();
+            //s->rotate(random(2));
+            //s->setScale(random(2) / 8);
+            //s->setOrigin(s->center());
+            //s->draw();
         }
 
 		drawSetColor(Color::Red);
@@ -153,7 +188,8 @@ int main() {
 
         drawText("The quick brown fox jumped over the lazy dog", 200, 50, 1, Color::Red);
 
-        drawText("我爱你 :)", 800, 100, 1, Color::White);
+        drawText("我当然还是[red]爱[]你", 800, 100, 1, Color::White, chinese);
+        //drawText(String("[blue]:)"), 800, 100, 1, Color::White);
 
         float mx = mouseX();
         float my = mouseY();
@@ -178,4 +214,4 @@ int main() {
 
 	vgde->cleanUp();
 	return 0;
-}*/
+}//*/

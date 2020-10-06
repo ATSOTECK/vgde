@@ -1,6 +1,5 @@
 #include "font.h"
 
-#include "color.h"
 #include "gl.h"
 
 #include <iostream>
@@ -9,10 +8,21 @@ Font::Font(const std::string &fnt) {
     loadFont(fnt);
 }
 
+Font::~Font() {
+    if (_face) {
+        FT_Done_Face((FT_Face)_face);
+    }
+    
+    if (_lib) {
+        FT_Done_FreeType((FT_Library)_lib);
+    }
+}
+
 void Font::loadFont(const std::string &filename) {
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
         vgderr("Could not init freetype!");
+        return;
     }
     _lib = ft;
 
@@ -20,17 +30,24 @@ void Font::loadFont(const std::string &filename) {
     if (FT_New_Face(ft, filename.c_str(), 0, &face)) {
         vgderr("Failed to load font!");
     }
-    _face = face;
 
     FT_Set_Pixel_Sizes(face, 0, DEFAULT_FONT_SIZE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    
+    if (FT_Select_Charmap(face, FT_ENCODING_UNICODE)) {
+        vgderr("Unable to load font \"" << filename << "\" failed to set the unicode charset.\n");
+        FT_Done_Face(face);
+        return;
+    }
+    
+    _face = face;
 
     for (uint c = 0; c < 128; ++c) {
-        getGlyph(c, 24);
+        //getGlyph(c, 24);
     }
 
-    FT_Done_Face(face);
-    FT_Done_FreeType(ft);
+    //FT_Done_Face(face);
+    //FT_Done_FreeType(ft);
 
     glGenBuffers(1, &_ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
@@ -48,31 +65,37 @@ void Font::loadFont(const std::string &filename) {
     glUseProgram(0);
 }
 
-void Font::draw(const std::string &txt, float x, float y, float scale, Shader *shader) {
+void Font::draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color) {
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(_vao);
     float ox = x;
 
-    for (int i = 0; i < txt.size(); ++i) {
-        if (txt[i] == '\n') {
+    for (int i = 0; i < txt.length(); ++i) {
+        uint32 cp = txt[i];
+        
+        if (cp == '\n') {
             y += 24;
             x = ox;
             continue;
         }
 
-        if (txt[i] == '\t') {
-            x += ((_chars[' '].advance >> 6) * scale) * 4;
+        if (cp == '\t') {
+            x += ((_chars[' '].advance >> 6u) * scale) * 4;
             continue;
         }
 
-        if (txt[i] == '[' && txt[i - 1] != '\\') {
+        if (cp == '[' && txt[i - 1] != '\\') {
             std::string str;
-            while (txt[++i] != ']') {
-                str += txt[i];
+            while (cp != ']') {
+                cp = txt[++i];
+                if (cp != ']') {
+                    str += cp;
+                }
             }
-            ++i;
-
-            if (str == "black") {
+            
+            if (str.empty()) {
+                shader->setVec3f("textColor", color.vec3gl());
+            } else if (str == "black") {
                 shader->setVec3f("textColor", Color::Black.vec3gl());
             } else if (str == "white") {
                 shader->setVec3f("textColor", Color::White.vec3gl());
@@ -93,12 +116,15 @@ void Font::draw(const std::string &txt, float x, float y, float scale, Shader *s
             } else if (str == "turquoise") {
                 shader->setVec3f("textColor", Color::Turquoise.vec3gl());
             }
+            
+            continue;
         }
-
-        Character ch = _chars[txt[i]];
+        
+        Character ch = _chars[cp];
         if (ch.textureID == 0) {
-            getGlyph(txt[i], 24);
-            ch = _chars[txt[i]];
+            getGlyph(cp, 24);
+
+            ch = _chars[cp];
         }
 
         float xpos = x + ch.bearing.x * scale;
@@ -150,8 +176,11 @@ void Font::draw(const std::string &txt, float x, float y, float scale, Shader *s
 
 void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness) {
     FT_Face face = (FT_Face)_face;
+    
+    //auto cp = FT_Get_Char_Index(face, codePoint);
+    
     if (FT_Load_Char(face, codePoint, FT_LOAD_RENDER)) {
-        vgderr("Failed to load glyph!");
+        vgderr("Failed to load glyph! " << codePoint);
         return;
     }
 
@@ -173,5 +202,5 @@ void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness)
             {face->glyph->bitmap_left, face->glyph->bitmap_top},
             (uint)face->glyph->advance.x
     };
-    _chars.insert(std::pair<uint, Character>(codePoint, character));
+    _chars.insert_or_assign(codePoint, character);
 }

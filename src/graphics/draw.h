@@ -3,10 +3,12 @@
 
 #include "color.h"
 #include "config.h"
+#include "font.h"
 #include "rect.h"
 #include "sprite.h"
 #include "texture.h"
 #include "vec.h"
+#include "util/vstring.h"
 
 #define VERT_SIZE 6
 
@@ -36,7 +38,7 @@ Color drawGetClearColor();
 void drawSetClearColor(const Color &c);
 
 uint8 drawGetAlpha();
-void drawSetAlpa(uint8 a);
+void drawSetAlpha(uint8 a);
 
 //The vertex is assumed to be x, y, r, g, b, a.
 void drawVerts(float *verts, int count, bool outline);
@@ -52,6 +54,7 @@ void drawCircle(float x, float y, float r, int sides = 20, bool outline = true);
 void drawArc(float x, float y, float r, float a, float a1, int sides = 20, bool radians = false);
 void drawSlice(float x, float y, float r, float a, float a1, int sides = 20, bool outline = true, bool radians = false);
 
-void drawText(const std::string &txt, float x, float y, float scale, const Color &color);
+void drawText(const String &txt, float x, float y, float scale, const Color &color, Font *font);
+void drawText(const String &txt, float x, float y, float scale, const Color &color);
 
 #endif

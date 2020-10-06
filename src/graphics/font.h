@@ -1,9 +1,11 @@
 #ifndef __VGDE_FONT_H__
 #define __VGDE_FONT_H__
 
+#include "color.h"
 #include "config.h"
 #include "shader.h"
 #include "vec.h"
+#include "util/vstring.h"
 
 #include <map>
 #include <string>
@@ -23,9 +25,10 @@ struct Character {
 class Font {
 public:
     explicit Font(const std::string &fnt);
+    ~Font();
 
     //TODO(Skyler): Make this work with other characters outside ascii.
-    void draw(const std::string &txt, float x, float y, float scale, Shader *shader);
+    void draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color);
 private:
     void getGlyph(uint codePoint, int size, bool bold = false, float outlineThickness = 0);
 

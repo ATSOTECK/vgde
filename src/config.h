@@ -8,6 +8,10 @@
 #define VDEBUG
 #endif
 
+#if defined(WIN32) || defined(_WIN32)
+#define VWIN
+#endif
+
 #define null nullptr
 
 typedef int8_t  int8;
@@ -32,8 +36,6 @@ typedef int64  char64;
 typedef uint16 uchar16;
 typedef uint32 uchar32;
 typedef uint64 uchar64;
-
-typedef size_t sizeT;
 
 #define staticCast(x, y)	  static_cast<x>(y)
 #define staticCasti(x)		  static_cast<int>(x)

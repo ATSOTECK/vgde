@@ -1,6 +1,5 @@
 #include "draw.h"
 
-#include "font.h"
 #include "shader.h"
 #include "vgde.h"
 #include "util/resourceManager.h"
@@ -82,8 +81,8 @@ void drawInit() {
 
 	glGenBuffers(1, &_ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
-
-	_defaultFont = new Font("liberation-mono.ttf");
+	
+    _defaultFont = new Font("liberation-mono.ttf");
 
 	drawSetProjection(0.0f, (float)_vgde->windowWidth(), (float)_vgde->windowHeight(), 0.0f, -1.0f, 1.0);
 }
@@ -142,7 +141,7 @@ uint8 drawGetAlpha() {
 	return c.a;
 }
 
-void drawSetAlpa(uint8 a) {
+void drawSetAlpha(uint8 a) {
 	Color c = drawGetColor();
 	c.a = a;
 	c.glA = (float)a / 255;
@@ -343,13 +342,21 @@ void drawSlice(float x, float y, float r, float a, float a1, int sides, bool out
 
 }
 
-void drawText(const std::string &txt, float x, float y, float scale, const Color &color) {
+void drawText(const String &txt, float x, float y, float scale, const Color &color, Font *font) {
+    if (font == null) {
+        return;
+    }
+    
     _textShader->use();
     _textShader->setVec3f("textColor", color.vec3gl());
 
-    _defaultFont->draw(txt, x, y, scale, _textShader);
+    font->draw(txt, x, y, scale, _textShader, color);
 
     _textShader->stop();
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void drawText(const String &txt, float x, float y, float scale, const Color &color) {
+    drawText(txt, x, y, scale, color, _defaultFont);
 }

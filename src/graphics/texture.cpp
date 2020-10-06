@@ -21,7 +21,7 @@ Texture::Texture(const std::string &path) :
     _height = (float)h;
 
     if (_data == null) {
-        vgderr("Could not load " << path);
+        vgdewarn("Could not load " << path);
         return;
     }
 
