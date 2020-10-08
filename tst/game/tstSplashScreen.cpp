@@ -1,15 +1,15 @@
 /*
  * VGDE - Video Game Development Environment
  * Copyright (c) 2020 Skyler Burwell
- *
+ * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
  * arising from the use of this software.
- *
+ * 
  * Permission is granted to anyone to use this software for any purpose,
  * including commercial applications, and to alter it and redistribute it
  * freely, subject to the following restrictions:
- *
+ * 
  * 1. The origin of this software must not be misrepresented; you must not
  *    claim that you wrote the original software. If you use this software
  *    in a product, an acknowledgment in the product documentation would be
@@ -20,39 +20,34 @@
  *
  */
 
-#ifndef __VGDE_CLOCK_H__
-#define __VGDE_CLOCK_H__
+#include "tstSplashScreen.h"
 
-#include "vtime.h"
+TstSplashScreen::TstSplashScreen():
+    Screen("splash"),
+    _vgde(VGDE::instance()),
+    _splash("birb.png")
+{
+    //
+}
 
-class Clock {
-public:
-    Clock();
+TstSplashScreen::~TstSplashScreen() = default;
 
-    static Time time();
-    static float timeAsSeconds();
-    static int32 timeAsMilliseconds();
-    static int64 timeAsMicroseconds();
+void TstSplashScreen::show() {
+    _clock.restart();
+    _splash.setOrigin(_splash.center());
+    _splash.setScale(.75f);
+    _splash.setPosition(_vgde->windowCenter());
+}
 
-    static int hour(bool use12hr = false);
-    static int minute();
-    static int second();
-    static int millisecond();
+void TstSplashScreen::hide() {
+    //
+}
 
-    static bool isAM();
-    static bool isPM();
-
-    Time elapsed() const;
-    float elapsedAsSeconds() const;
-    int32 elapsedAsMilliseconds() const;
-    int64 elapsedAsMicroseconds() const;
-
-    Time restart();
-    Time startTime() const;
-
-private:
-    Time _startTime;
-};
-
-
-#endif //__VGDE_CLOCK_H__
+void TstSplashScreen::render(float delta) {
+    if (_clock.elapsedAsSeconds() >= 5) {
+        _vgde->gotoScreen("game", true);
+        return;
+    }
+    
+    _splash.draw();
+}

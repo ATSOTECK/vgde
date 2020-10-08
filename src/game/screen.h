@@ -20,39 +20,35 @@
  *
  */
 
-#ifndef __VGDE_CLOCK_H__
-#define __VGDE_CLOCK_H__
+#ifndef __VGDE_SCREEN_H__
+#define __VGDE_SCREEN_H__
 
-#include "vtime.h"
+#include "util/vstring.h"
+#include "vec.h"
 
-class Clock {
+class Screen {
 public:
-    Clock();
-
-    static Time time();
-    static float timeAsSeconds();
-    static int32 timeAsMilliseconds();
-    static int64 timeAsMicroseconds();
-
-    static int hour(bool use12hr = false);
-    static int minute();
-    static int second();
-    static int millisecond();
-
-    static bool isAM();
-    static bool isPM();
-
-    Time elapsed() const;
-    float elapsedAsSeconds() const;
-    int32 elapsedAsMilliseconds() const;
-    int64 elapsedAsMicroseconds() const;
-
-    Time restart();
-    Time startTime() const;
-
+    explicit Screen(const String &name);
+    virtual ~Screen() = 0;
+    
+    virtual void show() = 0;
+    virtual void hide() = 0;
+    
+    void pause();
+    void resume();
+    
+    //void resize(const vec2f &size);
+    
+    virtual void render(float delta) = 0;
+    
+    String name() const;
+    
+protected:
+    bool _paused;
+    
 private:
-    Time _startTime;
+    String _name;
 };
 
 
-#endif //__VGDE_CLOCK_H__
+#endif //__VGDE_SCREEN_H__

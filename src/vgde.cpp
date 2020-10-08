@@ -1,8 +1,29 @@
+/*
+ * VGDE - Video Game Development Environment
+ * Copyright (c) 2020 Skyler Burwell
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ *
+ */
+
 #include "vgde.h"
 
 #include "graphics/draw.h"
 #include "input.h"
-#include "util/clock.h"
 #include "util/vmath.h"
 
 #include <fstream>
@@ -20,11 +41,11 @@ static void windowSizeCallback(GLFWwindow *window, int w, int h) {
 	vgde->resize(w, h);
 }
 
-static void windowCloseCallback(GLFWwindow *window) {
+static void windowCloseCallback(GLFWwindow *) {
     VGDE::instance()->saveInGameTime();
 }
 
-static void glfwErrorCallback(int error, const char *desc) {
+static void glfwErrorCallback(int, const char *desc) {
 	std::cerr << "glfwError: " << desc << std::endl;
 }
 
@@ -38,8 +59,10 @@ VGDE::VGDE() :
 	_frames(0),
 	_frameRate(0),
 	_time(Clock::timeAsMilliseconds()),
+	_frameTime(0),
     _startTime(Clock::timeAsSeconds()),
-    _totalInGameTime(0)
+    _totalInGameTime(0),
+    _currentScreen(null)
 {
 	//
 }
@@ -109,6 +132,20 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 	return 0;
 }
 
+void VGDE::run() {
+    while (running()) {
+        preRender();
+        
+        if (_currentScreen != null) {
+            _currentScreen->render(0);
+        }
+        
+        postRender();
+    }
+    
+    cleanUp();
+}
+
 bool VGDE::running() const {
 	return (!glfwWindowShouldClose(_window));
 }
@@ -150,7 +187,7 @@ std::vector<VideoMode> VGDE::videoModes() const {
 
     std::vector<VideoMode> vModes;
     int count;
-    GLFWvidmode *modes = constCast(GLFWvidmode *, glfwGetVideoModes(glfwGetPrimaryMonitor(), &count));
+    var modes = constCast(GLFWvidmode *, glfwGetVideoModes(glfwGetPrimaryMonitor(), &count));
 
     vModes.reserve(count);
     for (int i = 0; i < count; ++i) {
@@ -165,7 +202,7 @@ VideoMode VGDE::videoMode() const {
         return {0};
     }
 
-    GLFWvidmode *mode = constCast(GLFWvidmode *, glfwGetVideoMode(glfwGetPrimaryMonitor()));
+    var mode = constCast(GLFWvidmode *, glfwGetVideoMode(glfwGetPrimaryMonitor()));
     return {mode->width, mode->height, mode->refreshRate};
 }
 
@@ -187,6 +224,10 @@ int VGDE::windowWidth() const {
 
 int VGDE::windowHeight() const {
 	return _windowHeight;
+}
+
+vec2f VGDE::windowCenter() const {
+    return {(float)_windowWidth / 2.f, (float)_windowHeight / 2.f};
 }
 
 std::string VGDE::windowTitle() const {
@@ -221,6 +262,58 @@ float VGDE::inGameTime() const {
 
 float VGDE::totalInGameTime() const {
     return _totalInGameTime + inGameTime();
+}
+
+Screen *VGDE::currentScreen() const {
+    return _currentScreen;
+}
+
+void VGDE::addScreen(Screen *screen) {
+    if (screen != null) {
+        bool found = false;
+        
+        for (var cs : _screens) {
+            if (cs->name() == screen->name()) {
+                found = true;
+            }
+        }
+        
+        if (!found) {
+            _screens.push_back(screen);
+        }
+    }
+}
+
+void VGDE::gotoScreen(Screen *screen, bool cleanup) {
+    if (screen == null) {
+        return;
+    }
+    
+    if (cleanup && _currentScreen != null){
+        _currentScreen->hide();
+        _screens.erase(std::find(_screens.begin(), _screens.end(), _currentScreen));
+        delete _currentScreen;
+    } else if (_currentScreen != null) {
+        _currentScreen->hide();
+    }
+    
+    _currentScreen = screen;
+    _currentScreen->show();
+}
+
+void VGDE::gotoScreen(const String &screen, bool cleanup) {
+    for (var sc : _screens) {
+        if (sc->name() == screen) {
+            gotoScreen(sc, cleanup);
+            return;
+        }
+    }
+    
+    vgdewarn("Screen \"" << screen << "\" not found.");
+}
+
+size_t VGDE::screenCount() const {
+    return _screens.size();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

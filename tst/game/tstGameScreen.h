@@ -1,15 +1,15 @@
 /*
  * VGDE - Video Game Development Environment
  * Copyright (c) 2020 Skyler Burwell
- *
+ * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
  * arising from the use of this software.
- *
+ * 
  * Permission is granted to anyone to use this software for any purpose,
  * including commercial applications, and to alter it and redistribute it
  * freely, subject to the following restrictions:
- *
+ * 
  * 1. The origin of this software must not be misrepresented; you must not
  *    claim that you wrote the original software. If you use this software
  *    in a product, an acknowledgment in the product documentation would be
@@ -20,39 +20,24 @@
  *
  */
 
-#ifndef __VGDE_CLOCK_H__
-#define __VGDE_CLOCK_H__
+#ifndef __VGDE_TSTGAMESCREEN_H__
+#define __VGDE_TSTGAMESCREEN_H__
 
-#include "vtime.h"
+#include "vgde.h"
 
-class Clock {
+class TstGameScreen : public Screen {
 public:
-    Clock();
-
-    static Time time();
-    static float timeAsSeconds();
-    static int32 timeAsMilliseconds();
-    static int64 timeAsMicroseconds();
-
-    static int hour(bool use12hr = false);
-    static int minute();
-    static int second();
-    static int millisecond();
-
-    static bool isAM();
-    static bool isPM();
-
-    Time elapsed() const;
-    float elapsedAsSeconds() const;
-    int32 elapsedAsMilliseconds() const;
-    int64 elapsedAsMicroseconds() const;
-
-    Time restart();
-    Time startTime() const;
+    TstGameScreen();
+    ~TstGameScreen();
+    
+    void show() override;
+    void hide() override;
+    
+    void render(float delta) override;
 
 private:
-    Time _startTime;
+    VGDE *_vgde;
 };
 
 
-#endif //__VGDE_CLOCK_H__
+#endif //__VGDE_TSTGAMESCREEN_H__

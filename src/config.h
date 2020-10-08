@@ -13,6 +13,8 @@
 #endif
 
 #define null nullptr
+#define var auto
+#define keep [[nodiscard]]
 
 typedef int8_t  int8;
 typedef int16_t int16;

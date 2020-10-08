@@ -207,7 +207,7 @@ bool String::endsWith(const String &str, bool ignoreWhitespace) const {
         //while (isWhitespace(str[str._len - s - 1])) {++s;}
     }
     
-    return (strcmpcnt(_str + (_len - ), str._size - 1, str._str) == 0);
+    return (strcmpcnt(_str + (_len - 0), str._size - 1, str._str) == 0);
 }
 
 void String::erase(size_t index, size_t count) {

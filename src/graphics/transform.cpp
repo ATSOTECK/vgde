@@ -35,6 +35,22 @@ void Transform::setPosition(const vec2f &pos) {
     _updateVerts = true;
 }
 
+float Transform::x() const {
+    return _position.x;
+}
+
+float Transform::y() const {
+    return _position.y;
+}
+
+void Transform::setX(float x) {
+    _position.x = x;
+}
+
+void Transform::setY(float y) {
+    _position.y = y;
+}
+
 void Transform::move(const vec2f &amount) {
     _position += amount;
     _updateVerts = true;
@@ -70,6 +86,10 @@ vec2f Transform::originalSize() const {
 
 vec2f Transform::scale() const {
     return _scale;
+}
+
+void Transform::setScale(float scale) {
+    setScale({scale, scale});
 }
 
 void Transform::setScale(const vec2f &scale) {

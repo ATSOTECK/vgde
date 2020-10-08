@@ -461,7 +461,7 @@ add_executable(vgde
         src/vgde.h
         src/util/vmath.cpp
         src/util/vmath.h
-        main.cpp src/graphics/texture.cpp src/graphics/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/graphics/videoMode.h src/graphics/videoMode.cpp src/graphics/font.cpp src/graphics/font.h src/graphics/color.cpp src/graphics/color.h src/game/actor.cpp src/game/actor.h src/util/resourceManager.cpp src/util/resourceManager.h src/util/humanReadable.cpp src/util/humanReadable.h src/graphics/camera.cpp src/graphics/camera.h src/graphics/transform.cpp src/graphics/transform.h src/graphics/renderTarget.cpp src/graphics/renderTarget.h src/util/utf.h src/util/vstring.cpp src/util/vstring.h src/graphics/vulkan/vk.h src/graphics/vulkan/vk.cpp)
+        main.cpp src/graphics/texture.cpp src/graphics/texture.h src/util/vtime.cpp src/util/vtime.h src/util/clock.cpp src/util/clock.h src/graphics/videoMode.h src/graphics/videoMode.cpp src/graphics/font.cpp src/graphics/font.h src/graphics/color.cpp src/graphics/color.h src/game/actor.cpp src/game/actor.h src/util/resourceManager.cpp src/util/resourceManager.h src/util/humanReadable.cpp src/util/humanReadable.h src/graphics/camera.cpp src/graphics/camera.h src/graphics/transform.cpp src/graphics/transform.h src/graphics/renderTarget.cpp src/graphics/renderTarget.h src/util/vstring.cpp src/util/vstring.h src/graphics/vulkan/vk.h src/graphics/vulkan/vk.cpp src/game/screen.cpp src/game/screen.h src/game/stage.cpp src/game/stage.h src/game/event.cpp src/game/event.h tst/stringTest.cpp tst/stringTest.h tst/game/tstSplashScreen.cpp tst/game/tstSplashScreen.h tst/game/tstGameScreen.cpp tst/game/tstGameScreen.h)
 
 target_link_libraries(vgde vulkan-1)
 target_link_libraries(vgde glfw3)

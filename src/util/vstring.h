@@ -17,25 +17,25 @@ public:
     String(uint32 n);
     String(float n);
     String(double n);
-
-    [[nodiscard]] size_t length() const;
-    [[nodiscard]] size_t size() const;
+    
+    keep size_t length() const;
+    keep size_t size() const;
     
     void clear();
-    [[nodiscard]] bool isEmpty() const;
+    keep bool isEmpty() const;
     
-    [[nodiscard]] size_t indexOf(uchar32 cp) const;
-    [[nodiscard]] size_t indexOfNext(uchar32 cp, size_t startFrom) const;
-    [[nodiscard]] size_t indexOfLast(uchar32 cp) const;
-    [[nodiscard]] bool contains(uchar32 cp) const;
+    keep size_t indexOf(uchar32 cp) const;
+    keep size_t indexOfNext(uchar32 cp, size_t startFrom) const;
+    keep size_t indexOfLast(uchar32 cp) const;
+    keep bool contains(uchar32 cp) const;
     
     static bool isNumber(uchar32 cp);
     static bool isAlpha(uchar32 cp);
     static bool isAlphaNumeric(uchar32 cp);
     static bool isWhitespace(uchar32 cp);
     
-    bool startsWith(const String &str, bool ignoreWhitespace = false) const;
-    bool endsWith(const String &str, bool ignoreWhitespace = false) const;
+    keep bool startsWith(const String &str, bool ignoreWhitespace = false) const;
+    keep bool endsWith(const String &str, bool ignoreWhitespace = false) const;
     
     void erase(size_t index, size_t count = 1);
     
@@ -43,13 +43,13 @@ public:
     void trimTrailingWhitespace();
     void trimWhitespace();
     
-    [[nodiscard]] char *c_str() const;
-    [[nodiscard]] std::string stdString() const;
+    keep char *c_str() const;
+    keep std::string stdString() const;
     
     //void reserve(size_t size);
     
-    [[nodiscard]] size_t offsetForCharIndex(size_t index) const;
-    [[nodiscard]] uint32 codepoint(size_t index) const;
+    keep size_t offsetForCharIndex(size_t index) const;
+    keep uint32 codepoint(size_t index) const;
 
     operator std::string() const;
     

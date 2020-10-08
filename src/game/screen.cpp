@@ -20,39 +20,25 @@
  *
  */
 
-#ifndef __VGDE_CLOCK_H__
-#define __VGDE_CLOCK_H__
+#include "screen.h"
 
-#include "vtime.h"
+Screen::Screen(const String &name):
+    _paused(false),
+    _name(name)
+{
+    //
+}
 
-class Clock {
-public:
-    Clock();
+Screen::~Screen() = default;
 
-    static Time time();
-    static float timeAsSeconds();
-    static int32 timeAsMilliseconds();
-    static int64 timeAsMicroseconds();
+void Screen::pause() {
+    _paused = true;
+}
 
-    static int hour(bool use12hr = false);
-    static int minute();
-    static int second();
-    static int millisecond();
+void Screen::resume() {
+    _paused = true;
+}
 
-    static bool isAM();
-    static bool isPM();
-
-    Time elapsed() const;
-    float elapsedAsSeconds() const;
-    int32 elapsedAsMilliseconds() const;
-    int64 elapsedAsMicroseconds() const;
-
-    Time restart();
-    Time startTime() const;
-
-private:
-    Time _startTime;
-};
-
-
-#endif //__VGDE_CLOCK_H__
+String Screen::name() const {
+    return _name;
+}

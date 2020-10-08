@@ -11,6 +11,12 @@ public:
 
     vec2f position() const;
     void setPosition(const vec2f &pos);
+    
+    float x() const;
+    float y() const;
+    
+    void setX(float x);
+    void setY(float y);
 
     void move(const vec2f &amount);
 
@@ -25,6 +31,7 @@ public:
     vec2f originalSize() const;
 
     vec2f scale() const;
+    void setScale(float scale);
     void setScale(const vec2f &scale);
 
     void setRotation(float angle);
@@ -32,6 +39,7 @@ public:
     float rotation() const;
 
     vec2f center() const;
+    
 protected:
     vec2f _position;
     vec2f _origin;

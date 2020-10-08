@@ -15,6 +15,9 @@
 #include "util/resourceManager.h"
 
 #include "graphics/renderTarget.h"
+
+#include "tst/game/tstSplashScreen.h"
+#include "tst/game/tstGameScreen.h"
  //*/
 /*
 #include <GLFW/glfw3.h>
@@ -93,11 +96,18 @@ int main() {
         uint32 cp = c[i];
         db(cp);
     }
-    return 0;
-
+    //return 0;
+    
+    ResourceManager::instance()->setImgPath("../res");
 	VGDE *vgde = VGDE::instance();
 	//vgde->init(vgde->nativeVideoMode());
 	vgde->init();
+	vgde->addScreen(new TstSplashScreen());
+    vgde->addScreen(new TstGameScreen());
+    vgde->gotoScreen("splash");
+	vgde->run();
+	
+	return 0;
 
 	drawSetColor(Color::Red);
 	//drawSetClearColor(Color::Blue);
@@ -107,8 +117,6 @@ int main() {
 	} else {
         db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " am");
 	}
-
-    ResourceManager::instance()->setImgPath("../res");
 
 	Sprite spr("tv.png");
 	spr.setOrigin(spr.center());
@@ -127,7 +135,7 @@ int main() {
 	std::vector<Sprite *> sprs;
 	sprs.reserve(1000);
 	for (int i = 0; i < 1000; ++i) {
-	    Sprite *t = new Sprite("fire.png");
+	    var t = new Sprite("fire.png");
 	    t->setSize({32, 32});
 	    t->setPosition(randomPosition(700, 500));
 	    t->setOrigin(t->center());
@@ -160,7 +168,7 @@ int main() {
         fire.draw();
         f.draw();
 
-        for (auto s : sprs) {
+        for (var s : sprs) {
             //s->rotate(random(2));
             //s->setScale(random(2) / 8);
             //s->setOrigin(s->center());
