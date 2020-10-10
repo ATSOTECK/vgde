@@ -1,4 +1,4 @@
-#VGDE
+# VGDE
 
 VGDE - Video Game Development Environment
 
