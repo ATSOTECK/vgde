@@ -1,3 +1,25 @@
+/*
+ * VGDE - Video Game Development Environment
+ * Copyright (c) 2020 Skyler Burwell
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ *
+ */
+
 #include "config.h"
 
 #include <iostream>
@@ -98,7 +120,7 @@ int main() {
     }
     //return 0;
     
-    ResourceManager::instance()->setImgPath("../res");
+    ResourceManager::instance()->setResPath("../res");
 	VGDE *vgde = VGDE::instance();
 	//vgde->init(vgde->nativeVideoMode());
 	vgde->init();
@@ -111,16 +133,7 @@ int main() {
 
 	drawSetColor(Color::Red);
 	//drawSetClearColor(Color::Blue);
-
-	if (Clock::isPM()) {
-	    db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " pm");
-	} else {
-        db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " am");
-	}
-
-	Sprite spr("tv.png");
-	spr.setOrigin(spr.center());
-	spr.setPosition(spr.center());
+	
     Sprite fire("fire.png");
 	fire.setPosition({100, 200});
 	fire.setSize({32, 32});
@@ -155,16 +168,10 @@ int main() {
 
 	while (vgde->running()) {
 	    vgde->preRender();
-
-		if (isKeyDown(vk_escape) || isButtonDown(mb_middle) || isKeyReleased(vk_m)) {
-			vgde->exit();
-		}
-
-		spr.rotate(-0.5f);
+		
 		f.rotate(1.f);
 		f.move({-.5f, 0.f});
-
-		spr.draw();
+		
         fire.draw();
         f.draw();
 
@@ -199,22 +206,14 @@ int main() {
         drawText("我当然还是[red]爱[]你", 800, 100, 1, Color::White, chinese);
         //drawText(String("[blue]:)"), 800, 100, 1, Color::White);
 
-        float mx = mouseX();
-        float my = mouseY();
-        drawCircle(mx, my, 25);
-        drawArc(mx, my, 35, 0, 90);
-        drawArc(mx, my, 45, 90, 180);
-        drawArc(mx, my, 35, 180, 270);
-        drawArc(mx, my, 45, 270, 360);
-
         //glm::mat4 proj = drawGetProjection();
         //proj = glm::translate(proj, {.5f, 0.f, 0.f});
         //drawSetProjection(proj);
 
 		if (isKeyDown(vk_space)) {
-			setMousePosition(vec2i(100, 100));
+			setMousePosition(vec2f(100, 100));
 		} else if (isKeyDown(vk_z)) {
-			setMousePositionGlobal(vec2i(100, 100));
+			setMousePositionGlobal(vec2f(100, 100));
 		}
 
 		vgde->postRender();

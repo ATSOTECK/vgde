@@ -58,11 +58,11 @@ public:
 	VideoMode videoMode() const;
 	VideoMode nativeVideoMode() const;
 
-	vec2i windowSize() const;
-	void setWindowSize(const vec2i &size);
+	vec2f windowSize() const;
+	void setWindowSize(const vec2f &size);
 	
-	int windowWidth() const;
-	int windowHeight() const;
+	float windowWidth() const;
+	float windowHeight() const;
 	
 	vec2f windowCenter() const;
 
@@ -73,6 +73,7 @@ public:
 
 	int fps();
 	int32 frameTime() const;
+	float delta() const;
 
 	float inGameTime() const;
 	float totalInGameTime() const;
@@ -91,15 +92,15 @@ private:
 	static VGDE *_instance;
 
     void glInit() const;
-	void resize(int w, int h);
+	void resize(float w, float h);
 
 	void saveInGameTime() const;
 	void loadInGameTime();
 
 	bool _initialized;
 	GLFWwindow *_window;
-	int _windowWidth;
-	int _windowHeight;
+	float _windowWidth;
+	float _windowHeight;
 	std::string _windowTitle;
 	bool _fullScreen;
 
@@ -108,6 +109,7 @@ private:
 	int _time;
 	Clock _clock;
 	uint32 _frameTime;
+	float _delta;
 	float _startTime;
 	float _totalInGameTime;
 	

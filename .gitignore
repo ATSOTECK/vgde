@@ -361,3 +361,4 @@ FodyWeavers.xsd
 
 *.exe
 cmake-build-debug/
+*.ttf

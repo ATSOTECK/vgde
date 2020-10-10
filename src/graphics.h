@@ -20,30 +20,17 @@
  *
  */
 
-#ifndef __VGDE_TSTGAMESCREEN_H__
-#define __VGDE_TSTGAMESCREEN_H__
+#ifndef __VGDE_GRAPHICS_H__
+#define __VGDE_GRAPHICS_H__
 
-#include "graphics.h"
-#include "vgde.h"
+#include "graphics/gl.h"
+#include "graphics/color.h"
+#include "graphics/draw.h"
+#include "graphics/font.h"
+#include "graphics/shader.h"
+#include "graphics/sprite.h"
+#include "graphics/texture.h"
+#include "graphics/transform.h"
+#include "graphics/videoMode.h"
 
-class TstGameScreen : public Screen {
-public:
-    TstGameScreen();
-    ~TstGameScreen() override;
-    
-    void show() override;
-    void hide() override;
-    
-    void render(float delta) override;
-    
-    void resize(const vec2f &size) override;
-
-private:
-    VGDE *_vgde;
-    Font *_chinese;
-    
-    Sprite *_tv;
-};
-
-
-#endif //__VGDE_TSTGAMESCREEN_H__
+#endif //__VGDE_GRAPHICS_H__

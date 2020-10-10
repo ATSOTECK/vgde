@@ -1,3 +1,25 @@
+/*
+ * VGDE - Video Game Development Environment
+ * Copyright (c) 2020 Skyler Burwell
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ *
+ */
+
 #include "font.h"
 
 #include "gl.h"
@@ -19,6 +41,10 @@ Font::~Font() {
 }
 
 void Font::loadFont(const std::string &filename) {
+    _lib = null;
+    _face = null;
+    _loaded = false;
+    
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
         vgderr("Could not init freetype!");
@@ -29,6 +55,7 @@ void Font::loadFont(const std::string &filename) {
     FT_Face face;
     if (FT_New_Face(ft, filename.c_str(), 0, &face)) {
         vgderr("Failed to load font!");
+        return;
     }
 
     FT_Set_Pixel_Sizes(face, 0, DEFAULT_FONT_SIZE);
@@ -43,7 +70,7 @@ void Font::loadFont(const std::string &filename) {
     _face = face;
 
     for (uint c = 0; c < 128; ++c) {
-        //getGlyph(c, 24);
+        getGlyph(c, 24);
     }
 
     //FT_Done_Face(face);
@@ -63,6 +90,8 @@ void Font::loadFont(const std::string &filename) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glUseProgram(0);
+    
+    _loaded = true;
 }
 
 void Font::draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color) {
@@ -172,6 +201,10 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
         x += (ch.advance >> 6) * scale;
     }
+}
+
+bool Font::loaded() const {
+    return _loaded;
 }
 
 void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness) {

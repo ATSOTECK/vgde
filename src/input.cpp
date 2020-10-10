@@ -185,6 +185,14 @@ bool isKeyDown(int key) {
 	if (!glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
 		return false;
 	}
+	
+	if (key == vk_any) {
+	    for (bool keyDown : _currentKeyState) {
+	        if (keyDown) {
+	            return true;
+	        }
+	    }
+	}
 
 	if (key == vk_control) {
 		return isKeyDown(vk_lControl, vk_rControl);
@@ -293,35 +301,35 @@ bool isButtonDownGlobal(int btn) {
 	return (GetAsyncKeyState(buttonToVKey(btn)) & 0x8000) != 0;
 }
 
-vec2i mousePositionGlobal() {
+vec2f mousePositionGlobal() {
 	POINT p;
 	GetCursorPos(&p);
 
-	return {p.x, p.y};
+	return {(float)p.x, (float)p.y};
 }
 
-vec2i mousePosition() {
+vec2f mousePosition() {
 	POINT p;
 	GetCursorPos(&p);
 	ScreenToClient(_hwnd, &p);
 
-	return {p.x, p.y};
+	return {(float)p.x, (float)p.y};
 }
 
-int mouseX() {
+float mouseX() {
 	return mousePosition().x;
 }
 
-int mouseY() {
+float mouseY() {
 	return mousePosition().y;
 }
 
-void setMousePositionGlobal(const vec2i &pos) {
-	SetCursorPos(pos.x, pos.y);
+void setMousePositionGlobal(const vec2f &pos) {
+	SetCursorPos((int)pos.x, (int)pos.y);
 }
 
-void setMousePosition(const vec2i &pos) {
-	POINT p = {pos.x, pos.y};
+void setMousePosition(const vec2f &pos) {
+	POINT p = {(int)pos.x, (int)pos.y};
 	RECT r;//, c;
 	GetWindowRect(_hwnd, &r);
 	//GetClientRect(_hwnd, &c);
@@ -346,15 +354,15 @@ void setMousePosition(const vec2i &pos) {
 	//SetCursorPos(r.left, r.top);
 }
 
-void setMousePosition(int x, int y) {
-	setMousePosition(vec2i(x, y));
+void setMousePosition(float x, float y) {
+	setMousePosition({x, y});
 }
 
-void moveMouse(const vec2i &offset) {
-	vec2i pos = mousePosition();
+void moveMouse(const vec2f &offset) {
+	vec2f pos = mousePosition();
 	setMousePosition(pos + offset);
 }
 
-void moveMouse(int xoffset, int yoffset) {
-	moveMouse(vec2i(xoffset, yoffset));
+void moveMouse(float xoffset, float yoffset) {
+	moveMouse({xoffset, yoffset});
 }

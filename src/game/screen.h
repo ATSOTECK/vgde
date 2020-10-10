@@ -41,6 +41,8 @@ public:
     
     virtual void render(float delta) = 0;
     
+    virtual void resize(const vec2f &size) = 0;
+    
     String name() const;
     
 protected:

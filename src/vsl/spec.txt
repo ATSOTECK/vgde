@@ -1,0 +1,22 @@
+//Sample file.
+
+class MyClass : BaseClass
+
+self(str: string) {
+    .str = str
+}
+
+someFunc(x: int, y: int): int {
+    return x + y
+}
+
+readOnly:
+var name = "yeet"
+
+private:
+var a = 10
+var str = "helo world"
+var arr = [1, 2, 3]
+var map = {"key" : "value", "key1" : "value1"}
+var x: int = 0
+var s: string = "yo"

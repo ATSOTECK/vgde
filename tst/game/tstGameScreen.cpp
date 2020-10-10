@@ -22,20 +22,29 @@
 
 #include "tstGameScreen.h"
 
-#include "graphics/draw.h"
 #include "input.h"
+#include "util/humanReadable.h"
+#include "util/resourceManager.h"
 
 TstGameScreen::TstGameScreen():
     Screen("game"),
-    _vgde(VGDE::instance())
+    _vgde(VGDE::instance()),
+    _chinese(null),
+    _tv(null)
 {
     //
 }
 
-TstGameScreen::~TstGameScreen() = default;
+TstGameScreen::~TstGameScreen() {
+    ResourceManager::instance()->unloadFont(_chinese);
+}
 
 void TstGameScreen::show() {
-    //
+    _chinese = ResourceManager::instance()->loadFont("SimSun.ttf");
+    
+    _tv = new Sprite("tv.png");
+    _tv->setOrigin(_tv->center());
+    _tv->setPosition(_tv->center());
 }
 
 void TstGameScreen::hide() {
@@ -47,5 +56,25 @@ void TstGameScreen::render(float delta) {
         _vgde->exit();
     }
     
-    drawText("game [red]:[])", 10, 10, 1, Color::White);
+    _tv->rotate(-50.f * delta);
+    _tv->draw();
+    
+    std::string txt = "fps: " + std::to_string(_vgde->fps()) + "\t[blue]" + std::to_string(_vgde->frameTime()) + "ms\n"
+                      + "[cyan]" + secondsToHHMMSS((int)_vgde->totalInGameTime());
+    drawText(txt, 0, 0, 1, Color::Green);
+    
+    //drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 10, 1, Color::White);
+    drawText("我当然还是[red]爱[]你", 800, 10, 1, Color::White, _chinese);
+    
+    float mx = mouseX();
+    float my = mouseY();
+    drawCircle(mx, my, 25);
+    drawArc(mx, my, 35, 0, 90);
+    drawArc(mx, my, 45, 90, 180);
+    drawArc(mx, my, 35, 180, 270);
+    drawArc(mx, my, 45, 270, 360);
+}
+
+void TstGameScreen::resize(const vec2f &size) {
+    //
 }

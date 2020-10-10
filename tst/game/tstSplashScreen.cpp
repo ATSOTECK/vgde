@@ -22,21 +22,37 @@
 
 #include "tstSplashScreen.h"
 
+#include "input.h"
+#include "util/resourceManager.h"
+
 TstSplashScreen::TstSplashScreen():
     Screen("splash"),
     _vgde(VGDE::instance()),
-    _splash("birb.png")
+    _splash("birb.png"),
+    _chinese(null),
+    _txtx(0.f),
+    _txty(0.f)
 {
     //
 }
 
-TstSplashScreen::~TstSplashScreen() = default;
+TstSplashScreen::~TstSplashScreen() {
+    ResourceManager::instance()->unloadFont(_chinese);
+}
 
 void TstSplashScreen::show() {
     _clock.restart();
     _splash.setOrigin(_splash.center());
     _splash.setScale(.75f);
     _splash.setPosition(_vgde->windowCenter());
+    
+    _chinese = ResourceManager::instance()->loadFont("SimSun.ttf");
+    
+    if (Clock::isPM()) {
+        db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " pm");
+    } else {
+        db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " am");
+    }
 }
 
 void TstSplashScreen::hide() {
@@ -44,10 +60,20 @@ void TstSplashScreen::hide() {
 }
 
 void TstSplashScreen::render(float delta) {
-    if (_clock.elapsedAsSeconds() >= 5) {
+    if (isKeyDown(vk_any) || _clock.elapsedAsSeconds() >= 5) {
         _vgde->gotoScreen("game", true);
         return;
     }
     
     _splash.draw();
+    
+    drawText("我当然还是[red]爱[]你", _txtx, _txty, 1, Color::White, _chinese);
+    float cx = _vgde->windowCenter().x;
+    float wh = _vgde->windowHeight();
+    drawLine(cx, 0, cx, wh);
+}
+
+void TstSplashScreen::resize(const vec2f &size) {
+    _txtx = _vgde->windowCenter().x - 85;
+    _txty = _vgde->windowCenter().y - 180;
 }

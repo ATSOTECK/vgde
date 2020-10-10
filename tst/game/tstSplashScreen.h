@@ -24,7 +24,7 @@
 #define __VGDE_TSTSPLASHSCREEN_H__
 
 #include "game/screen.h"
-#include "graphics/sprite.h"
+#include "graphics.h"
 #include "util/clock.h"
 #include "util/vstring.h"
 #include "vgde.h"
@@ -39,10 +39,15 @@ public:
     
     void render(float delta) override;
     
+    void resize(const vec2f &size) override;
+    
 private:
     VGDE *_vgde;
     Clock _clock;
     Sprite _splash;
+    Font *_chinese;
+    float _txtx;
+    float _txty;
 };
 
 

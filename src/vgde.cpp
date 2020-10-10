@@ -60,6 +60,7 @@ VGDE::VGDE() :
 	_frameRate(0),
 	_time(Clock::timeAsMilliseconds()),
 	_frameTime(0),
+	_delta(0.f),
     _startTime(Clock::timeAsSeconds()),
     _totalInGameTime(0),
     _currentScreen(null)
@@ -76,7 +77,7 @@ VGDE *VGDE::instance() {
 }
 
 int VGDE::init() {
-	return init(_windowWidth, _windowHeight, _windowTitle);
+	return init((int)_windowWidth, (int)_windowHeight, _windowTitle);
 }
 
 int VGDE::init(VideoMode mode) {
@@ -95,8 +96,8 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 		return 1;
 	}
 
-	_windowWidth = width;
-	_windowHeight = height;
+	_windowWidth = (float)width;
+	_windowHeight = (float)height;
 	_windowTitle = title;
 	_fullScreen = fullScreen;
 
@@ -105,7 +106,7 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 		monitor = glfwGetPrimaryMonitor();
 	}
 
-	_window = glfwCreateWindow(_windowWidth, _windowHeight, _windowTitle.c_str(), monitor, null);
+	_window = glfwCreateWindow((int)_windowWidth, (int)_windowHeight, _windowTitle.c_str(), monitor, null);
 
 	if (!_window) {
 		glfwTerminate();
@@ -114,7 +115,7 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 
 	glfwMakeContextCurrent(_window);
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	glfwSwapInterval(1); //Set to 1 to make max fps 60.
+	glfwSwapInterval(1); //Set to 1 to make max fps the screen refresh rate.
 
 	glfwSetWindowSizeCallback(_window, windowSizeCallback);
 	glfwSetWindowCloseCallback(_window, windowCloseCallback);
@@ -137,7 +138,7 @@ void VGDE::run() {
         preRender();
         
         if (_currentScreen != null) {
-            _currentScreen->render(0);
+            _currentScreen->render(_delta);
         }
         
         postRender();
@@ -166,7 +167,9 @@ void VGDE::postRender() {
 	glfwPollEvents();
 
 	++_frames;
-	_frameTime = _clock.restart().asMilliseconds();
+	Time t = _clock.restart();
+	_frameTime = t.asMilliseconds();
+	_delta = t.asSeconds();
 }
 
 void VGDE::cleanUp() {
@@ -210,24 +213,24 @@ VideoMode VGDE::nativeVideoMode() const {
     return videoModes().back();
 }
 
-vec2i VGDE::windowSize() const {
+vec2f VGDE::windowSize() const {
 	return {_windowWidth, _windowHeight};
 }
 
-void VGDE::setWindowSize(const vec2i &size) {
+void VGDE::setWindowSize(const vec2f &size) {
 	glfwSetWindowSize(_window, size.x, size.y);
 }
 
-int VGDE::windowWidth() const {
+float VGDE::windowWidth() const {
 	return _windowWidth;
 }
 
-int VGDE::windowHeight() const {
+float VGDE::windowHeight() const {
 	return _windowHeight;
 }
 
 vec2f VGDE::windowCenter() const {
-    return {(float)_windowWidth / 2.f, (float)_windowHeight / 2.f};
+    return {_windowWidth / 2.f, _windowHeight / 2.f};
 }
 
 std::string VGDE::windowTitle() const {
@@ -254,6 +257,10 @@ int VGDE::fps() {
 
 int32 VGDE::frameTime() const {
     return _frameTime;
+}
+
+float VGDE::delta() const {
+    return _delta;
 }
 
 float VGDE::inGameTime() const {
@@ -299,6 +306,7 @@ void VGDE::gotoScreen(Screen *screen, bool cleanup) {
     
     _currentScreen = screen;
     _currentScreen->show();
+    _currentScreen->resize({_windowWidth, _windowHeight});
 }
 
 void VGDE::gotoScreen(const String &screen, bool cleanup) {
@@ -333,13 +341,17 @@ void VGDE::glInit() const {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
 }
 
-void ::VGDE::resize(int w, int h) {
+void ::VGDE::resize(float w, float h) {
 	_windowWidth = w;
 	_windowHeight = h;
 
 	glInit();
 
-	drawSetProjection(0.0f, (float)_windowWidth, (float)_windowHeight, 0.0f, -1.0f, 1.0);
+	drawSetProjection(0.0f, _windowWidth, _windowHeight, 0.0f, -1.0f, 1.0);
+	
+	if (_currentScreen != null) {
+	    _currentScreen->resize({_windowWidth, _windowHeight});
+	}
 }
 
 void VGDE::saveInGameTime() const {

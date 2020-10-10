@@ -115,6 +115,8 @@ static const int vk_control        = 1000;
 static const int vk_shift          = 1001;
 static const int vk_alt            = 1002;
 
+static const int vk_any            = 2000; //Only works with isKeyDown for now.
+
 static const int mb_left           = 201;
 static const int mb_right          = 202;
 static const int mb_middle         = 203;
@@ -180,15 +182,15 @@ bool isButtonReleased(int btn, int btn1);
 bool isKeyDownGlobal(int key);
 bool isButtonDownGlobal(int btn);
 
-vec2i mousePositionGlobal();
-vec2i mousePosition();
-int mouseX();
-int mouseY();
+vec2f mousePositionGlobal();
+vec2f mousePosition();
+float mouseX();
+float mouseY();
 
-void setMousePositionGlobal(const vec2i &pos);
-void setMousePosition(const vec2i &pos);
-void setMousePosition(int x, int y);
-void moveMouse(const vec2i &offset);
-void moveMouse(int xoffset, int yoffset);
+void setMousePositionGlobal(const vec2f &pos);
+void setMousePosition(const vec2f &pos);
+void setMousePosition(float x, float y);
+void moveMouse(const vec2f &offset);
+void moveMouse(float xoffset, float yoffset);
 
 #endif
