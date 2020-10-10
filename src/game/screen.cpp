@@ -39,6 +39,10 @@ void Screen::resume() {
     _paused = true;
 }
 
+bool Screen::paused() const {
+    return _paused;
+}
+
 String Screen::name() const {
     return _name;
 }

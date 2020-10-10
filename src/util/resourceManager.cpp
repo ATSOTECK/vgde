@@ -27,8 +27,8 @@
 ResourceManager *ResourceManager::_resourceManager = null;
 
 ResourceManager::ResourceManager() {
-    _imgPath = "res/img";
-    _fontPath = "res/fnt";
+    setImgPath("res/img");
+    setFontPath("res/fnt");
 }
 
 ResourceManager *ResourceManager::instance() {

@@ -36,6 +36,7 @@ public:
     
     void pause();
     void resume();
+    bool paused() const;
     
     //void resize(const vec2f &size);
     
@@ -45,10 +46,8 @@ public:
     
     String name() const;
     
-protected:
-    bool _paused;
-    
 private:
+    bool _paused;
     String _name;
 };
 
