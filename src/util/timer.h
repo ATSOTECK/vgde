@@ -20,32 +20,40 @@
  *
  */
 
-#ifndef __VGDE_TSTGAMESCREEN_H__
-#define __VGDE_TSTGAMESCREEN_H__
+#ifndef __VGDE_TIMER_H__
+#define __VGDE_TIMER_H__
 
-#include "graphics.h"
-#include "vgde.h"
+#include "game/actor.h"
+#include "game/screen.h"
+#include "vstring.h"
+#include "vtime.h"
 
-class TstGameScreen : public Screen {
+class Timer {
 public:
-    TstGameScreen();
-    ~TstGameScreen() override;
+    Timer(Actor *actor, Time time, bool repeat = false);
+    Timer(Actor *actor, const String &name, Time time, bool repeat = false);
+    Timer(Screen *screen, Time time, bool repeat = false);
+    Timer(Screen *screen, const String &name, Time time, bool repeat = false);
     
-    void show() override;
-    void hide() override;
+    void start();
+    void restart();
+    void stop();
+    void ding();
     
-    void render(float delta) override;
+    keep bool repeat() const;
+    keep bool ticking() const;
+    keep Time startTime() const;
+    keep Time endTime() const;
     
-    void resize(const vec2f &size) override;
-
 private:
-    VGDE *_vgde;
-    Font *_chinese;
-    
-    Sprite *_tv;
-    
-    std::vector<Sprite *> sprs;
+    Actor *_actor;
+    Screen *_screen;
+    String _name;
+    Time _time;
+    bool _repeat;
+    bool _ticking;
+    Time _startTime;
 };
 
 
-#endif //__VGDE_TSTGAMESCREEN_H__
+#endif //__VGDE_TIMER_H__

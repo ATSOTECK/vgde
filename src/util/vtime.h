@@ -28,25 +28,21 @@
 class Time {
 public:
     Time();
+    
+    static Time seconds(float seconds);
+    static Time milliseconds(int32 milliseconds);
+    static Time microseconds(int64 microseconds);
 
-    float asSeconds() const;
-    int32 asMilliseconds() const;
-    int64 asMicroseconds() const;
+    keep float asSeconds() const;
+    keep int32 asMilliseconds() const;
+    keep int64 asMicroseconds() const;
 
     static const Time Zero;
 private:
-    friend Time seconds(float);
-    friend Time milliseconds(int32);
-    friend Time microseconds(int64);
-
     explicit Time(int64 microseconds);
 
     int64 _microseconds;
 };
-
-Time seconds(float seconds);
-Time milliseconds(int32 milliseconds);
-Time microseconds(int64 microseconds);
 
 bool operator==(const Time &left, const Time &right);
 bool operator!=(const Time &left, const Time &right);

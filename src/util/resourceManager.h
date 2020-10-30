@@ -26,6 +26,7 @@
 #include "graphics/font.h"
 #include "graphics/shader.h"
 #include "graphics/texture.h"
+#include "timer.h"
 
 #include <map>
 #include <string>
@@ -57,6 +58,9 @@ public:
     void removeShader(Shader *shader);
     void updateShaderProjections();
     
+    void addTimer(Timer *timer);
+    void checkTimers();
+    
 private:
     ResourceManager();
     static ResourceManager *_resourceManager;
@@ -64,6 +68,7 @@ private:
     std::map<std::string, ref<Texture*> > _textureMap;
     std::vector<Shader*> _shaders;
     std::map<std::string, ref<Font*> > _fontMap;
+    std::vector<Timer *> _timers;
 
     std::string _imgPath;
     std::string _fontPath;

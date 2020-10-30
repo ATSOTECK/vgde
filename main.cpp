@@ -86,8 +86,9 @@ int main() {
 
 ///*
 int main() {
+    /*
     String w = "hello world";
-    String h = "hello world";
+    String h = "Hello World";
     db(w.startsWith("hello"));
     db(w.endsWith("world"));
     
@@ -119,6 +120,7 @@ int main() {
         db(cp);
     }
     //return 0;
+    */
     
     ResourceManager::instance()->setResPath("../res");
 	VGDE *vgde = VGDE::instance();
@@ -145,19 +147,6 @@ int main() {
 	f.setOrigin(f.center());
 	//f.setScale({0.5f});
 
-	std::vector<Sprite *> sprs;
-	sprs.reserve(1000);
-	for (int i = 0; i < 1000; ++i) {
-	    var t = new Sprite("fire.png");
-	    t->setSize({32, 32});
-	    t->setPosition(randomPosition(700, 500));
-	    t->setOrigin(t->center());
-	    t->setRotation(random(360));
-	    sprs.push_back(t);
-	}
-	
-	Font *chinese = new Font("SimSun.ttf");
-
 	RenderTarget rt({100, 100});
 
 	vgdewarn("warn yo");
@@ -175,13 +164,6 @@ int main() {
         fire.draw();
         f.draw();
 
-        for (var s : sprs) {
-            //s->rotate(random(2));
-            //s->setScale(random(2) / 8);
-            //s->setOrigin(s->center());
-            //s->draw();
-        }
-
 		drawSetColor(Color::Red);
 		drawLine(10, 10, 100, 100);
 
@@ -195,16 +177,7 @@ int main() {
 		drawSetColor(Color::Red + Color::Green);
 		drawRectangle(400, 500, 100, 35, true);
 
-		//vgde->setWindowTitle("vgde " + std::to_string(vgde->fps()));
-
-		std::string txt = "fps: " + std::to_string(vgde->fps()) + "\t[blue]" + std::to_string(vgde->frameTime()) + "ms\n"
-		        + "[cyan]" + secondsToHHMMSS((int)vgde->totalInGameTime());
-		drawText(txt, 0, 0, 1, Color::Green);
-
         drawText("The quick brown fox jumped over the lazy dog", 200, 50, 1, Color::Red);
-
-        drawText("我当然还是[red]爱[]你", 800, 100, 1, Color::White, chinese);
-        //drawText(String("[blue]:)"), 800, 100, 1, Color::White);
 
         //glm::mat4 proj = drawGetProjection();
         //proj = glm::translate(proj, {.5f, 0.f, 0.f});

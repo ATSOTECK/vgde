@@ -25,6 +25,7 @@
 
 #include "graphics/color.h"
 #include "graphics/transform.h"
+#include "util/vstring.h"
 
 class Actor : public Transform {
 public:
@@ -45,6 +46,8 @@ public:
     void toFront();
     
     void drawDebug();
+    
+    virtual void ding(const String &name);
     
 protected:
     bool _visible;

@@ -41,7 +41,7 @@ Time Clock::time() {
 
     SetThreadAffinityMask(currentThread, previousMask);
 
-    return microseconds(1000000 * time.QuadPart / freq.QuadPart);
+    return Time::microseconds(1000000 * time.QuadPart / freq.QuadPart);
 }
 
 float Clock::timeAsSeconds() {

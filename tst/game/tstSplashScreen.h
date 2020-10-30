@@ -25,7 +25,6 @@
 
 #include "game/screen.h"
 #include "graphics.h"
-#include "util/clock.h"
 #include "util/vstring.h"
 #include "vgde.h"
 
@@ -41,9 +40,10 @@ public:
     
     void resize(const vec2f &size) override;
     
+    void ding(const String &name) override;
+    
 private:
     VGDE *_vgde;
-    Clock _clock;
     Sprite _splash;
     Font *_chinese;
     float _txtx;

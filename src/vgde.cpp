@@ -38,7 +38,7 @@ static void windowSizeCallback(GLFWwindow *window, int w, int h) {
 		return;
 	}
 
-	vgde->resize(w, h);
+	vgde->resize((float)w, (float)h);
 }
 
 static void windowCloseCallback(GLFWwindow *) {
@@ -63,7 +63,9 @@ VGDE::VGDE() :
 	_delta(0.f),
     _startTime(Clock::timeAsSeconds()),
     _totalInGameTime(0),
-    _currentScreen(null)
+    _currentScreen(null),
+    _textureSlots(0),
+    _rm(null)
 {
 	//
 }
@@ -127,13 +129,22 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 	_clock.restart();
 	loadInGameTime();
 
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &_textureSlots);
 	db("OpenGL version " << glGetString(GL_VERSION));
+	db("Texture slots available: " << _textureSlots);
 
+	_rm = ResourceManager::instance();
+	
 	_initialized = true;
 	return 0;
 }
 
 void VGDE::run() {
+    if (!_initialized) {
+        vgderr("Must initialize VGDE before you can run it.");
+        return;
+    }
+    
     while (running()) {
         preRender();
         
@@ -163,6 +174,8 @@ void VGDE::preRender() {
 }
 
 void VGDE::postRender() {
+    _rm->checkTimers();
+    
 	glfwSwapBuffers(_window);
 	glfwPollEvents();
 

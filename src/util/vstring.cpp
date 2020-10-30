@@ -141,10 +141,7 @@ void String::reset() {
         _str = null;
     }
     
-    _size = 1;
-    _len = 0;
-    _str = new char[1];
-    _str[0] = '\0';
+    reserve(1);
 }
 
 size_t String::length() const {
@@ -197,6 +194,14 @@ bool String::isNumber(uchar32 cp) {
 
 bool String::isAlpha(uchar32 cp) {
     return ((cp >= 'a' && cp <= 'z') || (cp >= 'A' && cp <= 'Z'));
+}
+
+bool String::isLower(uchar32 cp) {
+    return (cp >= 'a' && cp <= 'z');
+}
+
+bool String::isUpper(uchar32 cp) {
+    return (cp >= 'A' && cp <= 'Z');
 }
 
 bool String::isAlphaNumeric(uchar32 cp) {
@@ -272,12 +277,68 @@ void String::trimWhitespace() {
     trimTrailingWhitespace();
 }
 
+String String::toUpper() const {
+    String ret = *this;
+    
+    for (size_t i = 0; i < _len; ++i) {
+        if (isLower(ret[i])) {
+            ret._str[ret.offsetForCharIndex(i)] -= 32;
+        }
+    }
+    
+    return ret;
+}
+
+String String::toLower() const {
+    String ret = *this;
+    
+    for (size_t i = 0; i < _len; ++i) {
+        if (isUpper(ret[i])) {
+            ret._str[ret.offsetForCharIndex(i)] += 32;
+        }
+    }
+    
+    return ret;
+}
+
+String String::swapCase() const {
+    String ret = *this;
+    
+    for (size_t i = 0; i < _len; ++i) {
+        uchar32 cp = ret[i];
+        if (isUpper(cp)) {
+            ret._str[ret.offsetForCharIndex(i)] += 32;
+        } else if (isLower(cp)) {
+            ret._str[ret.offsetForCharIndex(i)] -= 32;
+        }
+    }
+    
+    return ret;
+}
+
+String String::reverse() const {
+    String ret;
+    ret.reserve(_size);
+    return ret;
+}
+
 char *String::c_str() const {
     return _str;
 }
 
 std::string String::stdString() const {
     return std::string(_str);
+}
+
+void String::reserve(size_t size) {
+    if (_str != null) {
+        return;
+    }
+    
+    _size = size;
+    _len = 0;
+    _str = new char[size];
+    _str[0] = '\0';
 }
 
 size_t String::offsetForCharIndex(size_t index) const {
@@ -364,13 +425,29 @@ String &String::operator =(const String &other) {
     return *this;
 }
 
+String &String::operator=(const char *s) {
+    reset();
+    init(s);
+    
+    return *this;
+}
+
+String &String::operator=(const std::string &s) {
+    reset();
+    init(s.c_str());
+    
+    return *this;
+}
+
 uchar32 String::operator[](size_t index) const {
     return codepoint(index);
 }
 
-uchar32 String::operator[](size_t index) {
+/*
+uchar32 &String::operator[](size_t index) {
     return codepoint(index);
 }
+*/
 
 bool operator==(const String &lhs, const String &rhs) {
     if (lhs._len != rhs._len) {
@@ -381,6 +458,14 @@ bool operator==(const String &lhs, const String &rhs) {
 }
 
 bool operator!=(const String &lhs, const String &rhs) {
+    return !(lhs == rhs);
+}
+
+bool operator==(const String &lhs, const char *rhs) {
+    return (strcmpv(lhs._str, rhs) == 0);
+}
+
+bool operator!=(const String &lhs, const char *rhs) {
     return !(lhs == rhs);
 }
 

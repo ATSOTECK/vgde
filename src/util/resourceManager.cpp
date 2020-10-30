@@ -22,6 +22,7 @@
 
 #include "resourceManager.h"
 
+#include "clock.h";
 #include "graphics/draw.h"
 
 ResourceManager *ResourceManager::_resourceManager = null;
@@ -142,7 +143,7 @@ void ResourceManager::addShader(Shader *shader) {
 }
 
 void ResourceManager::removeShader(Shader *shader) {
-    auto idx = std::find(_shaders.begin(), _shaders.end(), shader);
+    var idx = std::find(_shaders.begin(), _shaders.end(), shader);
     if (idx == _shaders.end()) {
         return;
     }
@@ -157,7 +158,36 @@ void ResourceManager::updateShaderProjections() {
 
     glm::mat4 projection = drawGetProjection();
 
-    for (auto shader : _shaders) {
+    for (var shader : _shaders) {
         shader->setMat4("projection", projection, true);
+    }
+}
+
+void ResourceManager::addTimer(Timer *timer) {
+    _timers.push_back(timer);
+}
+
+void ResourceManager::checkTimers() {
+    if (_timers.empty()) {
+        return;
+    }
+    
+    Time time = Clock::time();
+    for (var timer : _timers) {
+        if (time > timer->endTime() && timer->ticking()) {
+            timer->ding();
+            
+            if (!timer->repeat()) {
+                var idx = std::find(_timers.begin(), _timers.end(), timer);
+                if (idx != _timers.end()) {
+                    _timers.erase(idx);
+                }
+                
+                delete timer;
+                timer = null;
+            } else {
+                timer->restart();
+            }
+        }
     }
 }

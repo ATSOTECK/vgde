@@ -46,6 +46,8 @@ public:
     
     String name() const;
     
+    virtual void ding(const String &name);
+    
 private:
     bool _paused;
     String _name;

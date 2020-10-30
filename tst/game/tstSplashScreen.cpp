@@ -23,7 +23,6 @@
 #include "tstSplashScreen.h"
 
 #include "input.h"
-#include "util/resourceManager.h"
 
 TstSplashScreen::TstSplashScreen():
     Screen("splash"),
@@ -41,7 +40,6 @@ TstSplashScreen::~TstSplashScreen() {
 }
 
 void TstSplashScreen::show() {
-    _clock.restart();
     _splash.setOrigin(_splash.center());
     _splash.setScale(.75f);
     _splash.setPosition(_vgde->windowCenter());
@@ -53,6 +51,9 @@ void TstSplashScreen::show() {
     } else {
         db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " am");
     }
+    
+    var timer = new Timer(this, Time::seconds(5));
+    timer->start();
 }
 
 void TstSplashScreen::hide() {
@@ -60,7 +61,7 @@ void TstSplashScreen::hide() {
 }
 
 void TstSplashScreen::render(float delta) {
-    if (isKeyDown(vk_any) || _clock.elapsedAsSeconds() >= 5) {
+    if (isKeyDown(vk_any)) {
         _vgde->gotoScreen("game", true);
         return;
     }
@@ -68,12 +69,16 @@ void TstSplashScreen::render(float delta) {
     _splash.draw();
     
     drawText("我当然还是[red]爱[]你", _txtx, _txty, 1, Color::White, _chinese);
-    float cx = _vgde->windowCenter().x;
-    float wh = _vgde->windowHeight();
-    drawLine(cx, 0, cx, wh);
+    //float cx = _vgde->windowCenter().x;
+    //float wh = _vgde->windowHeight();
+    //drawLine(cx, 0, cx, wh);
 }
 
 void TstSplashScreen::resize(const vec2f &size) {
     _txtx = _vgde->windowCenter().x - 85;
     _txty = _vgde->windowCenter().y - 180;
+}
+
+void TstSplashScreen::ding(const String &name) {
+    _vgde->gotoScreen("game", true);
 }

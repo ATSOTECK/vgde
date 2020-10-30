@@ -46,3 +46,7 @@ bool Screen::paused() const {
 String Screen::name() const {
     return _name;
 }
+
+void Screen::ding(const String &name) {
+    //
+}

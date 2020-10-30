@@ -32,6 +32,7 @@
 #include "game/screen.h"
 #include "graphics/videoMode.h"
 #include "util/clock.h"
+#include "util/resourceManager.h"
 #include "util/vstring.h"
 
 static const int DEFAULT_WINDOW_WIDTH  = 1024;
@@ -115,6 +116,10 @@ private:
 	
 	std::vector<Screen *> _screens;
 	Screen *_currentScreen;
+	
+	int _textureSlots;
+	
+	ResourceManager *_rm;
 };
 
 #endif

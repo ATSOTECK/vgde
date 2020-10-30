@@ -21,3 +21,7 @@
  */
 
 #include "actor.h"
+
+void Actor::ding(const String &name) {
+    //
+}

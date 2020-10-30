@@ -25,6 +25,7 @@
 #include "input.h"
 #include "util/humanReadable.h"
 #include "util/resourceManager.h"
+#include "util/vmath.h"
 
 TstGameScreen::TstGameScreen():
     Screen("game"),
@@ -45,6 +46,16 @@ void TstGameScreen::show() {
     _tv = new Sprite("tv.png");
     _tv->setOrigin(_tv->center());
     _tv->setPosition(_tv->center());
+    
+    sprs.reserve(1000);
+    for (int i = 0; i < 1000; ++i) {
+        var t = new Sprite("fire.png");
+        t->setSize({32, 32});
+        t->setPosition(randomPosition(700, 500));
+        t->setOrigin(t->center());
+        t->setRotation(random(360));
+        sprs.push_back(t);
+    }
 }
 
 void TstGameScreen::hide() {
@@ -58,6 +69,13 @@ void TstGameScreen::render(float delta) {
     
     _tv->rotate(-50.f * delta);
     _tv->draw();
+    
+    for (var s : sprs) {
+        s->rotate(random(2));
+        s->setScale(random(2) / 8);
+        s->setOrigin(s->center());
+        s->draw();
+    }
     
     std::string txt = "fps: " + std::to_string(_vgde->fps()) + "\t[blue]" + std::to_string(_vgde->frameTime()) + "ms\n"
                       + "[cyan]" + secondsToHHMMSS((int)_vgde->totalInGameTime());
