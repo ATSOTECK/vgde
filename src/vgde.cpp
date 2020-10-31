@@ -311,8 +311,10 @@ void VGDE::gotoScreen(Screen *screen, bool cleanup) {
     
     if (cleanup && _currentScreen != null){
         _currentScreen->hide();
+        _rm->removeScreenTimersFor(_currentScreen);
         _screens.erase(std::find(_screens.begin(), _screens.end(), _currentScreen));
         delete _currentScreen;
+        _currentScreen = null;
     } else if (_currentScreen != null) {
         _currentScreen->hide();
     }

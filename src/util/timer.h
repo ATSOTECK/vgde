@@ -36,7 +36,7 @@ public:
     Timer(Screen *screen, const String &name, Time time, bool repeat = false);
     
     void start();
-    void restart();
+    void restart(const Time &time = Time::Zero);
     void stop();
     void ding();
     
@@ -44,6 +44,10 @@ public:
     keep bool ticking() const;
     keep Time startTime() const;
     keep Time endTime() const;
+    keep Time timeLeft() const;
+    
+    keep Actor *actor() const;
+    keep Screen *screen() const;
     
 private:
     Actor *_actor;

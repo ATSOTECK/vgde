@@ -59,7 +59,9 @@ public:
     void updateShaderProjections();
     
     void addTimer(Timer *timer);
+    void removeTimer(Timer *timer);
     void checkTimers();
+    void removeScreenTimersFor(Screen *screen);
     
 private:
     ResourceManager();

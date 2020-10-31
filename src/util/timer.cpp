@@ -78,7 +78,11 @@ void Timer::start() {
     _startTime = Clock::time();
 }
 
-void Timer::restart() {
+void Timer::restart(const Time &time) {
+    if (time != Time::Zero) {
+        _time = time;
+    }
+    
     start();
 }
 
@@ -88,6 +92,14 @@ void Timer::stop() {
 }
 
 void Timer::ding() {
+    if (_actor == null && _screen == null) {
+        _startTime = Time::Zero;
+        _time = Time::Zero;
+        _repeat = false;
+        
+        return;
+    }
+    
     _actor != null ? _actor->ding(_name) : _screen->ding(_name);
 }
 
@@ -105,4 +117,16 @@ Time Timer::startTime() const {
 
 Time Timer::endTime() const {
     return _startTime + _time;
+}
+
+Time Timer::timeLeft() const {
+    return (_startTime + _time) - Clock::time();
+}
+
+Actor *Timer::actor() const {
+    return _actor;
+}
+
+Screen *Timer::screen() const {
+    return _screen;
 }

@@ -22,7 +22,6 @@
 
 #include "resourceManager.h"
 
-#include "clock.h";
 #include "graphics/draw.h"
 
 ResourceManager *ResourceManager::_resourceManager = null;
@@ -167,27 +166,34 @@ void ResourceManager::addTimer(Timer *timer) {
     _timers.push_back(timer);
 }
 
+void ResourceManager::removeTimer(Timer *timer) {
+    var idx = std::find(_timers.begin(), _timers.end(), timer);
+    if (idx != _timers.end()) {
+        _timers.erase(idx);
+    }
+    
+    delete timer;
+    timer = null;
+}
+
 void ResourceManager::checkTimers() {
     if (_timers.empty()) {
         return;
     }
     
-    Time time = Clock::time();
     for (var timer : _timers) {
-        if (time > timer->endTime() && timer->ticking()) {
+        if (timer->timeLeft() <= Time::Zero && timer->ticking()) {
             timer->ding();
             
-            if (!timer->repeat()) {
-                var idx = std::find(_timers.begin(), _timers.end(), timer);
-                if (idx != _timers.end()) {
-                    _timers.erase(idx);
-                }
-                
-                delete timer;
-                timer = null;
-            } else {
-                timer->restart();
-            }
+            timer->repeat() ? timer->restart() : removeTimer(timer);
+        }
+    }
+}
+
+void ResourceManager::removeScreenTimersFor(Screen *screen) {
+    for (var timer : _timers) {
+        if (timer->screen() == screen) {
+            removeTimer(timer);
         }
     }
 }

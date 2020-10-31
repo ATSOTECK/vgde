@@ -54,6 +54,9 @@ void TstSplashScreen::show() {
     
     var timer = new Timer(this, Time::seconds(5));
     timer->start();
+    
+    var hiTimer = new Timer(this, "hi", Time::seconds(1), true);
+    hiTimer->start();
 }
 
 void TstSplashScreen::hide() {
@@ -80,5 +83,9 @@ void TstSplashScreen::resize(const vec2f &size) {
 }
 
 void TstSplashScreen::ding(const String &name) {
-    _vgde->gotoScreen("game", true);
+    if (name == "hi") {
+        db("hi from splash screen");
+    } else {
+        _vgde->gotoScreen("game", true);
+    }
 }
