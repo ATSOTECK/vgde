@@ -1,9 +1,9 @@
-http://cloc.sourceforge.net v 1.62  T=0.12 s (519.0 files/s, 66197.0 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.10 s (601.8 files/s, 76842.0 lines/s)
 ----------------------------------------------------------------------------------
 File                                           blank        comment           code
 ----------------------------------------------------------------------------------
 .\src\graphics\vulkan\vk.cpp                     221             35            876
-.\src\vgde.cpp                                   109             23            378
+.\src\vgde.cpp                                   109             23            379
 .\src\util\vstring.cpp                            95             29            356
 .\src\input.cpp                                   58             25            307
 .\src\graphics\draw.cpp                           80             28            276
@@ -13,29 +13,29 @@ File                                           blank        comment           co
 .\src\util\resourceManager.cpp                    37             21            141
 .\src\graphics\vulkan\vk.h                        30             22            124
 .\src\graphics\sprite.cpp                         33             31            105
+.\src\util\timer.cpp                              22             21            102
 .\src\graphics\shader.cpp                         24             26            100
 .\src\graphics\transform.cpp                      27             22             97
 .\src\util\vtime.cpp                              31             23             97
-.\src\util\timer.cpp                              21             21             93
 .\src\util\vstring.h                              33             24             91
 .\src\vgde.h                                      29             21             82
 .\src\graphics\color.cpp                          16             21             81
 .\src\util\clock.cpp                              29             22             80
-.\tst\game\tstGameScreen.cpp                      19             24             70
+.\tst\game\tstGameScreen.cpp                      18             24             69
 .\src\config.h                                    13             21             67
 .\src\rect.h                                      15             25             65
 .\src\graphics\texture.cpp                        17             21             60
-.\tst\game\tstSplashScreen.cpp                    17             27             55
+.\tst\game\tstSplashScreen.cpp                    16             27             54
 .\src\util\vmath.cpp                              16             21             49
 .\src\graphics\draw.h                             17             22             43
 .\src\graphics\color.h                            11             21             42
 .\src\graphics\transform.h                        17             21             42
 .\src\util\resourceManager.h                      16             22             42
 .\src\util\vtime.h                                 9             21             41
+.\src\util\timer.h                                10             21             37
 .\src\util\vmath.h                                18             36             37
 .\src\graphics\font.h                             13             21             36
 .\src\game\screen.cpp                             12             23             35
-.\src\util\timer.h                                10             21             35
 .\src\game\screen.h                               13             22             28
 .\src\graphics\renderTarget.cpp                   13             21             28
 .\src\graphics\texture.h                          10             21             27
@@ -64,5 +64,5 @@ File                                           blank        comment           co
 .\tst\stringTest.cpp                               1             21              1
 .\src\game\stage.cpp                               1             21              1
 ----------------------------------------------------------------------------------
-SUM:                                            1409           1415           4956
+SUM:                                            1408           1415           4966
 ----------------------------------------------------------------------------------

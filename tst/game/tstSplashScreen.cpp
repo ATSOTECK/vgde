@@ -61,8 +61,6 @@ void TstSplashScreen::show() {
     
     var timer = new Timer(this, Time::seconds(5), Timer::Repeat);
     timer->start();
-    
-    initialize();
 }
 
 void TstSplashScreen::hide() {

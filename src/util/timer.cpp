@@ -35,7 +35,8 @@ Timer::Timer(Actor *actor, Time time, bool repeat) :
     _time(time),
     _repeat(repeat),
     _ticking(false),
-    _startTime(Time::Zero)
+    _startTime(Time::Zero),
+    _dingCount(0)
 {
     ResourceManager::instance()->addTimer(this);
 }
@@ -47,7 +48,8 @@ Timer::Timer(Actor *actor, const String &name, Time time, bool repeat) :
     _time(time),
     _repeat(repeat),
     _ticking(false),
-    _startTime(Time::Zero)
+    _startTime(Time::Zero),
+    _dingCount(0)
 {
     ResourceManager::instance()->addTimer(this);
 }
@@ -59,7 +61,8 @@ Timer::Timer(Screen *screen, Time time, bool repeat) :
     _time(time),
     _repeat(repeat),
     _ticking(false),
-    _startTime(Time::Zero)
+    _startTime(Time::Zero),
+    _dingCount(0)
 {
     ResourceManager::instance()->addTimer(this);
 }
@@ -71,7 +74,8 @@ Timer::Timer(Screen *screen, const String &name, Time time, bool repeat) :
     _time(time),
     _repeat(repeat),
     _ticking(false),
-    _startTime(Time::Zero)
+    _startTime(Time::Zero),
+    _dingCount(0)
 {
     ResourceManager::instance()->addTimer(this);
 }
@@ -82,8 +86,9 @@ void Timer::start() {
 }
 
 void Timer::restart(const Time &time) {
-    if (time != Time::Zero) {
+    if (time != Time::Zero && time != _time) {
         _time = time;
+        _dingCount = 0;
     }
     
     start();
@@ -104,6 +109,7 @@ void Timer::ding() {
     }
     
     _actor != null ? _actor->ding(_name) : _screen->ding(_name);
+    ++_dingCount;
 }
 
 bool Timer::repeat() const {
@@ -124,6 +130,10 @@ Time Timer::endTime() const {
 
 Time Timer::timeLeft() const {
     return (_startTime + _time) - Clock::time();
+}
+
+int Timer::dingCount() const {
+    return _dingCount;
 }
 
 Actor *Timer::actor() const {

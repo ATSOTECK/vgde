@@ -45,6 +45,7 @@ public:
     keep Time startTime() const;
     keep Time endTime() const;
     keep Time timeLeft() const;
+    keep int dingCount() const;
     
     keep Actor *actor() const;
     keep Screen *screen() const;
@@ -60,6 +61,7 @@ private:
     bool _repeat;
     bool _ticking;
     Time _startTime;
+    int _dingCount;
 };
 
 

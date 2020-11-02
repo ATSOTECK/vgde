@@ -335,6 +335,7 @@ void VGDE::screenGoto(Screen *screen, bool cleanup) {
     _currentScreen = screen;
     _currentScreen->setActive();
     _currentScreen->show();
+    _currentScreen->initialize();
     _currentScreen->resize({_windowWidth, _windowHeight});
 }
 

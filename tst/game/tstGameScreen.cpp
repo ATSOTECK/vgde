@@ -63,8 +63,6 @@ void TstGameScreen::show() {
     
     var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
     timer->start();
-    
-    initialize();
 }
 
 void TstGameScreen::hide() {
