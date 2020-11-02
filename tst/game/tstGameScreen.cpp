@@ -24,7 +24,7 @@
 
 #include "input.h"
 #include "util/humanReadable.h"
-#include "util/resourceManager.h"
+#include "util/timer.h"
 #include "util/vmath.h"
 
 TstGameScreen::TstGameScreen():
@@ -41,6 +41,10 @@ TstGameScreen::~TstGameScreen() {
 }
 
 void TstGameScreen::show() {
+    if (initialized()) {
+        return;
+    }
+    
     _chinese = ResourceManager::instance()->loadFont("SimSun.ttf");
     
     _tv = new Sprite("tv.png");
@@ -56,6 +60,11 @@ void TstGameScreen::show() {
         t->setRotation(random(360));
         sprs.push_back(t);
     }
+    
+    var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
+    timer->start();
+    
+    initialize();
 }
 
 void TstGameScreen::hide() {
@@ -81,7 +90,7 @@ void TstGameScreen::render(float delta) {
                       + "[cyan]" + secondsToHHMMSS((int)_vgde->totalInGameTime());
     drawText(txt, 0, 0, 1, Color::Green);
     
-    //drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 10, 1, Color::White);
+    drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 550, 1, Color::White);
     drawText("我当然还是[red]爱[]你", 800, 10, 1, Color::White, _chinese);
     
     float mx = mouseX();
@@ -95,4 +104,10 @@ void TstGameScreen::render(float delta) {
 
 void TstGameScreen::resize(const vec2f &size) {
     //
+}
+
+void TstGameScreen::ding(const String &name) {
+    if (active()) {
+        _vgde->screenGotoPrevious();
+    }
 }

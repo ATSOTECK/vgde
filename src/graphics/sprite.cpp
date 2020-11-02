@@ -146,8 +146,6 @@ void Sprite::draw() {
     };*/
 
     _shader->use();
-    //VGDE *v = VGDE::instance();
-    //glViewport(0, 0, v->windowWidth(), v->windowHeight());
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
     glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), &_verts[0], GL_STATIC_DRAW);
 

@@ -48,42 +48,47 @@ public:
 	
 	void run();
 
-	bool running() const;
+	keep bool running() const;
 	void preRender();
 	void postRender();
 	void cleanUp();
 
 	void exit();
 
-	std::vector<VideoMode> videoModes() const;
-	VideoMode videoMode() const;
-	VideoMode nativeVideoMode() const;
+	keep std::vector<VideoMode> videoModes() const;
+	keep VideoMode videoMode() const;
+	keep VideoMode nativeVideoMode() const;
 
-	vec2f windowSize() const;
+	keep vec2f windowSize() const;
 	void setWindowSize(const vec2f &size);
 	
-	float windowWidth() const;
-	float windowHeight() const;
+	keep float windowWidth() const;
+	keep float windowHeight() const;
 	
-	vec2f windowCenter() const;
+	keep vec2f windowCenter() const;
 
-	std::string windowTitle() const;
+	keep std::string windowTitle() const;
 	void setWindowTitle(const std::string &title);
 
 	void windowMaximize() const;
 
 	int fps();
-	int32 frameTime() const;
-	float delta() const;
+	keep int32 frameTime() const;
+	keep float delta() const;
 
-	float inGameTime() const;
-	float totalInGameTime() const;
+	keep float inGameTime() const;
+	keep float totalInGameTime() const;
 	
-	Screen *currentScreen() const;
-	void addScreen(Screen *screen);
-	void gotoScreen(Screen *screen, bool cleanup = false);
-	void gotoScreen(const String &screen, bool cleanup = false);
-	size_t screenCount() const;
+	keep Screen *screen() const;
+	void screenAdd(Screen *screen);
+	void screenGoto(Screen *screen, bool cleanup = false);
+	void screenGoto(const String &screen, bool cleanup = false);
+	void screenGoto(int index, bool cleanup = false);
+	void screenGotoFirst();
+	void screenGotoLast();
+	void screenGotoNext(bool cleanup = false);
+	void screenGotoPrevious(bool cleanup = false);
+	keep size_t screenCount() const;
 
 private:
 	friend void windowSizeCallback(GLFWwindow *, int, int);
@@ -97,6 +102,8 @@ private:
 
 	void saveInGameTime() const;
 	void loadInGameTime();
+    
+    bool screenCheckPN();
 
 	bool _initialized;
 	GLFWwindow *_window;

@@ -160,7 +160,7 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
         float ypos = y - (ch.bearing.y * scale) + 24; //TODO(Skyler): '24' is the font size. Move this over to a font file.
         float w = ch.size.x * scale;
         float h = ch.size.y * scale;
-
+        
         float verts[] = {
                 //  Position         Texcoords
                 xpos,      ypos + h, 0.0f, 1.0f, // Top-left
@@ -177,9 +177,9 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
                 xpos + w,  ypos + h, 0.0f, 1.0f, // Top-right
                 xpos + w,  ypos,     1.0f, 0.0f, // Bottom-right
                 xpos,      ypos,     0.0f, 0.0f  // Bottom-left
-        };*/
+        };//*/
 
-        uint indicies[] = {
+        uint indices[] = {
                 0, 1, 2,
                 2, 3, 0
         };
@@ -195,7 +195,7 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void *)(sizeof(float) * 2));
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);

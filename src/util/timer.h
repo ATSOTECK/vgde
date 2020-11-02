@@ -49,6 +49,9 @@ public:
     keep Actor *actor() const;
     keep Screen *screen() const;
     
+    static const bool Repeat;
+    static const bool Single;
+    
 private:
     Actor *_actor;
     Screen *_screen;

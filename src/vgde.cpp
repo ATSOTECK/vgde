@@ -284,11 +284,11 @@ float VGDE::totalInGameTime() const {
     return _totalInGameTime + inGameTime();
 }
 
-Screen *VGDE::currentScreen() const {
+Screen *VGDE::screen() const {
     return _currentScreen;
 }
 
-void VGDE::addScreen(Screen *screen) {
+void VGDE::screenAdd(Screen *screen) {
     if (screen != null) {
         bool found = false;
         
@@ -304,8 +304,20 @@ void VGDE::addScreen(Screen *screen) {
     }
 }
 
-void VGDE::gotoScreen(Screen *screen, bool cleanup) {
+void VGDE::screenGoto(Screen *screen, bool cleanup) {
+    if (_screens.empty()) {
+        vgdewarn("There are no screens to go to.");
+        return;
+    }
+    
     if (screen == null) {
+        vgdewarn("Given screen is null.");
+        return;
+    }
+    
+    var idx = std::find(_screens.begin(), _screens.end(), screen);
+    if (idx == _screens.end()) {
+        vgdewarn("Screen \"" << screen->name() << "\" not found.");
         return;
     }
     
@@ -317,22 +329,93 @@ void VGDE::gotoScreen(Screen *screen, bool cleanup) {
         _currentScreen = null;
     } else if (_currentScreen != null) {
         _currentScreen->hide();
+        _currentScreen->setActive(false);
     }
     
     _currentScreen = screen;
+    _currentScreen->setActive();
     _currentScreen->show();
     _currentScreen->resize({_windowWidth, _windowHeight});
 }
 
-void VGDE::gotoScreen(const String &screen, bool cleanup) {
+void VGDE::screenGoto(const String &screen, bool cleanup) {
+    if (_screens.empty()) {
+        vgdewarn("There are no screens to go to.");
+        return;
+    }
+    
     for (var sc : _screens) {
         if (sc->name() == screen) {
-            gotoScreen(sc, cleanup);
+            screenGoto(sc, cleanup);
             return;
         }
     }
     
     vgdewarn("Screen \"" << screen << "\" not found.");
+}
+
+void VGDE::screenGoto(int index, bool cleanup) {
+    if (_screens.empty()) {
+        vgdewarn("There are no screens to go to.");
+        return;
+    }
+    
+    if (index >= screenCount()) {
+        vgdewarn("No screen for index" << index << ".");
+        return;
+    }
+    
+    screenGoto(_screens[index], cleanup);
+}
+
+void VGDE::screenGotoFirst() {
+    if (_screens.empty()) {
+        vgdewarn("There are no screens to go to.");
+        return;
+    }
+    
+    screenGoto(_screens[0]);
+}
+
+void VGDE::screenGotoLast() {
+    if (_screens.empty()) {
+        vgdewarn("There are no screens to go to.");
+        return;
+    }
+    
+    screenGoto(_screens[screenCount() - 1]);
+}
+
+void VGDE::screenGotoNext(bool cleanup) {
+    if (!screenCheckPN()) {
+        return;
+    }
+    
+    var idx = std::find(_screens.begin(), _screens.end(), _currentScreen);
+    int index = std::distance(_screens.begin(), idx);
+    
+    if (index == screenCount() - 1) {
+        vgdewarn("Already at the last screen.");
+        return;
+    }
+    
+    screenGoto(_screens[index + 1], cleanup);
+}
+
+void VGDE::screenGotoPrevious(bool cleanup) {
+    if (!screenCheckPN()) {
+        return;
+    }
+    
+    var idx = std::find(_screens.begin(), _screens.end(), _currentScreen);
+    int index = std::distance(_screens.begin(), idx);
+    
+    if (index == 0) {
+        vgdewarn("Already at the first screen.");
+        return;
+    }
+    
+    screenGoto(_screens[index - 1], cleanup);
 }
 
 size_t VGDE::screenCount() const {
@@ -404,4 +487,24 @@ void VGDE::loadInGameTime() {
         }
         file.close();
     }
+}
+
+bool VGDE::screenCheckPN() {
+    if (_screens.empty()) {
+        vgdewarn("There are no screens to go to.");
+        return false;
+    }
+    
+    if (screenCount() == 1) {
+        vgdewarn("There is only one screen.");
+        return false;
+    }
+    
+    if (_currentScreen == null) {
+        vgdewarn("No screen currently selected. Going to the first screen.");
+        screenGoto(_screens[0]);
+        return false;
+    }
+    
+    return true;
 }

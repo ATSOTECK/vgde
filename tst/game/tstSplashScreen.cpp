@@ -40,6 +40,10 @@ TstSplashScreen::~TstSplashScreen() {
 }
 
 void TstSplashScreen::show() {
+    if (initialized()) {
+        return;
+    }
+    
     _splash.setOrigin(_splash.center());
     _splash.setScale(.75f);
     _splash.setPosition(_vgde->windowCenter());
@@ -52,11 +56,13 @@ void TstSplashScreen::show() {
         db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " am");
     }
     
-    var timer = new Timer(this, Time::seconds(5));
+    var hiTimer = new Timer(this, "hi", Time::seconds(1), Timer::Repeat);
+    hiTimer->start();
+    
+    var timer = new Timer(this, Time::seconds(5), Timer::Repeat);
     timer->start();
     
-    var hiTimer = new Timer(this, "hi", Time::seconds(1), true);
-    hiTimer->start();
+    initialize();
 }
 
 void TstSplashScreen::hide() {
@@ -64,14 +70,16 @@ void TstSplashScreen::hide() {
 }
 
 void TstSplashScreen::render(float delta) {
-    if (isKeyDown(vk_any)) {
-        _vgde->gotoScreen("game", true);
+    if (!isKeyDown(vk_alt) && isKeyDown(vk_any)) {
+        //_vgde->screenGoto("game", true);
+        _vgde->screenGotoNext();
         return;
     }
     
     _splash.draw();
     
     drawText("我当然还是[red]爱[]你", _txtx, _txty, 1, Color::White, _chinese);
+    drawText("Of Course I Still [red]Love[] You", _txtx - 100, _txty + 330, 1, Color::White);
     //float cx = _vgde->windowCenter().x;
     //float wh = _vgde->windowHeight();
     //drawLine(cx, 0, cx, wh);
@@ -85,7 +93,7 @@ void TstSplashScreen::resize(const vec2f &size) {
 void TstSplashScreen::ding(const String &name) {
     if (name == "hi") {
         db("hi from splash screen");
-    } else {
-        _vgde->gotoScreen("game", true);
+    } else if (active()) {
+        _vgde->screenGoto("game", false);
     }
 }

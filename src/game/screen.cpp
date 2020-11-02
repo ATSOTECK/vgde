@@ -24,7 +24,9 @@
 
 Screen::Screen(const String &name):
     _paused(false),
-    _name(name)
+    _name(name),
+    _initialized(false),
+    _active(false)
 {
     //
 }
@@ -43,10 +45,26 @@ bool Screen::paused() const {
     return _paused;
 }
 
+void Screen::initialize() {
+    _initialized = true;
+}
+
+bool Screen::initialized() const {
+    return _initialized;
+}
+
+void Screen::setActive(bool active) {
+    _active = active;
+}
+
+bool Screen::active() const {
+    return _active;
+}
+
 String Screen::name() const {
     return _name;
 }
 
 void Screen::ding(const String &name) {
-    //
+    // dong
 }

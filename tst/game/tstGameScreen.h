@@ -37,6 +37,8 @@ public:
     void render(float delta) override;
     
     void resize(const vec2f &size) override;
+    
+    void ding(const String &name) override;
 
 private:
     VGDE *_vgde;

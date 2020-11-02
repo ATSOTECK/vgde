@@ -33,15 +33,15 @@
 #include <string>
 
 #include <ft2build.h>
-#include FT_FREETYPE_H"freetype/freetype.h"
+#include FT_FREETYPE_H//"freetype/freetype.h"
 
 static const int DEFAULT_FONT_SIZE = 24;
 
 struct Character {
-    uint textureID;
+    uint textureID{};
     vec2i size;
     vec2i bearing;
-    uint advance;
+    uint advance{};
 };
 
 class Font {

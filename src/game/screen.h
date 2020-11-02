@@ -37,6 +37,10 @@ public:
     void pause();
     void resume();
     bool paused() const;
+    void initialize();
+    bool initialized() const;
+    void setActive(bool active = true);
+    bool active() const;
     
     //void resize(const vec2f &size);
     
@@ -51,6 +55,8 @@ public:
 private:
     bool _paused;
     String _name;
+    bool _initialized;
+    bool _active;
 };
 
 

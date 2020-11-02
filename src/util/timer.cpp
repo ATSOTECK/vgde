@@ -25,6 +25,9 @@
 #include "clock.h"
 #include "resourceManager.h"
 
+const bool Timer::Repeat = true;
+const bool Timer::Single = false;
+
 Timer::Timer(Actor *actor, Time time, bool repeat) :
     _actor(actor),
     _screen(null),
