@@ -225,7 +225,8 @@ bool String::startsWith(const String &str, bool ignoreWhitespace) const {
 }
 
 bool String::endsWith(const String &str, bool ignoreWhitespace) const {
-    return false; //TODO(Skyler): Make work.
+    TODO("Skyler", "Make work.");
+    return false;
     size_t i = 0;
     //size_t s = 0;
     

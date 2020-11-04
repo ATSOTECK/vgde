@@ -371,7 +371,7 @@ void setMousePosition(const vec2f &pos) {
 		borderWidth = 0;
 	}
 
-	//TODO(Skyler): Fix mouse position when not in fullscreen.
+	TODO("Skyler", "Fix mouse position when not in fullscreen.");
  	SetCursorPos(r.left + p.x + borderWidth, r.top + p.y + titleBarHeight);
 	//SetCursorPos(r.left, r.top);
 }

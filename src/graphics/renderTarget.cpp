@@ -46,7 +46,8 @@ RenderTarget::RenderTarget(const vec2f &size) :
     glDrawBuffers(1, drawBuffers);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        vgderr("Something went wrong!"); //TODO(Skyler): Better error message.
+        TODO("Skyler", "Better error message.");
+        vgderr("Something went wrong!");
     }
 
     unbind();
@@ -54,7 +55,8 @@ RenderTarget::RenderTarget(const vec2f &size) :
 
 void RenderTarget::bind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    glViewport(0, 0, _size.x, _size.y); //TODO(Skyler): Position?
+    TODO("Skyler", "Position?");
+    glViewport(0, 0, _size.x, _size.y);
 }
 
 void RenderTarget::unbind() const {

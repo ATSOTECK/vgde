@@ -157,7 +157,8 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
         }
 
         float xpos = x + ch.bearing.x * scale;
-        float ypos = y - (ch.bearing.y * scale) + 24; //TODO(Skyler): '24' is the font size. Move this over to a font file.
+        TODO("Skyler", "'24' is the font size. Move this over to a font file.");
+        float ypos = y - (ch.bearing.y * scale) + 24;
         float w = ch.size.x * scale;
         float h = ch.size.y * scale;
         

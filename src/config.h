@@ -98,4 +98,11 @@ SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15)
 #define trace(x) std::cerr << __FILE__ << ", L" << __LINE__ << ": " << x << std::endl
 #define tracemsg std::cerr << __FILE__ << ", L" << __LINE__ << ": "
 
+#ifdef VDEBUG
+#define TODO(name, msg) std::cerr << "TODO(" << name << "): " << msg << std::endl\
+<< "\t-> line " << __LINE__ << " in " << __FILE__ << std::endl
+#else
+#define TODO(name, msg)
+#endif
+
 #endif //__VGDE_CONFIG_H__
