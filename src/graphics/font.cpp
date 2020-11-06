@@ -68,9 +68,10 @@ void Font::loadFont(const std::string &filename) {
     }
     
     _face = face;
-
+    
+    _size = 24;
     for (uint c = 0; c < 128; ++c) {
-        getGlyph(c, 24);
+        getGlyph(c, _size);
     }
 
     //FT_Done_Face(face);
@@ -94,6 +95,14 @@ void Font::loadFont(const std::string &filename) {
     _loaded = true;
 }
 
+void Font::setSize(int size) {
+    _size = size;
+}
+
+int Font::size() const {
+    return _size;
+}
+
 void Font::draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color) {
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(_vao);
@@ -103,7 +112,7 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
         uint32 cp = txt[i];
         
         if (cp == '\n') {
-            y += 24;
+            y += (float)_size;
             x = ox;
             continue;
         }
@@ -114,7 +123,7 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
         }
 
         if (cp == '[' && txt[i - 1] != '\\') {
-            std::string str;
+            String str;
             while (cp != ']') {
                 cp = txt[++i];
                 if (cp != ']') {
@@ -151,14 +160,13 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
         
         Character ch = _chars[cp];
         if (ch.textureID == 0) {
-            getGlyph(cp, 24);
+            getGlyph(cp, _size);
 
             ch = _chars[cp];
         }
 
         float xpos = x + ch.bearing.x * scale;
-        TODO("Skyler", "'24' is the font size. Move this over to a font file.");
-        float ypos = y - (ch.bearing.y * scale) + 24;
+        float ypos = y - (ch.bearing.y * scale) + (float)_size;
         float w = ch.size.x * scale;
         float h = ch.size.y * scale;
         
@@ -200,7 +208,7 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
-        x += (ch.advance >> 6) * scale;
+        x += (ch.advance >> 6u) * scale;
     }
 }
 
@@ -215,6 +223,11 @@ void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness)
     
     if (FT_Load_Char(face, codePoint, FT_LOAD_RENDER)) {
         vgderr("Failed to load glyph! " << codePoint);
+        return;
+    }
+    
+    if (FT_Set_Pixel_Sizes(face, 0, size)) {
+        vgderr("Failed to set size! " << size);
         return;
     }
 

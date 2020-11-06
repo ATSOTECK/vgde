@@ -87,6 +87,43 @@ size_t strcmpcnt(const char *lhs, size_t count, const char *rhs) {
     return diff;
 }
 
+char *cptocstr(uchar32 cp, int &size) {
+    char *str = null;
+    
+    if (cp <= 0x7F) {
+        size = 2;
+        str = new char[size];
+        str[0] = (char)cp;
+        str[1] = '\0';
+    } else if (cp <= 0x7FF) {
+        size = 3;
+        str = new char[size];
+        str[0] = (char)(((cp >> 6u) & 0x1Fu) | 0xC0u);
+        str[1] = (char)(((cp >> 0u) & 0x3Fu) | 0x80u);
+        str[2] = '\0';
+    } else if (cp <= 0xFFFF) {
+        size = 4;
+        str = new char[size];
+        str[0] = (char)(((cp >> 12u) & 0x0Fu) | 0xE0u);
+        str[1] = (char)(((cp >>  6u) & 0x3Fu) | 0x80u);
+        str[2] = (char)(((cp >>  0u) & 0x3Fu) | 0x80u);
+        str[3] = '\0';
+    } else if (cp <= 0x10FFFF) {
+        size = 5;
+        str = new char[size];
+        str[0] = (char)(((cp >> 18u) & 0x07u) | 0xF0u);
+        str[1] = (char)(((cp >> 12u) & 0x3Fu) | 0x80u);
+        str[2] = (char)(((cp >>  6u) & 0x3Fu) | 0x80u);
+        str[3] = (char)(((cp >>  0u) & 0x3Fu) | 0x80u);
+        str[4] = '\0';
+    } else {
+        size = 0;
+    }
+    
+    --size;
+    return str;
+}
+
 String::String() {
     init(null);
 }
@@ -123,11 +160,12 @@ void String::init(const char *str) {
     _str = null;
     
     if (str != null) {
-        _size = strsize(str);
-        if (_size > 1) {
-            _str = new char[_size];
-            strcpy_s(_str, _size, str);
+        _allocated = strsize(str);
+        if (_allocated > 1) {
+            _str = new char[_allocated];
+            strcpy_s(_str, _allocated, str);
             _len = utf8_strlen(_str);
+            _bsize = strsize(_str);
             return;
         }
     }
@@ -149,15 +187,15 @@ size_t String::length() const {
 }
 
 size_t String::size() const {
-    return _size;
+    return _allocated;
 }
 
 void String::clear() {
     reset();
 }
 
-bool String::isEmpty() const {
-    return (_len != 0);
+bool String::empty() const {
+    return (_len == 0);
 }
 
 size_t String::indexOf(uchar32 cp) const {
@@ -218,10 +256,9 @@ bool String::startsWith(const String &str, bool ignoreWhitespace) const {
     
     if (ignoreWhitespace) {
         while (isWhitespace(codepoint(i))) {++i;}
-        //while (isWhitespace(str[s])) {++s;}
     }
     
-    return (strcmpcnt(_str + i, str._size - 1, str._str + s) == 0);
+    return (strcmpcnt(_str + i, str._bsize - 1, str._str + s) == 0);
 }
 
 bool String::endsWith(const String &str, bool ignoreWhitespace) const {
@@ -235,7 +272,7 @@ bool String::endsWith(const String &str, bool ignoreWhitespace) const {
         //while (isWhitespace(str[str._len - s - 1])) {++s;}
     }
     
-    return (strcmpcnt(_str + (_len - 0), str._size - 1, str._str) == 0);
+    return (strcmpcnt(_str + (_len - 0), str._allocated - 1, str._str) == 0);
 }
 
 void String::erase(size_t index, size_t count) {
@@ -246,9 +283,10 @@ void String::erase(size_t index, size_t count) {
     size_t end = offsetForCharIndex(index + count);
     index = offsetForCharIndex(index);
     
-    memcpy(_str + index, _str + end, _size - end);
+    memcpy(_str + index, _str + end, _allocated - end);
     _str[offsetForCharIndex(_len) - ((index - end) + 1)] = '\0';
     _len = utf8_strlen(_str);
+    _bsize = strsize(_str);
 }
 
 void String::trimLeadingWhitespace() {
@@ -276,6 +314,45 @@ void String::trimTrailingWhitespace() {
 void String::trimWhitespace() {
     trimLeadingWhitespace();
     trimTrailingWhitespace();
+}
+
+void String::append(uchar32 cp, size_t buffSize) {
+    int cps;
+    char *c = cptocstr(cp, cps);
+    
+    if (buffSize > 0) {
+        resize(_allocated + buffSize);
+    } else if (_bsize + cps > _allocated) {
+        resize(_allocated + cps);
+    }
+    
+    if (_len == 0) {
+        strcpy_s(_str, cps + 1, c);
+        _bsize = cps + 1;
+    } else {
+        strcat_s(_str, _bsize + cps, c);
+        _bsize += cps;
+    }
+    
+    ++_len;
+}
+
+void String::append(const String &string, size_t buffSize) {
+    if (buffSize > 0 && buffSize > string._bsize) {
+        resize(_allocated + buffSize);
+    } else if (_bsize + string._bsize > _allocated) {
+        resize(_allocated + string._bsize);
+    }
+    
+    if (_len == 0) {
+        strcpy_s(_str, string._bsize, string._str);
+        _bsize = string._bsize;
+    } else {
+        strcat_s(_str, _bsize + string._bsize, string._str);
+        _bsize += string._bsize;
+    }
+    
+    _len += string._len;
 }
 
 String String::toUpper() const {
@@ -319,7 +396,8 @@ String String::swapCase() const {
 
 String String::reverse() const {
     String ret;
-    ret.reserve(_size);
+    ret.reserve(_allocated);
+    TODO("Skyler", "Make work.");
     return ret;
 }
 
@@ -331,15 +409,58 @@ std::string String::stdString() const {
     return std::string(_str);
 }
 
+int String::toInt(int base) const {
+    return strtol(_str, null, base);
+}
+
+float String::toFloat() const {
+    return (float)strtod(_str, null);
+}
+
+double String::toDouble() const {
+    return strtod(_str, null);
+}
+
 void String::reserve(size_t size) {
     if (_str != null) {
         return;
     }
     
-    _size = size;
+    _allocated = size;
+    _bsize = 1;
     _len = 0;
     _str = new char[size];
     _str[0] = '\0';
+}
+
+void String::resize(size_t size) {
+    if (size == 0 || size < _allocated) {
+        return;
+    }
+    
+    if (_allocated == 0) {
+        _allocated = size + 1;
+        _str = new char[_allocated];
+        memset(_str, 0, _allocated);
+        _str[0] = '\0';
+        _bsize = 1;
+        _len = 0;
+    } else if (_allocated < size) {
+        _allocated = size;
+        
+        char *newStr = new char[_allocated];
+        
+        if (_len != 0) {
+            strcpy_s(newStr, _bsize, _str);
+        }
+        
+        delete[] _str;
+        _str = newStr;
+        
+        if (_len == 0) {
+            _str[0] = '\0';
+        }
+    }
 }
 
 size_t String::offsetForCharIndex(size_t index) const {
@@ -349,7 +470,7 @@ size_t String::offsetForCharIndex(size_t index) const {
     
     size_t c, i, l;
     
-    for (l = 0, i = 0; i < _size - 1; ++i, ++l) {
+    for (l = 0, i = 0; i < _bsize - 1; ++i, ++l) {
         c = (unsigned char)_str[i];
         if (c >= 0 && c <= 127) {
             i += 0;
@@ -386,11 +507,11 @@ uint32 String::codepoint(size_t index) const {
         cp =  ((uint32)_str[index]     & 0x1Fu) << 6u;
         cp |= ((uint32)_str[index + 1] & 0x3Fu);
     } else if ((c & 0xF0u) == 0xE0) {
-        cp =  ((uint32)_str[index] & 0xFu)      << 12u;
+        cp =  ((uint32)_str[index]     & 0xFu)  << 12u;
         cp |= ((uint32)_str[index + 1] & 0x3Fu) << 6u;
         cp |= ((uint32)_str[index + 2] & 0x3Fu);
     } else if ((c & 0xF8u) == 0xF0) {
-        cp =  ((uint32)_str[index] & 0x7u)      << 18u;
+        cp =  ((uint32)_str[index]     & 0x7u)  << 18u;
         cp |= ((uint32)_str[index + 1] & 0x3Fu) << 12u;
         cp |= ((uint32)_str[index + 2] & 0x3Fu) << 6u;
         cp |= ((uint32)_str[index + 3] & 0x3Fu);
@@ -426,16 +547,54 @@ String &String::operator =(const String &other) {
     return *this;
 }
 
-String &String::operator=(const char *s) {
+String &String::operator=(const char *other) {
     reset();
-    init(s);
+    init(other);
     
     return *this;
 }
 
-String &String::operator=(const std::string &s) {
+String &String::operator=(const std::string &other) {
     reset();
-    init(s.c_str());
+    init(other.c_str());
+    
+    return *this;
+}
+
+String String::operator +(const String &other) {
+    String s(*this);
+    s.append(other);
+    
+    return s;
+}
+
+String String::operator +(const char *other) {
+    String s(*this);
+    s.append(other);
+    
+    return s;
+}
+
+String String::operator+=(const String &other) {
+    append(other);
+    
+    return *this;
+}
+
+String String::operator+=(uchar32 cp) {
+    append(cp);
+    
+    return *this;
+}
+
+String String::operator+=(const char *other) {
+    append(other);
+    
+    return *this;
+}
+
+String String::operator+=(const std::string &other) {
+    append(other);
     
     return *this;
 }

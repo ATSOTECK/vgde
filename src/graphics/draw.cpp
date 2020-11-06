@@ -171,6 +171,14 @@ void drawSetAlpha(uint8 a) {
 	drawSetColor(c);
 }
 
+int drawGetFontSize() {
+    return _defaultFont->size();
+}
+
+void drawSetFontSize(int size) {
+    _defaultFont->setSize(size);
+}
+
 void drawVerts(float *verts, int count, bool outline) {
     _shader->use();
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);

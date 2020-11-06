@@ -21,3 +21,12 @@
  */
 
 #include "stringTest.h"
+
+void runStringTests() {
+    String s = "123";
+    db(s.toInt());
+    s = "0xF"; //15
+    db(s.toInt(String::Hex));
+    s = "10110011"; //179
+    db(s.toInt(String::Bin));
+}

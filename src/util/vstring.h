@@ -44,7 +44,7 @@ public:
     keep size_t size() const;
     
     void clear();
-    keep bool isEmpty() const;
+    keep bool empty() const;
     
     keep size_t indexOf(uchar32 cp) const;
     keep size_t indexOfNext(uchar32 cp, size_t startFrom) const;
@@ -61,17 +61,17 @@ public:
     keep bool startsWith(const String &str, bool ignoreWhitespace = false) const;
     keep bool endsWith(const String &str, bool ignoreWhitespace = false) const;
     
-    String stringAfterLast(uchar32 c);
-    String stringAfterLast(uchar32 c, uchar32 c1);
+    String stringAfterLast(uchar32 cp);
+    String stringAfterLast(uchar32 cp, uchar32 cp1);
     
-    String stringAfterFirst(uchar32 c);
-    String stringAfterFirst(uchar32 c, uchar32 c1);
+    String stringAfterFirst(uchar32 cp);
+    String stringAfterFirst(uchar32 cp, uchar32 cp1);
     
-    String stringBeforeFirst(uchar32 c);
-    String stringBeforeFirst(uchar32 c, uchar32 c1);
+    String stringBeforeFirst(uchar32 cp);
+    String stringBeforeFirst(uchar32 cp, uchar32 cp1);
     
-    String stringBeforeLast(uchar32 c);
-    String stringBeforeLast(uchar32 c, uchar32 c1);
+    String stringBeforeLast(uchar32 cp);
+    String stringBeforeLast(uchar32 cp, uchar32 cp1);
     
     void erase(size_t index, size_t count = 1);
     
@@ -79,9 +79,9 @@ public:
     void trimTrailingWhitespace();
     void trimWhitespace();
     
-    void append(uchar32 c, size_t buffSize = 0);
+    void append(uchar32 cp, size_t buffSize = 0);
     void append(const String &string, size_t buffSize = 0);
-    void prepend(uchar32 c, size_t buffSize = 0);
+    void prepend(uchar32 cp, size_t buffSize = 0);
     void prepend(const String &string, size_t buffSize = 0);
     
     ///Only works with ASCII.
@@ -93,11 +93,12 @@ public:
     keep char *c_str() const;
     keep std::string stdString() const;
     
-    keep int toInt() const;
+    keep int toInt(int base = Dec) const;
     keep float toFloat() const;
     keep double toDouble() const;
     
     void reserve(size_t size);
+    void resize(size_t size);
     
     keep size_t offsetForCharIndex(size_t index) const;
     keep uint32 codepoint(size_t index) const;
@@ -105,18 +106,24 @@ public:
     operator std::string() const;
     
     String &operator =(const String &other);
-    String &operator =(const char *s);
-    String &operator =(const std::string &s);
+    String &operator =(const char *other);
+    String &operator =(const std::string &other);
     //String &operator=(const char c);
-    String operator +(const String &right);
-    String operator +(const char *right);
-    String operator+=(const String &right);
-    String operator+=(uchar32 c);
-    String operator+=(const char *c);
-    String operator+=(std::string s);
+    String operator +(const String &other);
+    String operator +(const char *other);
+    String operator+=(const String &other);
+    String operator+=(uchar32 cp);
+    String operator+=(const char *other);
+    String operator+=(const std::string &other);
     
     uchar32 operator[](size_t index) const;
-   // uchar32 &operator[](size_t index);
+    //uchar32 &operator[](size_t index);
+    
+    enum Base {
+        Bin = 2,
+        Dec = 10,
+        Hex = 16
+    };
 
 private:
     void init(const char *str);
@@ -129,8 +136,9 @@ private:
     friend std::ostream &operator <<(std::ostream &os, const String &str);
 
     char *_str;
-    size_t _size;
-    size_t _len;
+    size_t _allocated; //Size in bytes of the memory allocated to the string.
+    size_t _bsize; //Minimum number of bytes to represent the string.
+    size_t _len; //Number of characters in the string.
 };
 
 bool operator==(const String &lhs, const String &rhs);

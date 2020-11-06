@@ -63,6 +63,8 @@ void TstGameScreen::show() {
     
     var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
     timer->start();
+    
+    //drawSetFontSize(6);
 }
 
 void TstGameScreen::hide() {
@@ -81,7 +83,7 @@ void TstGameScreen::render(float delta) {
         s->rotate(random(2));
         s->setScale(random(2) / 8);
         s->setOrigin(s->center());
-        s->draw();
+        //s->draw();
     }
     
     std::string txt = "fps: " + std::to_string(_vgde->fps()) + "\t[blue]" + std::to_string(_vgde->frameTime()) + "ms\n"

@@ -26,7 +26,7 @@
 #include <iostream>
 
 std::string secondsToHHMMSS(int seconds) {
-    TODO("Skyler","Formatting.");
+    //TODO("Skyler","Formatting.");
     
     int h = seconds / 3600;
     int m = (seconds - h * 3600) / 60;

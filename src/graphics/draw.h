@@ -62,6 +62,9 @@ void drawSetClearColor(const Color &c);
 uint8 drawGetAlpha();
 void drawSetAlpha(uint8 a);
 
+int drawGetFontSize();
+void drawSetFontSize(int size);
+
 //The vertex is assumed to be x, y, r, g, b, a.
 void drawVerts(float *verts, int count, bool outline);
 

@@ -20,71 +20,11 @@
  *
  */
 
-#include "config.h"
-
-#include <iostream>
-//#include "util/clock.h"
-
-///*
 #include "vgde.h"
-#include "graphics/draw.h"
-
-#include "input.h"
-
-#include "util/vmath.h"
-#include "util/clock.h"
-#include "util/humanReadable.h"
-#include "util/resourceManager.h"
-
-#include "graphics/renderTarget.h"
 
 #include "tst/game/tstSplashScreen.h"
 #include "tst/game/tstGameScreen.h"
- //*/
-/*
-#include <GLFW/glfw3.h>
-#include "graphics/vulkan/vk.h"
 
-int main() {
-    glfwInit();
-
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    GLFWwindow* window = glfwCreateWindow(800, 600, "vgde vulkan", nullptr, nullptr);
-    glfwSetFramebufferSizeCallback(window, vkResize);
-
-    Vulkan vulkan{};
-    vulkan.init(window, VK_DEBUG);
-    vulkan.displayInfo();
-
-    int frames = 0;
-    Clock clock;
-    int32 time = clock.restart().asMilliseconds();
-
-    while(!glfwWindowShouldClose(window)) {
-        clock.restart();
-        glfwPollEvents();
-
-        vulkan.drawFrame();
-        ++frames;
-
-        if (Clock::timeAsMilliseconds() > time + 1000) {
-            time = Clock::timeAsMilliseconds();
-            //db("fps: " << frames);
-            frames = 0;
-        }
-    }
-
-    vulkan.wait();
-
-    glfwDestroyWindow(window);
-
-    glfwTerminate();
-
-    //std::cin.get();
-    return 0;
-}*/
-
-///*
 int main() {
     ResourceManager::instance()->setResPath("../res");
 	VGDE *vgde = VGDE::instance();
@@ -97,4 +37,4 @@ int main() {
 	vgde->run();
 	
 	return 0;
-}//*/
+}

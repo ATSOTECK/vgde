@@ -23,10 +23,9 @@
 #ifndef __VGDE_STRINGTEST_H__
 #define __VGDE_STRINGTEST_H__
 
+#include "util/vstring.h"
 
-class StringTest {
-
-};
+void runStringTests();
 
 
 #endif //__VGDE_STRINGTEST_H__

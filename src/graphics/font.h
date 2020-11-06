@@ -49,9 +49,12 @@ public:
     explicit Font(const std::string &fnt);
     ~Font();
     
+    void setSize(int size);
+    keep int size() const;
+    
     void draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color);
     
-    bool loaded() const;
+    keep bool loaded() const;
 private:
     void getGlyph(uint codePoint, int size, bool bold = false, float outlineThickness = 0);
 
@@ -64,6 +67,7 @@ private:
     void loadFont(const std::string &filename);
     
     bool _loaded;
+    int _size;
 };
 
 
