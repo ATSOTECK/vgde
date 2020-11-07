@@ -52,7 +52,7 @@ public:
     void setSize(int size);
     keep int size() const;
     
-    void draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color);
+    float draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color);
     
     keep bool loaded() const;
 private:
@@ -63,7 +63,6 @@ private:
     uint _ibo;
     uint _vao;
     uint _vbo;
-    std::map<uchar32, Character> _chars;
     std::map<int, std::map<uchar32, Character> > _charMap;
     void loadFont(const std::string &filename);
     

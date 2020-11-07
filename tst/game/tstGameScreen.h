@@ -46,7 +46,7 @@ private:
     
     Sprite *_tv;
     
-    std::vector<Sprite *> sprs;
+    std::vector<Sprite *> _sprs;
 };
 
 

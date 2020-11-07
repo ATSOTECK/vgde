@@ -372,21 +372,23 @@ void drawSlice(float x, float y, float r, float a, float a1, int sides, bool out
 
 }
 
-void drawText(const String &txt, float x, float y, float scale, const Color &color, Font *font) {
+float drawText(const String &txt, float x, float y, float scale, const Color &color, Font *font) {
     if (font == null) {
-        return;
+        return 0;
     }
     
     _textShader->use();
     _textShader->setVec3f("textColor", color.vec3gl());
 
-    font->draw(txt, x, y, scale, _textShader, color);
+    float w = font->draw(txt, x, y, scale, _textShader, color);
 
     _textShader->stop();
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+    
+    return w;
 }
 
-void drawText(const String &txt, float x, float y, float scale, const Color &color) {
-    drawText(txt, x, y, scale, color, _defaultFont);
+float drawText(const String &txt, float x, float y, float scale, const Color &color) {
+    return drawText(txt, x, y, scale, color, _defaultFont);
 }

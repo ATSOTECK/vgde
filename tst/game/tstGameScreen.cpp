@@ -51,20 +51,21 @@ void TstGameScreen::show() {
     _tv->setOrigin(_tv->center());
     _tv->setPosition(_tv->center());
     
-    sprs.reserve(1000);
-    for (int i = 0; i < 1000; ++i) {
+    _sprs.reserve(500);
+    for (int i = 0; i < 500; ++i) {
         var t = new Sprite("fire.png");
         t->setSize({32, 32});
         t->setPosition(randomPosition(700, 500));
         t->setOrigin(t->center());
         t->setRotation(random(360));
-        sprs.push_back(t);
+        _sprs.push_back(t);
     }
     
     var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
     timer->start();
     
-    drawSetFontSize(6);
+    //drawSetFontSize(12);
+    //_chinese->setSize(6);
 }
 
 void TstGameScreen::hide() {
@@ -79,20 +80,21 @@ void TstGameScreen::render(float delta) {
     _tv->rotate(-50.f * delta);
     _tv->draw();
     
-    for (var s : sprs) {
+    for (var s : _sprs) {
         s->rotate(random(2));
         s->setScale(random(2) / 8);
         s->setOrigin(s->center());
-        //s->draw();
+        s->draw();
     }
     
     std::string txt = "fps: " + std::to_string(_vgde->fps()) + "\t[blue]" + std::to_string(_vgde->frameTime()) + "ms\n"
                       + "[cyan]" + secondsToHHMMSS((int)_vgde->totalInGameTime());
     drawText(txt, 0, 0, 1, Color::Green);
     
-    drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 550, 1, Color::White);
-    //drawText("THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG [red]:[])", 10, 550, 1, Color::White);
+    float x = drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 550, 1, Color::White);
     drawText("我当然还是[red]爱[]你", 800, 10, 1, Color::White, _chinese);
+    
+    drawLine(x, 0, x, 800);
     
     float mx = mouseX();
     float my = mouseY();

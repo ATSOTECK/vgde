@@ -79,7 +79,7 @@ void drawCircle(float x, float y, float r, int sides = 20, bool outline = true);
 void drawArc(float x, float y, float r, float a, float a1, int sides = 20, bool radians = false);
 void drawSlice(float x, float y, float r, float a, float a1, int sides = 20, bool outline = true, bool radians = false);
 
-void drawText(const String &txt, float x, float y, float scale, const Color &color, Font *font);
-void drawText(const String &txt, float x, float y, float scale, const Color &color);
+float drawText(const String &txt, float x, float y, float scale, const Color &color, Font *font);
+float drawText(const String &txt, float x, float y, float scale, const Color &color);
 
 #endif

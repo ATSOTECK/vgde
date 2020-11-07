@@ -70,11 +70,12 @@ void Font::loadFont(const std::string &filename) {
     _face = face;
     
     _size = 24;
+    auto chars = std::map<uchar32, Character>();
+    _charMap.insert_or_assign(_size, chars);
+    
     for (uint c = 0; c < 128; ++c) {
         getGlyph(c, _size);
     }
-    
-    _charMap.insert_or_assign(_size, _chars);
 
     //FT_Done_Face(face);
     //FT_Done_FreeType(ft);
@@ -101,10 +102,10 @@ void Font::setSize(int size) {
     _size = size;
     auto idx = _charMap.find(size);
     if (idx != _charMap.end()) {
-        _chars = _charMap[_size];
+        //_chars = _charMap[_size];
     } else {
-        _chars = std::map<uchar32, Character>();
-        _charMap.insert_or_assign(_size, _chars);
+        auto chars = std::map<uchar32, Character>();
+        _charMap.insert_or_assign(_size, chars);
     }
 }
 
@@ -112,10 +113,11 @@ int Font::size() const {
     return _size;
 }
 
-void Font::draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color) {
+float Font::draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color) {
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(_vao);
     float ox = x;
+    float len = 0.f;
 
     for (int i = 0; i < txt.length(); ++i) {
         uint32 cp = txt[i];
@@ -127,7 +129,7 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
         }
 
         if (cp == '\t') {
-            x += ((_chars[' '].advance >> 6u) * scale) * 4;
+            x += ((_charMap[_size][' '].advance >> 6u) * scale) * 4;
             continue;
         }
 
@@ -167,11 +169,11 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
             continue;
         }
         
-        Character ch = _chars[cp];
+        Character ch = _charMap[_size][cp];
         if (ch.textureID == 0) {
             getGlyph(cp, _size);
 
-            ch = _chars[cp];
+            ch = _charMap[_size][cp];
         }
 
         float xpos = x + ch.bearing.x * scale;
@@ -218,7 +220,13 @@ void Font::draw(const String &txt, float x, float y, float scale, Shader *shader
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
         x += (ch.advance >> 6u) * scale;
+        
+        if (x > len) {
+            len = x;
+        }
     }
+    
+    return len;
 }
 
 bool Font::loaded() const {
@@ -230,13 +238,13 @@ void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness)
     
     //auto cp = FT_Get_Char_Index(face, codePoint);
     
-    if (FT_Load_Char(face, codePoint, FT_LOAD_RENDER)) {
-        vgderr("Failed to load glyph! " << codePoint);
+    if (FT_Set_Pixel_Sizes(face, 0, size)) {
+        vgderr("Failed to set size! " << size);
         return;
     }
     
-    if (FT_Set_Pixel_Sizes(face, 0, size)) {
-        vgderr("Failed to set size! " << size);
+    if (FT_Load_Char(face, codePoint, FT_LOAD_RENDER)) {
+        vgderr("Failed to load glyph! " << codePoint);
         return;
     }
 
@@ -258,5 +266,5 @@ void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness)
             {face->glyph->bitmap_left, face->glyph->bitmap_top},
             (uint)face->glyph->advance.x
     };
-    _chars.insert_or_assign(codePoint, character);
+    _charMap[_size].insert_or_assign(codePoint, character);
 }
