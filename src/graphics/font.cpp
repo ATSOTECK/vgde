@@ -73,6 +73,8 @@ void Font::loadFont(const std::string &filename) {
     for (uint c = 0; c < 128; ++c) {
         getGlyph(c, _size);
     }
+    
+    _charMap.insert_or_assign(_size, _chars);
 
     //FT_Done_Face(face);
     //FT_Done_FreeType(ft);
@@ -97,6 +99,13 @@ void Font::loadFont(const std::string &filename) {
 
 void Font::setSize(int size) {
     _size = size;
+    auto idx = _charMap.find(size);
+    if (idx != _charMap.end()) {
+        _chars = _charMap[_size];
+    } else {
+        _chars = std::map<uchar32, Character>();
+        _charMap.insert_or_assign(_size, _chars);
+    }
 }
 
 int Font::size() const {

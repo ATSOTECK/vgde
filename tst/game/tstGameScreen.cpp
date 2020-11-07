@@ -64,7 +64,7 @@ void TstGameScreen::show() {
     var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
     timer->start();
     
-    //drawSetFontSize(6);
+    drawSetFontSize(6);
 }
 
 void TstGameScreen::hide() {
@@ -91,6 +91,7 @@ void TstGameScreen::render(float delta) {
     drawText(txt, 0, 0, 1, Color::Green);
     
     drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 550, 1, Color::White);
+    //drawText("THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG [red]:[])", 10, 550, 1, Color::White);
     drawText("我当然还是[red]爱[]你", 800, 10, 1, Color::White, _chinese);
     
     float mx = mouseX();

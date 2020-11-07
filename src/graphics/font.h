@@ -63,7 +63,8 @@ private:
     uint _ibo;
     uint _vao;
     uint _vbo;
-    std::map<uint, Character> _chars;
+    std::map<uchar32, Character> _chars;
+    std::map<int, std::map<uchar32, Character> > _charMap;
     void loadFont(const std::string &filename);
     
     bool _loaded;
