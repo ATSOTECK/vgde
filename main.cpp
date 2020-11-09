@@ -27,14 +27,14 @@
 
 int main() {
     ResourceManager::instance()->setResPath("../res");
-	VGDE *vgde = VGDE::instance();
-	//vgde->init(vgde->nativeVideoMode());
-	vgde->init();
+    VGDE *vgde = VGDE::instance();
+    //vgde->init(vgde->nativeVideoMode());
+    vgde->init();
     vgde->screenAdd(new TstSplashScreen());
     vgde->screenAdd(new TstGameScreen());
     vgde->screenGotoFirst();
     //vgde->screenGoto("splash");
-	vgde->run();
-	
-	return 0;
+    vgde->run();
+    
+    return 0;
 }
