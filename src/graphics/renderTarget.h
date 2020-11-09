@@ -23,19 +23,31 @@
 #ifndef __VGDE_RENDERTARGET_H__
 #define __VGDE_RENDERTARGET_H__
 
-//#include "transform.h"
+#include "color.h"
+#include "shader.h"
+#include "transform.h"
 #include "vec.h"
 
-class RenderTarget {
+class RenderTarget : public Transform {
 public:
     explicit RenderTarget(const vec2f &size);
+    ~RenderTarget();
 
     void bind() const;
     void unbind() const;
+    
+    void clear(const Color &color = Color::Transparent);
+    
+    void draw();
 private:
+    void bindTexture() const;
+    void unbindTexture() const;
+    
     uint _frameBuffer;
     uint _textureID;
-    vec2f _size;
+    Shader *_shader;
+    uint _vbo;
+    uint _ebo;
 };
 
 

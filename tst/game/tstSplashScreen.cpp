@@ -86,6 +86,7 @@ void TstSplashScreen::render(float delta) {
 void TstSplashScreen::resize(const vec2f &size) {
     _txtx = _vgde->windowCenter().x - 85;
     _txty = _vgde->windowCenter().y - 180;
+    _splash.setPosition(_vgde->windowCenter());
 }
 
 void TstSplashScreen::ding(const String &name) {

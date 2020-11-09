@@ -148,6 +148,7 @@ void ResourceManager::removeShader(Shader *shader) {
     }
 
     _shaders.erase(idx);
+    delete shader;
 }
 
 void ResourceManager::updateShaderProjections() {

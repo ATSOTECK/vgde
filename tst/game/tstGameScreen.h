@@ -47,6 +47,8 @@ private:
     Sprite *_tv;
     
     std::vector<Sprite *> _sprs;
+    
+    RenderTarget *_t;
 };
 
 

@@ -1,18 +1,19 @@
-http://cloc.sourceforge.net v 1.62  T=0.10 s (585.3 files/s, 76245.6 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.18 s (335.6 files/s, 44718.8 lines/s)
 ----------------------------------------------------------------------------------
 File                                           blank        comment           code
 ----------------------------------------------------------------------------------
 .\src\graphics\vulkan\vk.cpp                     221             35            876
 .\src\util\vstring.cpp                           126             28            486
-.\src\vgde.cpp                                   109             23            379
+.\src\vgde.cpp                                   109             25            377
 .\src\input.cpp                                   58             24            308
-.\src\graphics\draw.cpp                           82             28            282
+.\src\graphics\draw.cpp                           83             28            283
 .\src\vec.h                                       67             29            252
+.\src\graphics\font.cpp                           50             35            185
 .\src\input.h                                     23             22            173
-.\src\graphics\font.cpp                           47             34            172
-.\src\util\resourceManager.cpp                    37             21            141
+.\src\util\resourceManager.cpp                    37             21            142
 .\src\graphics\vulkan\vk.h                        30             22            124
-.\src\graphics\sprite.cpp                         33             31            105
+.\src\graphics\renderTarget.cpp                   41             34            124
+.\src\graphics\sprite.cpp                         33             31            104
 .\src\util\timer.cpp                              22             21            102
 .\src\graphics\shader.cpp                         24             26            100
 .\src\util\vstring.h                              34             24             98
@@ -22,10 +23,10 @@ File                                           blank        comment           co
 .\src\graphics\color.cpp                          16             21             81
 .\src\util\clock.cpp                              29             22             80
 .\src\config.h                                    14             21             73
-.\tst\game\tstGameScreen.cpp                      19             26             68
+.\tst\game\tstGameScreen.cpp                      22             33             70
 .\src\rect.h                                      15             25             65
 .\src\graphics\texture.cpp                        17             21             60
-.\tst\game\tstSplashScreen.cpp                    16             27             54
+.\tst\game\tstSplashScreen.cpp                    16             27             55
 .\src\util\vmath.cpp                              16             21             49
 .\src\graphics\draw.h                             18             22             45
 .\src\graphics\color.h                            11             21             42
@@ -36,18 +37,17 @@ File                                           blank        comment           co
 .\src\util\timer.h                                10             21             37
 .\src\util\vmath.h                                18             36             37
 .\src\game\screen.cpp                             12             23             35
-.\src\graphics\renderTarget.cpp                   13             21             30
 .\src\game\screen.h                               13             22             28
 .\src\graphics\texture.h                          10             21             27
 .\src\game\actor.h                                12             21             26
 .\src\util\clock.h                                11             21             26
 .\src\graphics\shader.h                           10             22             26
 .\src\graphics\sprite.h                            8             21             25
+.\src\graphics\renderTarget.h                      9             21             24
 .\tst\game\tstSplashScreen.h                      10             21             23
-.\tst\game\tstGameScreen.h                        12             21             20
-.\src\graphics\renderTarget.h                      6             22             14
+.\tst\game\tstGameScreen.h                        13             21             21
+.\src\graphics.h                                   3             21             13
 .\main.cpp                                         4             23             13
-.\src\graphics.h                                   3             21             12
 .\src\graphics\videoMode.h                         6             21             12
 .\src\graphics\camera.h                            6             21             11
 .\src\graphics\camera.cpp                          4             22             11
@@ -64,5 +64,5 @@ File                                           blank        comment           co
 .\src\game\event.cpp                               1             21              1
 .\src\game\stage.cpp                               1             21              1
 ----------------------------------------------------------------------------------
-SUM:                                            1434           1380           5132
+SUM:                                            1473           1402           5253
 ----------------------------------------------------------------------------------

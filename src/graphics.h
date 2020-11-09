@@ -27,6 +27,7 @@
 #include "graphics/color.h"
 #include "graphics/draw.h"
 #include "graphics/font.h"
+#include "graphics/renderTarget.h"
 #include "graphics/shader.h"
 #include "graphics/sprite.h"
 #include "graphics/texture.h"

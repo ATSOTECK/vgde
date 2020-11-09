@@ -168,8 +168,8 @@ void VGDE::preRender() {
 
 	int w, h;
 
-	glfwGetFramebufferSize(_window, &w, &h);
-	glViewport(0, 0, w, h);
+	//glfwGetFramebufferSize(_window, &w, &h);
+	//glViewport(0, 0, w, h);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 

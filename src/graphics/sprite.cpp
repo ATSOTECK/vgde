@@ -83,7 +83,6 @@ Sprite::~Sprite() {
     ResourceManager::instance()->unloadTexture(_texture);
     _shader->stop();
     ResourceManager::instance()->removeShader(_shader);
-    delete _shader; //TODO(Skyler): Move to resource manager.
 }
 
 void Sprite::init() {

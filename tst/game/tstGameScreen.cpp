@@ -31,7 +31,8 @@ TstGameScreen::TstGameScreen():
     Screen("game"),
     _vgde(VGDE::instance()),
     _chinese(null),
-    _tv(null)
+    _tv(null),
+    _t(null)
 {
     //
 }
@@ -61,8 +62,14 @@ void TstGameScreen::show() {
         _sprs.push_back(t);
     }
     
-    var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
-    timer->start();
+    _t = new RenderTarget({1024, 600});
+    _t->bind();
+    //_t->clear();
+    drawText("REEEEEEEEEEEEEEEEEEEEEEEEEEEE", 0, 0, 1, Color::White);
+    _t->unbind();
+    
+    //var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
+    //timer->start();
     
     //drawSetFontSize(12);
     //_chinese->setSize(6);
@@ -91,10 +98,12 @@ void TstGameScreen::render(float delta) {
                       + "[cyan]" + secondsToHHMMSS((int)_vgde->totalInGameTime());
     drawText(txt, 0, 0, 1, Color::Green);
     
-    float x = drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 550, 1, Color::White);
-    drawText("我当然还是[red]爱[]你", 800, 10, 1, Color::White, _chinese);
+    //float x = drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 550, 1, Color::White);
+    //drawText("我当然还是[red]爱[]你", 800, 10, 1, Color::White, _chinese);
     
-    drawLine(x, 0, x, 800);
+    //drawLine(x, 0, x, 800);
+    
+    _t->draw();
     
     float mx = mouseX();
     float my = mouseY();
