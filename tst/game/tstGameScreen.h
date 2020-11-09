@@ -48,7 +48,7 @@ private:
     
     std::vector<Sprite *> _sprs;
     
-    RenderTarget *_t;
+    RenderTexture *_t;
 };
 
 

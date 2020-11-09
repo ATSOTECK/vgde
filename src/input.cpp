@@ -224,7 +224,7 @@ bool isKeyDown(int key) {
 		return isKeyDown(vk_lAlt, vk_rAlt);
 	}
 
-	return (GetAsyncKeyState(keyToVKey(key)) & 0x8000) != 0;
+	return ((ushort)GetAsyncKeyState(keyToVKey(key)) & 0x8000u) != 0;
 }
 
 bool isKeyDown(int key, int key1, int key2) {
@@ -276,7 +276,7 @@ bool isButtonDown(int btn) {
 		return false;
 	}
 
-	return (GetAsyncKeyState(buttonToVKey(btn)) & 0x8000) != 0;
+	return ((ushort)GetAsyncKeyState(buttonToVKey(btn)) & 0x8000u) != 0;
 }
 
 bool isButtonDown(int btn, int btn1) {
@@ -316,11 +316,11 @@ bool isKeyDownGlobal(int key) {
 		return isKeyDownGlobal(vk_lAlt) || isKeyDownGlobal(vk_rAlt);
 	}
 
-	return (GetAsyncKeyState(keyToVKey(key)) & 0x8000) != 0;
+	return ((ushort)GetAsyncKeyState(keyToVKey(key)) & 0x8000u) != 0;
 }
 
 bool isButtonDownGlobal(int btn) {
-	return (GetAsyncKeyState(buttonToVKey(btn)) & 0x8000) != 0;
+	return ((ushort)GetAsyncKeyState(buttonToVKey(btn)) & 0x8000u) != 0;
 }
 
 vec2f mousePositionGlobal() {
@@ -346,11 +346,11 @@ float mouseY() {
 	return mousePosition().y;
 }
 
-void setMousePositionGlobal(const vec2f &pos) {
+void mouseSetPositionGlobal(const vec2f &pos) {
 	SetCursorPos((int)pos.x, (int)pos.y);
 }
 
-void setMousePosition(const vec2f &pos) {
+void mouseSetPosition(const vec2f &pos) {
 	POINT p = {(int)pos.x, (int)pos.y};
 	RECT r;//, c;
 	GetWindowRect(_hwnd, &r);
@@ -376,15 +376,31 @@ void setMousePosition(const vec2f &pos) {
 	//SetCursorPos(r.left, r.top);
 }
 
-void setMousePosition(float x, float y) {
-	setMousePosition({x, y});
+void mouseSetPosition(float x, float y) {
+    mouseSetPosition({x, y});
 }
 
-void moveMouse(const vec2f &offset) {
+void mouseMove(const vec2f &offset) {
 	vec2f pos = mousePosition();
-	setMousePosition(pos + offset);
+    mouseSetPosition(pos + offset);
 }
 
-void moveMouse(float xoffset, float yoffset) {
-	moveMouse({xoffset, yoffset});
+void mouseMove(float xoffset, float yoffset) {
+    mouseMove({xoffset, yoffset});
+}
+
+void mouseHide() {
+    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+
+void mouseShow() {
+    glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+bool mouseHidden() {
+    return glfwGetInputMode(_window, GLFW_CURSOR) == GLFW_CURSOR_HIDDEN;
+}
+
+bool mouseShown() {
+    return glfwGetInputMode(_window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL;
 }

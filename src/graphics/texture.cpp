@@ -27,22 +27,34 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
+Texture::Texture(const vec2f &size) :
+    _textureID(0),
+    _slot(0),
+    _width(0),
+    _height(0),
+    _bpp(4)
+{
+    resize(size);
+}
+
 Texture::Texture(const std::string &path) :
         _textureID(0),
         _slot(0),
         _path(path),
-        _data(null),
         _width(0),
         _height(0),
         _bpp(0)
 {
     stbi_set_flip_vertically_on_load(1);
     int w = 0, h = 0;
-    _data = stbi_load(_path.c_str(), &w, &h, &_bpp, 4);
+    uchar *data = stbi_load(_path.c_str(), &w, &h, &_bpp, 4);
     _width = (float)w;
     _height = (float)h;
 
-    if (_data == null) {
+    if (data == null) {
         vgdewarn("Could not load " << path);
         return;
     }
@@ -55,12 +67,10 @@ Texture::Texture(const std::string &path) :
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _data);
-    bind();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    unbind();
 
-    if (_data != null) {
-        stbi_image_free(_data);
-    }
+    stbi_image_free(data);
 }
 
 Texture::~Texture() {
@@ -77,6 +87,10 @@ void Texture::unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void Texture::clear() const {
+    glClearTexImage(_textureID, 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
+}
+
 float Texture::width() const {
     return _width;
 }
@@ -89,10 +103,51 @@ vec2f Texture::size() const {
     return {_width, _height};
 }
 
+void Texture::resize(const vec2f &size) {
+    _width = size.x;
+    _height = size.y;
+    
+    if (_textureID == 0) {
+        glGenTextures(1, &_textureID);
+    }
+    glBindTexture(GL_TEXTURE_2D, _textureID);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
+    unbind();
+}
+
 uint Texture::textureID() const {
     return _textureID;
 }
 
 uint Texture::slot() const {
     return _slot;
+}
+
+bool Texture::saveToFile(const std::string &filename) const {
+    int w = (int)_width;
+    int h = (int)_height;
+    GLsizei size = w * h * 4u;
+    var data = new uint8[size];
+    var pixels = new uint8[size];
+    
+    glGetTextureImage(_textureID, 0, GL_RGBA, GL_UNSIGNED_BYTE, size, data);
+    
+    for (int y = 0; y < h; ++y) {
+        uint8 *ptr = &data[(h - y - 1) * w * 4];
+        memcpy_s(&pixels[y * w * 4], w * 4, ptr, w * 4);
+    }
+    
+    //TODO(Skyler): Move to thread.
+    bool success = (stbi_write_png(filename.c_str(), w, h, 4, pixels, 0) != 0);
+    
+    delete[] data;
+    delete[] pixels;
+    
+    return success;
 }

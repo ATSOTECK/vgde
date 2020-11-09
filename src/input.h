@@ -209,10 +209,14 @@ vec2f mousePosition();
 float mouseX();
 float mouseY();
 
-void setMousePositionGlobal(const vec2f &pos);
-void setMousePosition(const vec2f &pos);
-void setMousePosition(float x, float y);
-void moveMouse(const vec2f &offset);
-void moveMouse(float xoffset, float yoffset);
+void mouseSetPositionGlobal(const vec2f &pos);
+void mouseSetPosition(const vec2f &pos);
+void mouseSetPosition(float x, float y);
+void mouseMove(const vec2f &offset);
+void mouseMove(float xoffset, float yoffset);
+void mouseHide();
+void mouseShow();
+bool mouseHidden();
+bool mouseShown();
 
 #endif

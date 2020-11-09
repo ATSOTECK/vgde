@@ -26,6 +26,9 @@
 #include "input.h"
 #include "util/vmath.h"
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
 #include <fstream>
 #include <iostream>
 
@@ -64,6 +67,7 @@ VGDE::VGDE() :
     _startTime(Clock::timeAsSeconds()),
     _totalInGameTime(0),
     _currentScreen(null),
+    _ssname("screenshot"),
     _textureSlots(0),
     _rm(null)
 {
@@ -121,7 +125,7 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 
 	glfwSetWindowSizeCallback(_window, windowSizeCallback);
 	glfwSetWindowCloseCallback(_window, windowCloseCallback);
-
+	
 	glInit();
 	drawInit();
 	inputInit(_window);
@@ -165,12 +169,8 @@ bool VGDE::running() const {
 void VGDE::preRender() {
     _clock.restart();
 	inputUpdate();
-
-	int w, h;
-
-	//glfwGetFramebufferSize(_window, &w, &h);
-	//glViewport(0, 0, w, h);
-	glClear(GL_COLOR_BUFFER_BIT);
+	
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void VGDE::postRender() {
@@ -282,6 +282,33 @@ float VGDE::inGameTime() const {
 
 float VGDE::totalInGameTime() const {
     return _totalInGameTime + inGameTime();
+}
+
+void VGDE::setScreenshotName(const String &name) {
+    if (!name.empty()) {
+        _ssname = name;
+    }
+}
+
+void VGDE::screenshot() {
+    int w = (int)_windowWidth;
+    int h = (int)_windowHeight;
+    GLsizei size = w * h * 4u;
+    var data = new uint8[size];
+    var pixels = new uint8[size];
+    
+    glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    
+    for (int y = 0; y < h; ++y) {
+        uint8 *ptr = &data[(h - y - 1) * w * 4];
+        memcpy_s(&pixels[y * w * 4], w * 4, ptr, w * 4);
+    }
+    
+    //TODO(Skyler): Move to thread.
+    stbi_write_png((_ssname + ".png").c_str(), w, h, 4, pixels, 0);
+    
+    delete[] data;
+    delete[] pixels;
 }
 
 Screen *VGDE::screen() const {

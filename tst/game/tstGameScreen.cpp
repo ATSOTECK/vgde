@@ -24,7 +24,6 @@
 
 #include "input.h"
 #include "util/humanReadable.h"
-#include "util/timer.h"
 #include "util/vmath.h"
 
 TstGameScreen::TstGameScreen():
@@ -62,14 +61,16 @@ void TstGameScreen::show() {
         _sprs.push_back(t);
     }
     
-    _t = new RenderTarget({1024, 600});
+    _t = new RenderTexture({200, 600});
     _t->bind();
     //_t->clear();
-    drawText("REEEEEEEEEEEEEEEEEEEEEEEEEEEE", 0, 0, 1, Color::White);
+    drawText("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\nEEEEE\nEEEEEEEEQEE\nEEEEEE\nEEEEE\nEEEEEEEEEE", 0, 0, 1, Color::White);
     _t->unbind();
     
-    //var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
-    //timer->start();
+    //_t->texture()->saveToFile("_t.png");
+    
+    var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
+    timer->start();
     
     //drawSetFontSize(12);
     //_chinese->setSize(6);
@@ -84,6 +85,8 @@ void TstGameScreen::render(float delta) {
         _vgde->exit();
     }
     
+    _t->setPosition(mousePosition());
+    
     _tv->rotate(-50.f * delta);
     _tv->draw();
     
@@ -91,17 +94,17 @@ void TstGameScreen::render(float delta) {
         s->rotate(random(2));
         s->setScale(random(2) / 8);
         s->setOrigin(s->center());
-        s->draw();
+        //s->draw();
     }
     
     std::string txt = "fps: " + std::to_string(_vgde->fps()) + "\t[blue]" + std::to_string(_vgde->frameTime()) + "ms\n"
                       + "[cyan]" + secondsToHHMMSS((int)_vgde->totalInGameTime());
     drawText(txt, 0, 0, 1, Color::Green);
     
-    //float x = drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 550, 1, Color::White);
-    //drawText("我当然还是[red]爱[]你", 800, 10, 1, Color::White, _chinese);
+    float x = drawText("The quick brown fox jumped over the lazy dog [green]:[])", 10, 550, 1, Color::White);
+    drawText("我当然还是[red]爱[]你", 800, 10, 1, Color::White, _chinese);
     
-    //drawLine(x, 0, x, 800);
+    drawLine(x, 0, x, 800);
     
     _t->draw();
     
@@ -112,6 +115,10 @@ void TstGameScreen::render(float delta) {
     drawArc(mx, my, 45, 90, 180);
     drawArc(mx, my, 35, 180, 270);
     drawArc(mx, my, 45, 270, 360);
+    
+    if (isKeyPressed(vk_f12)) {
+        _vgde->screenshot();
+    }
 }
 
 void TstGameScreen::resize(const vec2f &size) {

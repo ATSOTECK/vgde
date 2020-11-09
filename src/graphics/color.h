@@ -26,11 +26,21 @@
 #include "config.h"
 #include "vec.h"
 
+struct SimpleColor {
+    float r;
+    float g;
+    float b;
+    float a;
+};
+
 class Color {
 public:
-    explicit Color(uint8 red = 0, uint8 green = 0, uint8 blue = 0, uint8 alpha = 255);
+    explicit Color(uint8 red = 0, uint8 green = 0, uint8 blue = 0, uint8 alpha = 255, bool valid = true);
 
-    vec3f vec3gl() const;
+    keep vec3f vec3gl() const;
+    keep SimpleColor simple() const;
+    
+    void set(uint8 red = 0, uint8 green = 0, uint8 blue = 0, uint8 alpha = 255);
 
     static const Color Black;
     static const Color Black100;
@@ -59,6 +69,11 @@ public:
     float glG;
     float glB;
     float glA;
+    
+private:
+    friend bool operator ==(const Color &lhs, const Color &rhs);
+    
+    bool _valid;
 };
 
 bool operator ==(const Color &lhs, const Color &rhs);

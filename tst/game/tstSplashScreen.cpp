@@ -44,6 +44,8 @@ void TstSplashScreen::show() {
         return;
     }
     
+    mouseHide();
+    
     _splash.setOrigin(_splash.center());
     _splash.setScale(.75f);
     _splash.setPosition(_vgde->windowCenter());

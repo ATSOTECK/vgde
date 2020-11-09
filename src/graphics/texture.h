@@ -31,24 +31,29 @@
 
 class Texture {
 public:
+    explicit Texture(const vec2f &size);
     explicit Texture(const std::string &path);
     ~Texture();
 
     void bind(uint slot = 0);
     void unbind() const;
+    
+    void clear() const;
 
-    float width() const;
-    float height() const;
-    vec2f size() const;
+    keep float width() const;
+    keep float height() const;
+    keep vec2f size() const;
+    void resize(const vec2f &size);
 
-    uint textureID() const;
-    uint slot() const;
+    keep uint textureID() const;
+    keep uint slot() const;
+    
+    bool saveToFile(const std::string &filename) const;
 
 private:
     uint _textureID;
     uint _slot;
     std::string _path;
-    uchar *_data;
     float _width;
     float _height;
     int _bpp;

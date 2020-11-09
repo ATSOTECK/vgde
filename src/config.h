@@ -28,11 +28,11 @@
 #include <Windows.h>
 
 #ifndef NDEBUG
-#define VDEBUG
+#   define VDEBUG
 #endif
 
 #if defined(WIN32) || defined(_WIN32)
-#define VWIN
+#   define VWIN
 #endif
 
 #define null nullptr

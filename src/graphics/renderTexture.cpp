@@ -20,7 +20,7 @@
  *
  */
 
-#include "renderTarget.h"
+#include "renderTexture.h"
 
 #include "draw.h"
 #include "gl.h"
@@ -59,39 +59,14 @@ const GLuint elements[] ={
 };
 }
 
-RenderTarget::RenderTarget(const vec2f &size) :
+RenderTexture::RenderTexture(const vec2f &size) :
     Transform(),
     _frameBuffer(0),
-    _textureID(0),
+    _texture(null),
     _vbo(0),
     _ebo(0)
 {
-    setSize(size);
-    
-    //glGenFramebuffers(1, &_frameBuffer);
-    glCreateFramebuffers(1, &_frameBuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-
-    //glGenTextures(1, &_textureID);
-    glCreateTextures(GL_TEXTURE_2D, 1, &_textureID);
-    bindTexture();
-    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, _size.x, _size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    
-    unbindTexture();
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _textureID, 0);
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        vgderr("Framebuffer not complete!");
-    }
-
-    unbind();
+    resize(size);
     
     glGenBuffers(1, &_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
@@ -107,38 +82,57 @@ RenderTarget::RenderTarget(const vec2f &size) :
     _shader->setMat4("projection", projection, true);
     
     ResourceManager::instance()->addShader(_shader);
-    
-    setPosition({100, 100});
 }
 
-RenderTarget::~RenderTarget() {
-    glDeleteTextures(1, &_textureID);
+RenderTexture::~RenderTexture() {
+    delete _texture;
     glDeleteFramebuffers(1, &_frameBuffer);
     _shader->stop();
     ResourceManager::instance()->removeShader(_shader);
 }
 
-void RenderTarget::bind() const {
+void RenderTexture::resize(const vec2f &size) {
+    setSize(size);
+    
+    if (_texture == null) {
+        _texture = new Texture(_size);
+    }
+    
+    //glGenFramebuffers(1, &_frameBuffer);
+    if (_frameBuffer == 0) {
+        glCreateFramebuffers(1, &_frameBuffer);
+    }
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    //TODO("Skyler", "Position?");
-    //glViewport(0, 0, _size.x, _size.y);
-    //glViewport(0, 0, 1024, 600);
+    
+    _texture->resize(_size);
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->textureID(), 0);
+    
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        vgderr("Framebuffer not complete!");
+    }
+    
+    unbind();
 }
 
-void RenderTarget::unbind() const {
+Texture *RenderTexture::texture() const {
+    return _texture;
+}
+
+void RenderTexture::bind() const {
+    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+}
+
+void RenderTexture::unbind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    //glViewport(0, 0, 1024, 600);
 }
 
-void RenderTarget::clear(const Color &color) {
-    Color c = drawGetClearColor();
-    glClearColor(color.glR, color.glG, color.glB, color.glA);
-    glClear(GL_COLOR_BUFFER_BIT);
-    drawSetClearColor(c);
+void RenderTexture::clear() const {
+    _texture->clear();
 }
 
-void RenderTarget::draw() {
-    if (_textureID == 0 || _size.x == 0 || _size.y == 0) {
+void RenderTexture::draw() {
+    if (_texture == null || _size.x == 0 || _size.y == 0) {
         return;
     }
     
@@ -172,21 +166,13 @@ void RenderTarget::draw() {
     
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), elements, GL_STATIC_DRAW);
     
-    bindTexture();
+    _texture->bind();
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, null);
     
-    unbindTexture();
+    _texture->unbind();
     _shader->stop();
     
     glBindVertexArray(0);
-}
-
-void RenderTarget::bindTexture() const {
-    glBindTexture(GL_TEXTURE_2D, _textureID);
-}
-
-void RenderTarget::unbindTexture() const {
-    glBindTexture(GL_TEXTURE_2D, 0);
 }

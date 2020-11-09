@@ -20,35 +20,37 @@
  *
  */
 
-#ifndef __VGDE_RENDERTARGET_H__
-#define __VGDE_RENDERTARGET_H__
+#ifndef __VGDE_RENDERTEXTURE_H__
+#define __VGDE_RENDERTEXTURE_H__
 
 #include "color.h"
 #include "shader.h"
+#include "texture.h"
 #include "transform.h"
 #include "vec.h"
 
-class RenderTarget : public Transform {
+class RenderTexture : public Transform {
 public:
-    explicit RenderTarget(const vec2f &size);
-    ~RenderTarget();
+    explicit RenderTexture(const vec2f &size);
+    ~RenderTexture();
+    
+    void resize(const vec2f &size);
+    
+    keep Texture *texture() const;
 
     void bind() const;
     void unbind() const;
     
-    void clear(const Color &color = Color::Transparent);
+    void clear() const;
     
     void draw();
 private:
-    void bindTexture() const;
-    void unbindTexture() const;
-    
     uint _frameBuffer;
-    uint _textureID;
+    Texture *_texture;
     Shader *_shader;
     uint _vbo;
     uint _ebo;
 };
 
 
-#endif //__VGDE_RENDERTARGET_H__
+#endif //__VGDE_RENDERTEXTURE_H__

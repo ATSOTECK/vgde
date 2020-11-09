@@ -79,6 +79,9 @@ public:
 	keep float inGameTime() const;
 	keep float totalInGameTime() const;
 	
+	void setScreenshotName(const String &name);
+	void screenshot();
+	
 	keep Screen *screen() const;
 	void screenAdd(Screen *screen);
 	void screenGoto(Screen *screen, bool cleanup = false);
@@ -123,6 +126,7 @@ private:
 	
 	std::vector<Screen *> _screens;
 	Screen *_currentScreen;
+	String _ssname;
 	
 	int _textureSlots;
 	

@@ -37,13 +37,14 @@ const Color Color::Magenta(255, 0, 255);
 const Color Color::Cyan(0, 255, 255);
 const Color Color::Turquoise(64, 244, 208);
 const Color Color::Transparent(0, 0, 0, 0);
-const Color Color::None(0, 0, 0, 0);
+const Color Color::None(0, 0, 0, 0, false);
 
-Color::Color(uint8 red, uint8 green, uint8 blue, uint8 alpha) :
-        r(red),
-        g(green),
-        b(blue),
-        a(alpha)
+Color::Color(uint8 red, uint8 green, uint8 blue, uint8 alpha, bool valid) :
+    r(red),
+    g(green),
+    b(blue),
+    a(alpha),
+    _valid(valid)
 {
     glR = (float)r / 255.f;
     glG = (float)g / 255.f;
@@ -53,6 +54,22 @@ Color::Color(uint8 red, uint8 green, uint8 blue, uint8 alpha) :
 
 vec3f Color::vec3gl() const {
     return {glR, glG, glB};
+}
+
+SimpleColor Color::simple() const {
+    return {(float)r / 255.f, (float)g / 255.f, (float)b / 255.f, (float)a / 255.f};
+}
+
+void Color::set(uint8 red, uint8 green, uint8 blue, uint8 alpha) {
+    r = red;
+    g = green;
+    b = blue;
+    a = alpha;
+    
+    glR = (float)r / 255.f;
+    glG = (float)g / 255.f;
+    glB = (float)b / 255.f;
+    glA = (float)a / 255.f;
 }
 
 Color &Color::operator= (const Color &other) {
@@ -69,6 +86,8 @@ Color &Color::operator= (const Color &other) {
     glG = other.glG;
     glB = other.glB;
     glA = other.glA;
+    
+    _valid = other._valid;
 
     return *this;
 }
@@ -77,7 +96,8 @@ bool operator ==(const Color &lhs, const Color &rhs) {
     return (lhs.r == rhs.r) &&
            (lhs.g == rhs.g) &&
            (lhs.b == rhs.b) &&
-           (lhs.a == rhs.a);
+           (lhs.a == rhs.a) &&
+           (lhs._valid == rhs._valid);
 }
 
 bool operator !=(const Color &lhs, const Color &rhs) {

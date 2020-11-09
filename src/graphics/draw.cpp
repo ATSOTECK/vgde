@@ -107,6 +107,7 @@ void drawInit() {
     _defaultFont = new Font("liberation-mono.ttf");
 
 	drawSetProjection(0.0f, (float)_vgde->windowWidth(), (float)_vgde->windowHeight(), 0.0f, -1.0f, 1.0);
+	drawSetClearColor(Color::Black);
 }
 
 glm::mat4 drawGetProjection() {
