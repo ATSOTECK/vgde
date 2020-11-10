@@ -23,12 +23,12 @@
 #include "texture.h"
 
 #include <iostream>
+#include <thread>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-//#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#include "stbi.h"
 
 Texture::Texture(const vec2f &size) :
     _textureID(0),
@@ -129,7 +129,7 @@ uint Texture::slot() const {
     return _slot;
 }
 
-bool Texture::saveToFile(const std::string &filename) const {
+void Texture::saveToFile(const std::string &filename) const {
     int w = (int)_width;
     int h = (int)_height;
     GLsizei size = w * h * 4u;
@@ -143,11 +143,9 @@ bool Texture::saveToFile(const std::string &filename) const {
         memcpy_s(&pixels[y * w * 4], w * 4, ptr, w * 4);
     }
     
-    //TODO(Skyler): Move to thread.
-    bool success = (stbi_write_png(filename.c_str(), w, h, 4, pixels, 0) != 0);
+    std::thread thread(writeImg, filename, w, h, 4, pixels);
+    thread.detach();
     
+    //pixels deleted by the thread.
     delete[] data;
-    delete[] pixels;
-    
-    return success;
 }

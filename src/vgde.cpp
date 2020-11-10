@@ -23,14 +23,13 @@
 #include "vgde.h"
 
 #include "graphics/draw.h"
+#include "graphics/stbi.h"
 #include "input.h"
 #include "util/vmath.h"
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
-
 #include <fstream>
 #include <iostream>
+#include <thread>
 
 VGDE *VGDE::_instance = null;
 
@@ -304,11 +303,12 @@ void VGDE::screenshot() {
         memcpy_s(&pixels[y * w * 4], w * 4, ptr, w * 4);
     }
     
-    //TODO(Skyler): Move to thread.
-    stbi_write_png((_ssname + ".png").c_str(), w, h, 4, pixels, 0);
+    //TODO(Skyler): Is there anyway to make this faster?
+    std::thread thread(writeImg, (_ssname + ".png").c_str(), w, h, 4, pixels);
+    thread.detach();
     
+    //pixels deleted by the thread.
     delete[] data;
-    delete[] pixels;
 }
 
 Screen *VGDE::screen() const {
