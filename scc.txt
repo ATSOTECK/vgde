@@ -1,10 +1,10 @@
-http://cloc.sourceforge.net v 1.62  T=0.11 s (568.9 files/s, 77079.4 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.11 s (559.0 files/s, 76342.2 lines/s)
 -----------------------------------------------------------------------------------
 File                                            blank        comment           code
 -----------------------------------------------------------------------------------
 .\src\graphics\vulkan\vk.cpp                      221             35            876
 .\src\util\vstring.cpp                            126             28            486
-.\src\vgde.cpp                                    115             24            399
+.\src\vgde.cpp                                    115             24            404
 .\src\input.cpp                                    62             24            320
 .\src\graphics\draw.cpp                            83             28            284
 .\src\vec.h                                        67             29            252
@@ -13,19 +13,20 @@ File                                            blank        comment           c
 .\src\util\resourceManager.cpp                     37             21            142
 .\src\graphics\vulkan\vk.h                         30             22            124
 .\src\graphics\renderTexture.cpp                   37             23            118
+.\src\util\timer.cpp                               22             21            106
 .\src\graphics\sprite.cpp                          33             31            104
-.\src\util\timer.cpp                               22             21            102
+.\src\graphics\texture.cpp                         29             21            102
 .\src\graphics\shader.cpp                          24             26            100
-.\src\graphics\texture.cpp                         30             23            100
+.\src\graphics\transform.cpp                       27             22             98
 .\src\util\vstring.h                               34             24             98
 .\src\graphics\color.cpp                           20             21             97
-.\src\graphics\transform.cpp                       27             22             97
 .\src\util\vtime.cpp                               31             23             97
 .\src\vgde.h                                       30             21             85
+.\tst\game\tstGameScreen.cpp                       26             29             82
 .\src\util\clock.cpp                               29             22             80
-.\tst\game\tstGameScreen.cpp                       25             29             78
 .\src\config.h                                     14             21             73
 .\src\rect.h                                       15             25             65
+.\src\util\timer.h                                 18             44             58
 .\tst\game\tstSplashScreen.cpp                     17             27             56
 .\src\graphics\color.h                             15             21             53
 .\src\util\vmath.cpp                               16             21             49
@@ -34,7 +35,6 @@ File                                            blank        comment           c
 .\src\util\resourceManager.h                       16             22             42
 .\src\util\vtime.h                                  9             21             41
 .\src\graphics\font.h                              14             21             39
-.\src\util\timer.h                                 10             21             37
 .\src\util\vmath.h                                 18             36             37
 .\src\game\screen.cpp                              12             23             35
 .\src\graphics\texture.h                           12             21             30
@@ -64,5 +64,5 @@ File                                            blank        comment           c
 .\src\game\event.cpp                                1             21              1
 .\src\game\stage.cpp                                1             21              1
 -----------------------------------------------------------------------------------
-SUM:                                             1508           1388           5369
+SUM:                                             1516           1409           5406
 -----------------------------------------------------------------------------------

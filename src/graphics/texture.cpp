@@ -28,7 +28,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "stbi.h"
+#include "stb_image_write.h"
 
 Texture::Texture(const vec2f &size) :
     _textureID(0),
@@ -143,9 +143,10 @@ void Texture::saveToFile(const std::string &filename) const {
         memcpy_s(&pixels[y * w * 4], w * 4, ptr, w * 4);
     }
     
-    std::thread thread(writeImg, filename, w, h, 4, pixels);
-    thread.detach();
-    
-    //pixels deleted by the thread.
     delete[] data;
+    
+    std::thread([=]{
+        stbi_write_png(filename.c_str(), w, h, 4, pixels, 0);
+        delete[] pixels;
+    }).detach();
 }

@@ -36,7 +36,8 @@ Timer::Timer(Actor *actor, Time time, bool repeat) :
     _repeat(repeat),
     _ticking(false),
     _startTime(Time::Zero),
-    _dingCount(0)
+    _dingCount(0),
+    _lambda(false)
 {
     ResourceManager::instance()->addTimer(this);
 }
@@ -49,7 +50,8 @@ Timer::Timer(Actor *actor, const String &name, Time time, bool repeat) :
     _repeat(repeat),
     _ticking(false),
     _startTime(Time::Zero),
-    _dingCount(0)
+    _dingCount(0),
+    _lambda(false)
 {
     ResourceManager::instance()->addTimer(this);
 }
@@ -62,7 +64,8 @@ Timer::Timer(Screen *screen, Time time, bool repeat) :
     _repeat(repeat),
     _ticking(false),
     _startTime(Time::Zero),
-    _dingCount(0)
+    _dingCount(0),
+    _lambda(false)
 {
     ResourceManager::instance()->addTimer(this);
 }
@@ -75,7 +78,8 @@ Timer::Timer(Screen *screen, const String &name, Time time, bool repeat) :
     _repeat(repeat),
     _ticking(false),
     _startTime(Time::Zero),
-    _dingCount(0)
+    _dingCount(0),
+    _lambda(false)
 {
     ResourceManager::instance()->addTimer(this);
 }

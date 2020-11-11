@@ -23,6 +23,7 @@
 #include "transform.h"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <math.h>
 
 Transform::Transform() :
     _position(0.f),
@@ -125,7 +126,7 @@ void Transform::setScale(const vec2f &scale) {
 }
 
 void Transform::setRotation(float angle) {
-    _rotation = angle;
+    _rotation = fmod(angle, 360);
     _transform = glm::mat4(1.f);
     _transform = glm::translate(_transform, {_position.x, _position.y, 0.f});
     _transform = glm::rotate(_transform, glm::radians(_rotation), {0, 0, 1});

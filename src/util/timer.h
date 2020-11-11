@@ -28,12 +28,63 @@
 #include "vstring.h"
 #include "vtime.h"
 
+#include <thread>
+
+/*
+template <int...>
+struct seq {};
+
+template <int N, int ...S>
+struct gens : gens<N - 1, N, -1, S...> {};
+
+template <int ...S>
+struct gens<0, S...> {
+    typedef seq<S...> type;
+};
+
+template <class Fn, class ...Args>
+struct LContainer {
+    Fn func;
+    std::tuple<Args...> args;
+    
+    void call() {
+        std::apply(func, args);
+        callFunc(typename gens<sizeof...(Args)>::type());
+    }
+    
+    template <int ...S>
+    void callFunc(seq<S...>) {
+        func(std::get<S>(args)...);
+    }
+};
+*/
+
 class Timer {
 public:
-    Timer(Actor *actor, Time time, bool repeat = false);
-    Timer(Actor *actor, const String &name, Time time, bool repeat = false);
-    Timer(Screen *screen, Time time, bool repeat = false);
-    Timer(Screen *screen, const String &name, Time time, bool repeat = false);
+    explicit Timer(Actor *actor, Time time, bool repeat = false);
+    explicit Timer(Actor *actor, const String &name, Time time, bool repeat = false);
+    explicit Timer(Screen *screen, Time time, bool repeat = false);
+    explicit Timer(Screen *screen, const String &name, Time time, bool repeat = false);
+    
+    template <class Fn, class ...Args>
+    explicit Timer(Time time, bool repeat, Fn &&fn, Args &&...args):
+        _actor(null),
+        _screen(null),
+        _name(),
+        _time(time),
+        _repeat(repeat),
+        _ticking(false),
+        _startTime(Time::Zero),
+        _dingCount(0),
+        _lambda(false)
+    {
+        std::thread([=]{
+            do {
+                std::this_thread::sleep_for(std::chrono::microseconds(time.asMicroseconds()));
+                std::invoke(fn, args...);
+            } while (_repeat);
+        }).detach();
+    }
     
     void start();
     void restart(const Time &time = Time::Zero);
@@ -62,6 +113,7 @@ private:
     bool _ticking;
     Time _startTime;
     int _dingCount;
+    bool _lambda;
 };
 
 

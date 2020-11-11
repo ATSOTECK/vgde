@@ -53,12 +53,12 @@ void TstGameScreen::show() {
     
     _sprs.reserve(500);
     for (int i = 0; i < 500; ++i) {
-        var t = new Sprite("fire.png");
-        t->setSize({32, 32});
-        t->setPosition(randomPosition(700, 500));
-        t->setOrigin(t->center());
-        t->setRotation(random(360));
-        _sprs.push_back(t);
+        var fire = new Sprite("fire.png");
+        fire->setSize({32, 32});
+        fire->setPosition(randomPosition(700, 500));
+        fire->setOrigin(fire->center());
+        fire->setRotation(random(360));
+        _sprs.push_back(fire);
     }
     
     _t = new RenderTexture({200, 600});
@@ -71,6 +71,11 @@ void TstGameScreen::show() {
     
     var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
     timer->start();
+    
+    Timer(Time::seconds(2), Timer::Repeat, [=]{
+        db(_tv->rotation());
+        db("yo from timer");
+    });
     
     //drawSetFontSize(12);
     //_chinese->setSize(6);
