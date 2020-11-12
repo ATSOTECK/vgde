@@ -43,6 +43,8 @@ class Timer;
 class ResourceManager {
 public:
     static ResourceManager *instance();
+    
+    void cleanUp();
 
     Texture *loadTexture(const std::string &path);
     void unloadTexture(Texture *texture);

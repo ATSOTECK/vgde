@@ -40,6 +40,24 @@ ResourceManager *ResourceManager::instance() {
     return _resourceManager;
 }
 
+void ResourceManager::cleanUp() {
+    for (var [s, r] : _textureMap) {
+        delete r.obj;
+    }
+    
+    for (var [s, r] : _fontMap) {
+        delete r.obj;
+    }
+    
+    for (var s : _shaders) {
+        removeShader(s);
+    }
+    
+    for (var t : _timers) {
+        removeTimer(t);
+    }
+}
+
 Texture *ResourceManager::loadTexture(const std::string &path) {
     Texture *texture = null;
 
@@ -68,15 +86,15 @@ Texture *ResourceManager::loadTexture(const std::string &path) {
 }
 
 void ResourceManager::unloadTexture(Texture *texture) {
-    for (var &pair : _textureMap) {
-        if (pair.second.obj == texture) {
-            if (pair.second.count == 1) {
+    for (var [s, r] : _textureMap) {
+        if (r.obj == texture) {
+            if (r.count <= 1) {
                 delete texture;
-                _textureMap.erase(pair.first);
+                _textureMap.erase(s);
 
                 return;
             } else {
-                --pair.second.count;
+                --r.count;
                 return;
             }
         }
@@ -110,15 +128,15 @@ Font *ResourceManager::loadFont(const std::string &path) {
 }
 
 void ResourceManager::unloadFont(Font *font) {
-    for (var &pair : _fontMap) {
-        if (pair.second.obj == font) {
-            if (pair.second.count == 1) {
+    for (var [s, r] : _fontMap) {
+        if (r.obj == font) {
+            if (r.count <= 1) {
                 delete font;
-                _fontMap.erase(pair.first);
+                _fontMap.erase(s);
                 
                 return;
             } else {
-                --pair.second.count;
+                --r.count;
                 return;
             }
         }

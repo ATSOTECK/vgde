@@ -187,6 +187,7 @@ void VGDE::postRender() {
 }
 
 void VGDE::cleanUp() {
+    _rm->cleanUp();
 	glfwDestroyWindow(_window);
 	glfwTerminate();
 }
