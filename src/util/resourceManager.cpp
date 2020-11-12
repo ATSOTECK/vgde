@@ -23,6 +23,7 @@
 #include "resourceManager.h"
 
 #include "graphics/draw.h"
+#include "timer.h"
 
 ResourceManager *ResourceManager::_resourceManager = null;
 
@@ -194,6 +195,14 @@ void ResourceManager::checkTimers() {
 void ResourceManager::removeScreenTimersFor(Screen *screen) {
     for (var timer : _timers) {
         if (timer->screen() == screen) {
+            removeTimer(timer);
+        }
+    }
+}
+
+void ResourceManager::removeLambdaTimers() {
+    for (var timer : _timers) {
+        if (timer->lambda()) {
             removeTimer(timer);
         }
     }

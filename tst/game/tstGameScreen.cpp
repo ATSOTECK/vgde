@@ -24,6 +24,7 @@
 
 #include "input.h"
 #include "util/humanReadable.h"
+#include "util/timer.h"
 #include "util/vmath.h"
 
 TstGameScreen::TstGameScreen():
@@ -69,12 +70,17 @@ void TstGameScreen::show() {
     
     //_t->texture()->saveToFile("_t.png");
     
-    var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
-    timer->start();
+    //var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
+    //timer->start();
     
-    Timer(Time::seconds(2), Timer::Repeat, [=]{
+    TimerCallback(Time::seconds(2), Timer::Repeat, [=]{
         db(_tv->rotation());
         db("yo from timer");
+    });
+    
+    TimerCallback(Time::seconds(4), Timer::Repeat, [=]{
+        db(_t->position().x);
+        db("ye from timer");
     });
     
     //drawSetFontSize(12);

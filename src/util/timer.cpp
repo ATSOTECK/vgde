@@ -23,7 +23,6 @@
 #include "timer.h"
 
 #include "clock.h"
-#include "resourceManager.h"
 
 const bool Timer::Repeat = true;
 const bool Timer::Single = false;
@@ -104,15 +103,18 @@ void Timer::stop() {
 }
 
 void Timer::ding() {
-    if (_actor == null && _screen == null) {
+    if (_lambda) {
+        _fnCall();
+    } else if (_actor == null && _screen == null) {
         _startTime = Time::Zero;
         _time = Time::Zero;
         _repeat = false;
         
         return;
+    } else {
+        _actor != null ? _actor->ding(_name) : _screen->ding(_name);
     }
     
-    _actor != null ? _actor->ding(_name) : _screen->ding(_name);
     ++_dingCount;
 }
 
@@ -140,10 +142,18 @@ int Timer::dingCount() const {
     return _dingCount;
 }
 
+bool Timer::lambda() const {
+    return _lambda;
+}
+
 Actor *Timer::actor() const {
     return _actor;
 }
 
 Screen *Timer::screen() const {
     return _screen;
+}
+
+String Timer::name() const {
+    return _name;
 }

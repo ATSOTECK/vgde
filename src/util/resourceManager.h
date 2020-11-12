@@ -23,10 +23,10 @@
 #ifndef __VGDE_RESOURCEMANAGER_H__
 #define __VGDE_RESOURCEMANAGER_H__
 
+#include "game/screen.h"
 #include "graphics/font.h"
 #include "graphics/shader.h"
 #include "graphics/texture.h"
-#include "timer.h"
 
 #include <map>
 #include <string>
@@ -38,7 +38,7 @@ struct ref {
     int count;
 };
 
-//TODO(Skyler): Manage fonts as well.
+class Timer;
 
 class ResourceManager {
 public:
@@ -62,6 +62,7 @@ public:
     void removeTimer(Timer *timer);
     void checkTimers();
     void removeScreenTimersFor(Screen *screen);
+    void removeLambdaTimers();
     
 private:
     ResourceManager();

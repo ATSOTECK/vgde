@@ -23,6 +23,7 @@
 #include "tstSplashScreen.h"
 
 #include "input.h"
+#include "util/timer.h"
 
 TstSplashScreen::TstSplashScreen():
     Screen("splash"),
@@ -61,6 +62,10 @@ void TstSplashScreen::show() {
     var hiTimer = new Timer(this, "hi", Time::seconds(1), Timer::Repeat);
     hiTimer->start();
     
+    TimerCallback(Time::seconds(1), Timer::Repeat, [=]{
+        db("test from old screen");
+    });
+    
     var timer = new Timer(this, Time::seconds(5), Timer::Repeat);
     timer->start();
 }
@@ -72,7 +77,7 @@ void TstSplashScreen::hide() {
 void TstSplashScreen::render(float delta) {
     if (!isKeyDown(vk_alt) && isKeyDown(vk_any)) {
         //_vgde->screenGoto("game", true);
-        _vgde->screenGotoNext();
+        _vgde->screenGotoNext(true);
         return;
     }
     

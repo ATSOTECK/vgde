@@ -25,39 +25,56 @@
 
 #include "game/actor.h"
 #include "game/screen.h"
+#include "resourceManager.h"
 #include "vstring.h"
 #include "vtime.h"
 
 #include <thread>
 
-/*
-template <int...>
-struct seq {};
+#define tcatimpl(x,y) x##y
+#define tcat(x,y) tcatimpl(x,y)
+#define TimerCallback var *tcat(_tmpTimer,__COUNTER__) = new Timer
 
-template <int N, int ...S>
-struct gens : gens<N - 1, N, -1, S...> {};
-
-template <int ...S>
-struct gens<0, S...> {
-    typedef seq<S...> type;
+struct AbstractLContainer {
+    virtual void call() const = 0;
+    virtual ~AbstractLContainer() = default;
 };
 
 template <class Fn, class ...Args>
-struct LContainer {
-    Fn func;
-    std::tuple<Args...> args;
-    
-    void call() {
-        std::apply(func, args);
-        callFunc(typename gens<sizeof...(Args)>::type());
+struct LContainerWrapper : AbstractLContainer {
+    explicit LContainerWrapper(Fn &&fn, Args &&...args):
+        _fn(std::move(fn)),
+        _args(args...)
+    {
+        //
     }
     
-    template <int ...S>
-    void callFunc(seq<S...>) {
-        func(std::get<S>(args)...);
+    void call() const override {
+        std::apply(_fn, _args);
     }
+    
+private:
+    Fn _fn;
+    std::tuple<Args...> _args;
 };
-*/
+
+struct LContainer {
+    LContainer() {
+        _ptr = null;
+    }
+    
+    template <class Fn, class ...Args>
+    LContainer(Fn fn, Args ...args) {
+        _ptr = new LContainerWrapper<Fn, Args...>(std::move(fn), args...);
+    }
+    
+    void operator()() const {
+        _ptr->call();
+    }
+    
+private:
+    AbstractLContainer *_ptr;
+};
 
 class Timer {
 public:
@@ -66,24 +83,20 @@ public:
     explicit Timer(Screen *screen, Time time, bool repeat = false);
     explicit Timer(Screen *screen, const String &name, Time time, bool repeat = false);
     
-    template <class Fn, class ...Args>
-    explicit Timer(Time time, bool repeat, Fn &&fn, Args &&...args):
-        _actor(null),
-        _screen(null),
-        _name(),
-        _time(time),
-        _repeat(repeat),
-        _ticking(false),
-        _startTime(Time::Zero),
-        _dingCount(0),
-        _lambda(false)
+    Timer(Time time, bool repeat, const LContainer &container):
+            _actor(null),
+            _screen(null),
+            _name("_lambda"),
+            _time(time),
+            _repeat(repeat),
+            _ticking(false),
+            _startTime(Time::Zero),
+            _dingCount(0),
+            _lambda(true),
+            _fnCall(container)
     {
-        std::thread([=]{
-            do {
-                std::this_thread::sleep_for(std::chrono::microseconds(time.asMicroseconds()));
-                std::invoke(fn, args...);
-            } while (_repeat);
-        }).detach();
+        ResourceManager::instance()->addTimer(this);
+        start();
     }
     
     void start();
@@ -97,9 +110,11 @@ public:
     keep Time endTime() const;
     keep Time timeLeft() const;
     keep int dingCount() const;
+    keep bool lambda() const;
     
     keep Actor *actor() const;
     keep Screen *screen() const;
+    keep String name() const;
     
     static const bool Repeat;
     static const bool Single;
@@ -114,7 +129,7 @@ private:
     Time _startTime;
     int _dingCount;
     bool _lambda;
+    LContainer _fnCall;
 };
-
 
 #endif //__VGDE_TIMER_H__
