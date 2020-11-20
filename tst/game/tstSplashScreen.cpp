@@ -62,12 +62,12 @@ void TstSplashScreen::show() {
     var hiTimer = new Timer(this, "hi", Time::seconds(1), Timer::Repeat);
     hiTimer->start();
     
-    TimerCallback(Time::seconds(1), Timer::Repeat, [=]{
-        db("test from old screen");
+    TimerCallback(Time::seconds(5), Timer::Repeat, [=]{
+        _vgde->screenGotoNext(true);
     });
     
-    var timer = new Timer(this, Time::seconds(5), Timer::Repeat);
-    timer->start();
+    //var timer = new Timer(this, Time::seconds(5), Timer::Repeat);
+    //timer->start();
 }
 
 void TstSplashScreen::hide() {
@@ -100,6 +100,6 @@ void TstSplashScreen::ding(const String &name) {
     if (name == "hi") {
         db("hi from splash screen");
     } else if (active()) {
-        _vgde->screenGoto("game", false);
+        _vgde->screenGoto("game", true);
     }
 }

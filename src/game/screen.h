@@ -36,11 +36,11 @@ public:
     
     void pause();
     void resume();
-    bool paused() const;
+    keep bool paused() const;
     void initialize();
-    bool initialized() const;
+    keep bool initialized() const;
     void setActive(bool active = true);
-    bool active() const;
+    keep bool active() const;
     
     //void resize(const vec2f &size);
     
@@ -48,7 +48,7 @@ public:
     
     virtual void resize(const vec2f &size) = 0;
     
-    String name() const;
+    keep String name() const;
     
     virtual void ding(const String &name);
     

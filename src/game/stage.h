@@ -25,8 +25,22 @@
 
 #include "actor.h"
 
-class Stage {
+#include <vector>
 
+class Stage {
+public:
+    void sort();
+    
+    void addActor(Actor *actor);
+    
+    void act(float delta);
+    void draw();
+    
+    keep float getFront() const;
+    keep float getBack() const;
+    
+private:
+    std::vector<Actor *> _actors;
 };
 
 

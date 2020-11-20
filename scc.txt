@@ -1,4 +1,4 @@
-http://cloc.sourceforge.net v 1.62  T=0.10 s (586.1 files/s, 80705.3 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.11 s (581.5 files/s, 78582.2 lines/s)
 -----------------------------------------------------------------------------------
 File                                            blank        comment           code
 -----------------------------------------------------------------------------------
@@ -21,8 +21,8 @@ File                                            blank        comment           c
 .\src\util\vstring.h                               34             24             98
 .\src\graphics\color.cpp                           20             21             97
 .\src\util\vtime.cpp                               31             23             97
-.\src\util\timer.h                                 20             22             93
-.\tst\game\tstGameScreen.cpp                       27             31             85
+.\src\util\timer.h                                 23             22             95
+.\tst\game\tstGameScreen.cpp                       29             31             90
 .\src\vgde.h                                       30             21             85
 .\src\util\clock.cpp                               29             22             80
 .\src\config.h                                     14             21             73
@@ -37,32 +37,35 @@ File                                            blank        comment           c
 .\src\graphics\font.h                              14             21             39
 .\src\util\vmath.h                                 18             36             37
 .\src\game\screen.cpp                              12             23             35
+.\src\game\actor.cpp                               11             23             35
+.\src\game\stage.cpp                               11             21             35
 .\src\graphics\texture.h                           12             21             30
+.\src\game\actor.h                                 16             24             29
 .\src\game\screen.h                                13             22             28
-.\src\game\actor.h                                 12             21             26
 .\src\util\clock.h                                 11             21             26
+.\tst\game\player.cpp                               8             21             26
 .\src\graphics\shader.h                            10             22             26
-.\src\graphics\sprite.h                             8             21             25
 .\src\graphics\renderTexture.h                     10             21             25
+.\src\graphics\sprite.h                             8             21             25
 .\tst\game\tstSplashScreen.h                       10             21             23
-.\tst\game\tstGameScreen.h                         13             21             21
+.\tst\game\tstGameScreen.h                         14             21             23
+.\src\game\stage.h                                 10             21             16
 .\src\graphics.h                                    3             21             13
 .\main.cpp                                          4             23             13
 .\src\graphics\videoMode.h                          6             21             12
+.\tst\game\player.h                                 7             21             12
 .\src\graphics\camera.h                             6             21             11
 .\src\graphics\camera.cpp                           4             22             11
 .\src\graphics\videoMode.cpp                        4             21             11
 .\src\util\humanReadable.cpp                        5             22              9
 .\tst\stringTest.cpp                                2             21              9
-.\src\game\stage.h                                  6             21              6
-.\src\game\event.h                                  6             21              5
+.\src\game.h                                        3             21              6
 .\src\graphics\gl.h                                 3             21              5
 .\src\util\humanReadable.h                          4             21              5
 .\tst\stringTest.h                                  5             21              5
+.\src\game\event.h                                  6             21              5
 .\res\shaders\compile.bat                           0              0              4
-.\src\game\actor.cpp                                2             22              3
 .\src\game\event.cpp                                1             21              1
-.\src\game\stage.cpp                                1             21              1
 -----------------------------------------------------------------------------------
-SUM:                                             1528           1388           5483
+SUM:                                             1579           1455           5615
 -----------------------------------------------------------------------------------

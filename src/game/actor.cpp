@@ -21,7 +21,49 @@
  */
 
 #include "actor.h"
+#include "stage.h"
+
+Actor::Actor():
+    _visible(true),
+    _z(0.f),
+    _stage(null)
+{
+    //
+}
+
+void Actor::setStage(Stage *stage) {
+    _stage = stage;
+}
+
+bool Actor::visible() const {
+    return _visible;
+}
+
+void Actor::setVisible(bool visible) {
+    _visible = visible;
+}
+
+float Actor::z() const {
+    return _z;
+}
+
+void Actor::setZIndex(float z) {
+    _z = z;
+    _stage->sort();
+}
+
+void Actor::toBack() {
+    setZIndex(_stage->getBack() - 1.f);
+}
+
+void Actor::toFront() {
+    setZIndex(_stage->getFront() + 1.f);
+}
 
 void Actor::ding(const String &name) {
     //
+}
+
+bool operator< (const Actor &lhs, const Actor &rhs) {
+    return (lhs._z < rhs._z);
 }

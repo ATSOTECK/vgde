@@ -23,6 +23,7 @@
 #include "tstGameScreen.h"
 
 #include "input.h"
+#include "player.h"
 #include "util/humanReadable.h"
 #include "util/timer.h"
 #include "util/vmath.h"
@@ -32,7 +33,8 @@ TstGameScreen::TstGameScreen():
     _vgde(VGDE::instance()),
     _chinese(null),
     _tv(null),
-    _t(null)
+    _t(null),
+    _stage(new Stage())
 {
     //
 }
@@ -73,6 +75,7 @@ void TstGameScreen::show() {
     //var timer = new Timer(this, Time::seconds(10), Timer::Repeat);
     //timer->start();
     
+    /*
     TimerCallback(Time::seconds(2), Timer::Repeat, [=]{
         db(_tv->rotation());
         db("yo from timer");
@@ -82,9 +85,12 @@ void TstGameScreen::show() {
         db(_t->position().x);
         db("ye from timer");
     });
+    */
     
     //drawSetFontSize(12);
     //_chinese->setSize(6);
+    
+    _stage->addActor(new Player());
 }
 
 void TstGameScreen::hide() {
@@ -118,6 +124,9 @@ void TstGameScreen::render(float delta) {
     drawLine(x, 0, x, 800);
     
     _t->draw();
+    
+    _stage->act(delta);
+    _stage->draw();
     
     float mx = mouseX();
     float my = mouseY();

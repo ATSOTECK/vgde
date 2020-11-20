@@ -35,8 +35,11 @@
 #define tcat(x,y) tcatimpl(x,y)
 #define TimerCallback var *tcat(_tmpTimer,__COUNTER__) = new Timer
 
+namespace {
+
 struct AbstractLContainer {
     virtual void call() const = 0;
+    
     virtual ~AbstractLContainer() = default;
 };
 
@@ -52,7 +55,7 @@ struct LContainerWrapper : AbstractLContainer {
     void call() const override {
         std::apply(_fn, _args);
     }
-    
+
 private:
     Fn _fn;
     std::tuple<Args...> _args;
@@ -71,10 +74,12 @@ struct LContainer {
     void operator()() const {
         _ptr->call();
     }
-    
+
 private:
     AbstractLContainer *_ptr;
 };
+
+} //namespace
 
 class Timer {
 public:
@@ -84,16 +89,16 @@ public:
     explicit Timer(Screen *screen, const String &name, Time time, bool repeat = false);
     
     Timer(Time time, bool repeat, const LContainer &container):
-            _actor(null),
-            _screen(null),
-            _name("_lambda"),
-            _time(time),
-            _repeat(repeat),
-            _ticking(false),
-            _startTime(Time::Zero),
-            _dingCount(0),
-            _lambda(true),
-            _fnCall(container)
+        _actor(null),
+        _screen(null),
+        _name("_lambda"),
+        _time(time),
+        _repeat(repeat),
+        _ticking(false),
+        _startTime(Time::Zero),
+        _dingCount(0),
+        _lambda(true),
+        _fnCall(container)
     {
         ResourceManager::instance()->addTimer(this);
         start();

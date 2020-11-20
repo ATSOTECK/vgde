@@ -504,7 +504,7 @@ add_executable(vgde
         tst/game/tstGameScreen.h
         src/graphics.h
         src/util/timer.cpp
-        src/util/timer.h)
+        src/util/timer.h tst/game/player.cpp tst/game/player.h src/game.h)
 
 target_link_libraries(vgde vulkan-1)
 target_link_libraries(vgde glfw3)

@@ -23,6 +23,7 @@
 #ifndef __VGDE_TSTGAMESCREEN_H__
 #define __VGDE_TSTGAMESCREEN_H__
 
+#include "game.h"
 #include "graphics.h"
 #include "vgde.h"
 
@@ -49,6 +50,8 @@ private:
     std::vector<Sprite *> _sprs;
     
     RenderTexture *_t;
+    
+    Stage *_stage;
 };
 
 

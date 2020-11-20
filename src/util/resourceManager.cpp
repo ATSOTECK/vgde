@@ -190,10 +190,10 @@ void ResourceManager::removeTimer(Timer *timer) {
     var idx = std::find(_timers.begin(), _timers.end(), timer);
     if (idx != _timers.end()) {
         _timers.erase(idx);
-    }
     
-    delete timer;
-    timer = null;
+        delete timer;
+        timer = null;
+    }
 }
 
 void ResourceManager::checkTimers() {

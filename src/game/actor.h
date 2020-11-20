@@ -27,19 +27,23 @@
 #include "graphics/transform.h"
 #include "util/vstring.h"
 
+class Stage;
+
 class Actor : public Transform {
 public:
     Actor();
     virtual void act(float delta) = 0;
     virtual void draw() = 0;
     
-    bool visible() const;
+    void setStage(Stage *stage);
+    
+    keep bool visible() const;
     void setVisible(bool visible);
     
-    Color color() const;
-    void setColor(const Color &color);
+    //Color color() const;
+    //void setColor(const Color &color);
     
-    float z() const;
+    keep float z() const;
     void setZIndex(float z);
     
     void toBack();
@@ -50,10 +54,16 @@ public:
     virtual void ding(const String &name);
     
 protected:
+    friend bool operator< (const Actor &lhs, const Actor &rhs);
+    
     bool _visible;
-    Color _color;
+    //Color _color;
     float _z;
+    
+private:
+    Stage *_stage;
 };
 
+bool operator< (const Actor &lhs, const Actor &rhs);
 
 #endif //__VGDE_ACTOR_H__
