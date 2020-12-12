@@ -24,18 +24,24 @@
 
 #include <algorithm>
 
+Stage::Stage(uint32 maxActors) {
+    setMaxActors(maxActors);
+}
+
 void Stage::sort() {
     std::sort(_actors.begin(), _actors.end());
 }
 
-void Stage::addActor(Actor *actor) {
-    if (actor == null) {
-        return;
+bool Stage::addActor(Actor *actor) {
+    if (actor == null || _actors.size() > _maxActors) {
+        return false;
     }
     
     actor->setStage(this);
     _actors.push_back(actor);
     sort();
+    
+    return true;
 }
 
 void Stage::act(float delta) {
@@ -50,7 +56,7 @@ void Stage::draw() {
     }
 }
 
-float Stage::getFront() const {
+float Stage::front() const {
     if (_actors.empty()) {
         return 0.f;
     }
@@ -58,10 +64,26 @@ float Stage::getFront() const {
     return _actors[_actors.size() - 1]->z();
 }
 
-float Stage::getBack() const {
+float Stage::back() const {
     if (_actors.empty()) {
         return 0.f;
     }
     
     return _actors[0]->z();
+}
+
+uint32 Stage::maxActors() const {
+    return _maxActors;
+}
+
+void Stage::setMaxActors(uint32 max) {
+    _maxActors = max;
+    
+    if (_maxActors < 100) {
+        _maxActors = 100;
+    }
+}
+
+void Stage::reserve(uint32 count) {
+    _actors.reserve(count);
 }

@@ -29,6 +29,7 @@
 #include <Windows.h>
 #include <Xinput.h>
 
+static const int vk_none           = 0;
 static const int vk_unknown        = 0;
 static const int vk_a              = 1;
 static const int vk_b              = 2;
@@ -139,6 +140,7 @@ static const int vk_alt            = 1002;
 
 static const int vk_any            = 2000; //Only works with isKeyDown for now.
 
+static const int mb_none           = 200;
 static const int mb_left           = 201;
 static const int mb_right          = 202;
 static const int mb_middle         = 203;
@@ -182,15 +184,18 @@ bool *currentButtonState();
 bool *previousButtonState();
 
 bool isKeyDown(int key);
-bool isKeyDown(int key, int key1, int key2 = 0);
+bool isKeyDown(int key, int key1, int key2 = vk_none);
 
 bool isKeyPressed(int key);
-bool isKeyPressed(int key, int key1, int key2 = 0);
+bool isKeyPressed(int key, int key1, int key2 = vk_none);
 
 bool isKeyReleased(int key);
-bool isKeyReleased(int key, int key1, int key2 = 0);
+bool isKeyReleased(int key, int key1, int key2 = vk_none);
 
-//bool isKeyTapped(int key, int time = 100);
+bool isKeyTapped(int key, uint32 time = 100);
+bool isKeyTapped(int key, int key1, int key2, uint32 time = 100);
+
+bool isKeyRapidPressed(int key, uint32 time = 100, uint32 count = 2);
 
 bool isButtonDown(int btn);
 bool isButtonDown(int btn, int btn1);

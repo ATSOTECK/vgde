@@ -25,11 +25,15 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
+#include "util/clock.h"
+#include "util/vtime.h"
+
 namespace {
 bool _currentKeyState     [vk_keyCount    - 1];
 bool _previousKeyState    [vk_keyCount    - 1];
 bool _currentButtonState  [mb_buttonCount - 1];
 bool _previousButtonState [mb_buttonCount - 1];
+Time _keyPressTime        [vk_keyCount    - 1];
 
 GLFWwindow *_window;
 HWND _hwnd;
@@ -42,6 +46,7 @@ bool inputInit(GLFWwindow *window) {
 	for (int i = 0; i < vk_keyCount - 1; ++i) {
 		_currentKeyState  [i] = false;
 		_previousKeyState [i] = false;
+		_keyPressTime     [i] = Time::Zero;
 	}
 
 	for (int j = 0; j < mb_buttonCount - 1; ++j) {
@@ -204,12 +209,12 @@ bool *previousButtonState() {
 }
 
 bool isKeyDown(int key) {
-	if (!glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
+	if (key == vk_none || !glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
 		return false;
 	}
 	
 	if (key == vk_any) {
-	    for (bool keyDown : _currentKeyState) {
+	    for (var keyDown : _currentKeyState) {
 	        if (keyDown) {
 	            return true;
 	        }
@@ -232,7 +237,7 @@ bool isKeyDown(int key, int key1, int key2) {
 }
 
 bool isKeyPressed(int key) {
-	if (!glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
+	if (key == vk_none || !glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
 		return false;
 	}
 
@@ -252,7 +257,7 @@ bool isKeyPressed(int key, int key1, int key2) {
 }
 
 bool isKeyReleased(int key) {
-	if (!glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
+	if (key == vk_none || !glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
 		return false;
 	}
 
@@ -271,8 +276,42 @@ bool isKeyReleased(int key, int key1, int key2) {
 	return (isKeyReleased(key) || isKeyReleased(key1) || isKeyReleased(key2));
 }
 
+bool isKeyTapped(int key, uint32 time) {
+    if (key == vk_none) {
+        return false;
+    }
+    
+    if (key == vk_control) {
+        return isKeyTapped(vk_lControl, vk_rControl, vk_none, time);
+    } else if (key == vk_alt) {
+        return isKeyTapped(vk_lAlt, vk_rAlt, vk_none, time);
+    } else if (key == vk_shift) {
+        return isKeyTapped(vk_lShift, vk_rShift, vk_none, time);
+    }
+    
+    if (isKeyDown(key)) {
+        if (_keyPressTime[key] == Time::Zero) {
+            _keyPressTime[key] = Clock::time();
+            return true;
+        } else {
+            return ((Clock::timeAsMilliseconds() - _keyPressTime[key].asMilliseconds()) <= time);
+        }
+    }
+    
+    _keyPressTime[key] = Time::Zero;
+    return false;
+}
+
+bool isKeyTapped(int key, int key1, int key2, uint32 time) {
+    return (isKeyTapped(key, time) || isKeyTapped(key1, time) || isKeyTapped(key2, time));
+}
+
+bool isKeyRapidPressed(int key, uint32 time, uint32 count) {
+    return false;
+}
+
 bool isButtonDown(int btn) {
-	if (!glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
+	if (btn == mb_none || !glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
 		return false;
 	}
 
@@ -284,7 +323,7 @@ bool isButtonDown(int btn, int btn1) {
 }
 
 bool isButtonPressed(int btn) {
-	if (!glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
+	if (btn == mb_none || !glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
 		return false;
 	}
 
@@ -296,7 +335,7 @@ bool isButtonPressed(int btn, int btn1) {
 }
 
 bool isButtonReleased(int btn) {
-	if (!glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
+	if (btn == mb_none || !glfwGetWindowAttrib(_window, GLFW_FOCUSED)) {
 		return false;
 	}
 

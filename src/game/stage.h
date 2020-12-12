@@ -29,18 +29,26 @@
 
 class Stage {
 public:
+    explicit Stage(uint32 maxActors = 1000);
+    
     void sort();
     
-    void addActor(Actor *actor);
+    bool addActor(Actor *actor);
     
     void act(float delta);
     void draw();
     
-    keep float getFront() const;
-    keep float getBack() const;
+    keep float front() const;
+    keep float back() const;
+    
+    keep uint32 maxActors() const;
+    void setMaxActors(uint32 max);
+    
+    void reserve(uint32 count);
     
 private:
     std::vector<Actor *> _actors;
+    uint32 _maxActors;
 };
 
 

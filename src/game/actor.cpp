@@ -53,11 +53,11 @@ void Actor::setZIndex(float z) {
 }
 
 void Actor::toBack() {
-    setZIndex(_stage->getBack() - 1.f);
+    setZIndex(_stage->back() - 1.f);
 }
 
 void Actor::toFront() {
-    setZIndex(_stage->getFront() + 1.f);
+    setZIndex(_stage->front() + 1.f);
 }
 
 void Actor::ding(const String &name) {
