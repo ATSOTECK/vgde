@@ -46,10 +46,14 @@ public:
     void clear();
     keep bool empty() const;
     
-    keep size_t indexOf(uchar32 cp) const;
-    keep size_t indexOfNext(uchar32 cp, size_t startFrom) const;
-    keep size_t indexOfLast(uchar32 cp) const;
+    keep int64 indexOf(uchar32 cp) const;
+    keep int64 indexOf(const String &str) const;
+    keep int64 indexOfNext(uchar32 cp, size_t startFrom) const;
+    keep int64 indexOfNext(const String &str, size_t startFrom) const;
+    keep int64 indexOfLast(uchar32 cp) const;
+    keep int64 indexOfLast(const String &str) const;
     keep bool contains(uchar32 cp) const;
+    keep bool contains(const String &str) const;
     
     static bool isNumber(uchar32 cp);
     static bool isAlpha(uchar32 cp);
@@ -61,17 +65,22 @@ public:
     keep bool startsWith(const String &str, bool ignoreWhitespace = false) const;
     keep bool endsWith(const String &str, bool ignoreWhitespace = false) const;
     
-    String stringAfterLast(uchar32 cp);
-    String stringAfterLast(uchar32 cp, uchar32 cp1);
+    keep String stringAfter(size_t index) const;
+    keep String stringBefore(size_t index) const;
     
-    String stringAfterFirst(uchar32 cp);
-    String stringAfterFirst(uchar32 cp, uchar32 cp1);
+    keep String stringAfterLast(uchar32 cp) const;
+    keep String stringAfterLast(uchar32 cp0, uchar32 cp1) const;
+    //This is NOT the same as (stringAfterLast(cp0) || stringAfterLast(cp1)).
+    //Same for the following functions.
     
-    String stringBeforeFirst(uchar32 cp);
-    String stringBeforeFirst(uchar32 cp, uchar32 cp1);
+    keep String stringAfterFirst(uchar32 cp) const;
+    keep String stringAfterFirst(uchar32 cp0, uchar32 cp1) const;
     
-    String stringBeforeLast(uchar32 cp);
-    String stringBeforeLast(uchar32 cp, uchar32 cp1);
+    keep String stringBeforeFirst(uchar32 cp) const;
+    keep String stringBeforeFirst(uchar32 cp0, uchar32 cp1) const;
+    
+    keep String stringBeforeLast(uchar32 cp) const;
+    keep String stringBeforeLast(uchar32 cp0, uchar32 cp1) const;
     
     void erase(size_t index, size_t count = 1);
     
@@ -83,6 +92,13 @@ public:
     void append(const String &string, size_t buffSize = 0);
     void prepend(uchar32 cp, size_t buffSize = 0);
     void prepend(const String &string, size_t buffSize = 0);
+    void insert(uchar32 cp, size_t index);
+    void insert(const String &str, size_t index);
+    
+    void replace(size_t index, size_t len, const String &str);
+    bool replace(const String &findStr, const String &replaceStr);
+    
+    keep String substring(size_t index, size_t len = 0) const;
     
     ///Only works with ASCII.
     keep String toUpper() const;
@@ -102,13 +118,14 @@ public:
     
     keep size_t offsetForCharIndex(size_t index) const;
     keep uint32 codepoint(size_t index) const;
+    static uchar32 codepointFor(const String &str);
 
     operator std::string() const;
     
     String &operator =(const String &other);
     String &operator =(const char *other);
     String &operator =(const std::string &other);
-    //String &operator=(const char c);
+    //String &operator =(const char c);
     String operator +(const String &other);
     String operator +(const char *other);
     String operator+=(const String &other);
@@ -137,7 +154,7 @@ private:
 
     char *_str;
     size_t _allocated; //Size in bytes of the memory allocated to the string.
-    size_t _bsize; //Minimum number of bytes to represent the string.
+    size_t _bsize; //Minimum number of bytes needed to represent the string.
     size_t _len; //Number of characters in the string.
 };
 

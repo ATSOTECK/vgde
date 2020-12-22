@@ -1,10 +1,10 @@
-http://cloc.sourceforge.net v 1.62  T=0.12 s (584.7 files/s, 75844.3 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.13 s (583.8 files/s, 77334.6 lines/s)
 -----------------------------------------------------------------------------------
 File                                            blank        comment           code
 -----------------------------------------------------------------------------------
 .\src\graphics\vulkan\vk.cpp                      221             35            876
-.\src\util\vstring.cpp                            126             28            486
-.\src\vgde.cpp                                    126             24            445
+.\src\util\vstring.cpp                            161             28            595
+.\src\vgde.cpp                                    126             24            444
 .\src\input.cpp                                    69             24            352
 .\src\graphics\draw.cpp                            83             28            284
 .\src\vec.h                                        67             29            252
@@ -14,16 +14,16 @@ File                                            blank        comment           c
 .\src\graphics\vulkan\vk.h                         30             22            124
 .\src\graphics\renderTexture.cpp                   37             23            118
 .\src\util\timer.cpp                               24             21            114
+.\src\util\vstring.h                               37             26            110
 .\src\graphics\sprite.cpp                          33             31            104
 .\src\graphics\texture.cpp                         29             21            102
 .\src\graphics\shader.cpp                          24             26            100
 .\src\graphics\transform.cpp                       27             22             98
-.\src\util\vstring.h                               34             24             98
 .\src\graphics\color.cpp                           20             21             97
 .\src\util\vtime.cpp                               31             23             97
 .\src\vgde.h                                       33             21             93
 .\tst\game\tstGameScreen.cpp                       31             41             90
-.\src\config.h                                     17             21             80
+.\src\config.h                                     17             21             82
 .\src\util\clock.cpp                               29             22             80
 .\src\audio\al\alSoundBuffer.cpp                   22             21             70
 .\src\rect.h                                       15             25             65
@@ -37,6 +37,7 @@ File                                            blank        comment           c
 .\src\game\event.cpp                               12             23             42
 .\src\graphics\transform.h                         17             21             42
 .\src\util\vtime.h                                  9             21             41
+.\tst\stringTest.cpp                                9             21             41
 .\src\graphics\font.h                              14             21             39
 .\src\util\vcontainer.h                            15             22             39
 .\src\util\vmath.h                                 18             36             37
@@ -67,7 +68,6 @@ File                                            blank        comment           c
 .\src\graphics\camera.cpp                           4             22             11
 .\src\graphics\videoMode.cpp                        4             21             11
 .\src\util\humanReadable.cpp                        5             22              9
-.\tst\stringTest.cpp                                2             21              9
 .\src\game.h                                        3             21              6
 .\src\graphics\gl.h                                 3             21              5
 .\src\util\humanReadable.h                          4             21              5
@@ -76,5 +76,5 @@ File                                            blank        comment           c
 .\res\shaders\compile.bat                           0              0              4
 .\src\audio\al\alSound.cpp                          1             21              1
 -----------------------------------------------------------------------------------
-SUM:                                             1739           1695           6035
+SUM:                                             1784           1697           6189
 -----------------------------------------------------------------------------------

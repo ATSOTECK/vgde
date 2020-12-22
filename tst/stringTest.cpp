@@ -29,4 +29,43 @@ void runStringTests() {
     db(s.toInt(String::Hex));
     s = "10110011"; //179
     db(s.toInt(String::Bin));
+    
+    String str = " hello个world ";
+    dbq(str);
+    std::string sss = "sss个";
+    std::cout << sss << std::endl;
+    
+    db(str.endsWith("world"));
+    db(str.endsWith("world "));
+    db(str.endsWith("world", true));
+    dbln
+    db(str.startsWith("hello"));
+    db(str.startsWith(" hello"));
+    db(str.startsWith("hello", true));
+    dbq(str);
+    
+    dbln
+    
+    dbq(str.stringAfterLast('o'));
+    dbq(str.stringAfterLast('o', 'l'));
+    dbq(str.stringAfterLast(' '));
+    dbq(str.stringAfterLast(' ', ' '));
+    dbq(str.stringAfterLast(0x4E2A)); //codepoint for 个.
+    dbq(str.stringAfterLast(String::codepointFor("个")));
+    
+    str = " hello个world 2";
+    
+    dbq(str.stringAfterFirst(' '));
+    dbq(str.stringAfterFirst('o'));
+    dbq(str.stringAfterFirst('o', 'l'));
+    dbq(str.stringAfterFirst('2'));
+    dbq(str.stringAfterFirst('2', '2'));
+    
+    dbln
+    dbq(str.stringBeforeFirst(0x4E2A));
+    dbq(str.stringBeforeLast(0x4E2A));
+    dbq(str.stringBeforeFirst('o'));
+    dbq(str.stringBeforeLast('o'));
+    dbq(str.stringBeforeFirst('o', 'l'));
+    dbq(str.stringBeforeLast('o', 'l'));
 }

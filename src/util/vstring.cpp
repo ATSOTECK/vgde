@@ -124,6 +124,13 @@ char *cptocstr(uchar32 cp, int &size) {
     return str;
 }
 
+std::string cptostd(uchar32 cp) {
+    int size;
+    std::string ret = cptocstr(cp, size);
+    
+    return ret;
+}
+
 String::String() {
     init(null);
 }
@@ -198,12 +205,12 @@ bool String::empty() const {
     return (_len == 0);
 }
 
-size_t String::indexOf(uchar32 cp) const {
+int64 String::indexOf(uchar32 cp) const {
     return indexOfNext(cp, 0);
 }
 
-size_t String::indexOfNext(uchar32 cp, size_t startFrom) const {
-    for (size_t i = startFrom; i < _len; ++i) {
+int64 String::indexOfNext(uchar32 cp, size_t startFrom) const {
+    for (size_t i = startFrom; i <= _len; ++i) {
         if (cp == codepoint(i)) {
             return i;
         }
@@ -212,7 +219,7 @@ size_t String::indexOfNext(uchar32 cp, size_t startFrom) const {
     return -1;
 }
 
-size_t String::indexOfLast(uchar32 cp) const {
+int64 String::indexOfLast(uchar32 cp) const {
     for (size_t i = _len - 1; i >= 0; --i) {
         if (cp == codepoint(i)) {
             return i;
@@ -262,17 +269,141 @@ bool String::startsWith(const String &str, bool ignoreWhitespace) const {
 }
 
 bool String::endsWith(const String &str, bool ignoreWhitespace) const {
-    TODO("Skyler", "Make work.");
-    return false;
-    size_t i = 0;
-    //size_t s = 0;
-    
     if (ignoreWhitespace) {
-        while (isWhitespace(codepoint(_len - i - 1))) {++i;}
-        //while (isWhitespace(str[str._len - s - 1])) {++s;}
+        //TODO(Skyler): Redo this so it doesn't have to copy the string.
+        String tmp = *this;
+        tmp.trimWhitespace();
+        
+        return tmp.endsWith(str, false);
     }
     
-    return (strcmpcnt(_str + (_len - 0), str._allocated - 1, str._str) == 0);
+    return (strcmpcnt(_str + (_bsize - str._bsize), str._bsize - 1, str._str) == 0);
+}
+
+String String::stringAfter(size_t index) const {
+    String ret;
+    
+    if (index >= _len) {
+        return ret;
+    }
+    
+    size_t offset = offsetForCharIndex(index + 1);
+    
+    ret = (_str + offset);
+    return ret;
+}
+
+String String::stringBefore(size_t index) const {
+    String ret;
+    
+    if (index <= 0) {
+        return ret;
+    }
+    
+    size_t size = offsetForCharIndex(index);
+    ret.resize(size + 1);
+    memcpy(ret._str, _str, size * sizeof(char));
+    ret._str[size] = '\0';
+    ret._bsize = ret._allocated;
+    ret._len = utf8_strlen(ret._str);
+    
+    return ret;
+}
+
+String String::stringAfterLast(uchar32 cp) const {
+    return stringAfter(indexOfLast(cp));
+}
+
+String String::stringAfterLast(uchar32 cp0, uchar32 cp1) const {
+    String ret;
+    size_t offset;
+    uchar32 cp;
+    
+    for (size_t i = _len; i >= 0; --i) {
+        cp = codepoint(i);
+        if (cp == cp0 || cp == cp1) {
+            if (i == _len) {
+                return ret;
+            }
+            
+            offset = offsetForCharIndex(i + 1);
+            ret = (_str + offset);
+            
+            return ret;
+        }
+    }
+    
+    return ret;
+}
+
+String String::stringAfterFirst(uchar32 cp) const {
+    return stringAfter(indexOf(cp));
+}
+
+String String::stringAfterFirst(uchar32 cp0, uchar32 cp1) const {
+    String ret;
+    size_t offset;
+    uchar32 cp;
+    
+    for (size_t i = 0; i <= _len; ++i) {
+        cp = codepoint(i);
+        if (cp == cp0 || cp == cp1) {
+            if (i == _len) {
+                return ret;
+            }
+            
+            offset = offsetForCharIndex(i + 1);
+            ret = (_str + offset);
+            
+            return ret;
+        }
+    }
+    
+    return ret;
+}
+
+String String::stringBeforeFirst(uchar32 cp) const {
+    return stringBefore(indexOf(cp));
+}
+
+String String::stringBeforeFirst(uchar32 cp0, uchar32 cp1) const {
+    String ret;
+    uchar32 cp;
+    
+    for (size_t i = 0; i <= _len; ++i) {
+        cp = codepoint(i);
+        if (cp == cp0 || cp == cp1) {
+            if (i == 0) {
+                return ret;
+            }
+            
+            return stringBefore(i);
+        }
+    }
+    
+    return ret;
+}
+
+String String::stringBeforeLast(uchar32 cp) const {
+    return stringBefore(indexOfLast(cp));
+}
+
+String String::stringBeforeLast(uchar32 cp0, uchar32 cp1) const {
+    String ret;
+    uchar32 cp;
+    
+    for (size_t i = _len; i >= 0; --i) {
+        cp = codepoint(i);
+        if (cp == cp0 || cp == cp1) {
+            if (i == 0) {
+                return ret;
+            }
+            
+            return stringBefore(i);
+        }
+    }
+    
+    return ret;
 }
 
 void String::erase(size_t index, size_t count) {
@@ -533,6 +664,18 @@ uint32 String::codepoint(size_t index) const {
     return cp;
 }
 
+uchar32 String::codepointFor(const String &str) {
+    if (str._len != 1) {
+        vgdewarn("Expected string length of 1, got length of " << str._len);
+        
+        if (str._len == 0) {
+            return 0;
+        }
+    }
+    
+    return str.codepoint(0);
+}
+
 String::operator std::string() const {
     return stdString();
 }
@@ -547,14 +690,14 @@ String &String::operator =(const String &other) {
     return *this;
 }
 
-String &String::operator=(const char *other) {
+String &String::operator =(const char *other) {
     reset();
     init(other);
     
     return *this;
 }
 
-String &String::operator=(const std::string &other) {
+String &String::operator =(const std::string &other) {
     reset();
     init(other.c_str());
     
@@ -630,6 +773,7 @@ bool operator!=(const String &lhs, const char *rhs) {
 }
 
 std::ostream &operator <<(std::ostream &os, String &str) {
+    //os.rdbuf()->sputn(str._str, str._bsize);
     os << str._str;
     return os;
 }

@@ -112,7 +112,7 @@ int VGDE::init(VideoMode mode) {
 
 int VGDE::init(int width, int height, const std::string &title, bool fullScreen) {
 	if (_initialized) {
-		vgdewarn("VGDE already initialized!");
+		vgdewarn("VGDE is already initialized!");
 		return 0;
 	}
 
@@ -201,9 +201,8 @@ void VGDE::postRender() {
 	glfwPollEvents();
 
 	++_frames;
-	Time t = _clock.restart();
-	_frameTime = t.asMilliseconds();
-	_delta = t.asSeconds();
+    _frameTime = _clock.restart().asMilliseconds();
+	_delta = _frameTime / 1000.f; //Convert frame time to seconds.
 }
 
 void VGDE::cleanUp() {

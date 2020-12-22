@@ -104,6 +104,8 @@ std::cerr << "Warning: '" << x << "' on line #" << __LINE__ << " in " __FILE__ <
 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15)
 
 #define db(x) std::cout << x << std::endl
+#define dbq(x) std::cout << "'" << x << "'" << std::endl
+#define dbQ(x) std::cout << "\"" << x << "\"" << std::endl
 #define dbln std::cout << std::endl;
 #define trace(x) std::cerr << __FILE__ << ", L" << __LINE__ << ": " << x << std::endl
 #define tracemsg std::cerr << __FILE__ << ", L" << __LINE__ << ": "
