@@ -138,7 +138,7 @@ static const int vk_control        = 1000;
 static const int vk_shift          = 1001;
 static const int vk_alt            = 1002;
 
-static const int vk_any            = 2000; //Only works with isKeyDown for now.
+static const int vk_any            = 2000; ///< Only works with isKeyDown for now.
 
 static const int mb_none           = 200;
 static const int mb_left           = 201;

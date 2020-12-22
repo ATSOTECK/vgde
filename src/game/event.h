@@ -23,9 +23,45 @@
 #ifndef __VGDE_EVENT_H__
 #define __VGDE_EVENT_H__
 
+#include "util/vcontainer.h"
+#include "util/vstring.h"
+
+#define EventCallback var *vcat(_tmpEvent,__COUNTER__) = new Event
+
+class Actor;
+class Screen;
+
+struct EventTriggerInfo {
+    //
+};
 
 class Event {
-
+public:
+    Event(const String &name, Actor *actor, bool active = true, bool repeat = false);
+    Event(const String &name, Screen *screen, bool active = true, bool repeat = false);
+    
+    keep bool active() const;
+    void active(bool active);
+    
+    keep bool shouldTrigger() const;
+    
+    keep bool repeat() const;
+    
+    keep Actor *actor() const;
+    keep Screen *screen() const;
+    keep String name() const;
+    
+    static const bool Repeat;
+    static const bool Single;
+    
+private:
+    String _name;
+    Actor *_actor;
+    Screen *_screen;
+    bool _active;
+    bool _repeat;
+    
+    LContainer _fnCall;
 };
 
 

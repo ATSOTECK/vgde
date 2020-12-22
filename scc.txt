@@ -1,16 +1,16 @@
-http://cloc.sourceforge.net v 1.62  T=0.11 s (581.5 files/s, 78582.2 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.12 s (584.7 files/s, 75844.3 lines/s)
 -----------------------------------------------------------------------------------
 File                                            blank        comment           code
 -----------------------------------------------------------------------------------
 .\src\graphics\vulkan\vk.cpp                      221             35            876
 .\src\util\vstring.cpp                            126             28            486
-.\src\vgde.cpp                                    115             24            406
-.\src\input.cpp                                    62             24            320
+.\src\vgde.cpp                                    126             24            445
+.\src\input.cpp                                    69             24            352
 .\src\graphics\draw.cpp                            83             28            284
 .\src\vec.h                                        67             29            252
+.\src\util\resourceManager.cpp                     55             25            215
 .\src\graphics\font.cpp                            50             35            185
-.\src\input.h                                      23             22            177
-.\src\util\resourceManager.cpp                     42             21            164
+.\src\input.h                                      24             21            182
 .\src\graphics\vulkan\vk.h                         30             22            124
 .\src\graphics\renderTexture.cpp                   37             23            118
 .\src\util\timer.cpp                               24             21            114
@@ -21,25 +21,31 @@ File                                            blank        comment           c
 .\src\util\vstring.h                               34             24             98
 .\src\graphics\color.cpp                           20             21             97
 .\src\util\vtime.cpp                               31             23             97
-.\src\util\timer.h                                 23             22             95
-.\tst\game\tstGameScreen.cpp                       29             31             90
-.\src\vgde.h                                       30             21             85
+.\src\vgde.h                                       33             21             93
+.\tst\game\tstGameScreen.cpp                       31             41             90
+.\src\config.h                                     17             21             80
 .\src\util\clock.cpp                               29             22             80
-.\src\config.h                                     14             21             73
+.\src\audio\al\alSoundBuffer.cpp                   22             21             70
 .\src\rect.h                                       15             25             65
-.\tst\game\tstSplashScreen.cpp                     18             27             60
+.\src\util\timer.h                                 12             21             60
+.\tst\game\tstSplashScreen.cpp                     19             29             59
 .\src\graphics\color.h                             15             21             53
+.\src\util\resourceManager.h                       19             22             53
+.\src\game\stage.cpp                               17             21             51
 .\src\util\vmath.cpp                               16             21             49
 .\src\graphics\draw.h                              18             22             45
-.\src\util\resourceManager.h                       17             21             45
+.\src\game\event.cpp                               12             23             42
 .\src\graphics\transform.h                         17             21             42
 .\src\util\vtime.h                                  9             21             41
 .\src\graphics\font.h                              14             21             39
+.\src\util\vcontainer.h                            15             22             39
 .\src\util\vmath.h                                 18             36             37
 .\src\game\screen.cpp                              12             23             35
 .\src\game\actor.cpp                               11             23             35
-.\src\game\stage.cpp                               11             21             35
+.\src\audio\al\alSoundDevice.cpp                   11             22             31
+.\src\game\event.h                                 15             22             31
 .\src\graphics\texture.h                           12             21             30
+.\src\audio\al\alCall.cpp                          10             21             29
 .\src\game\actor.h                                 16             24             29
 .\src\game\screen.h                                13             22             28
 .\src\util\clock.h                                 11             21             26
@@ -49,9 +55,12 @@ File                                            blank        comment           c
 .\src\graphics\sprite.h                             8             21             25
 .\tst\game\tstSplashScreen.h                       10             21             23
 .\tst\game\tstGameScreen.h                         14             21             23
-.\src\game\stage.h                                 10             21             16
+.\src\game\stage.h                                 13             21             21
+.\src\audio\al\alSoundBuffer.h                      8             21             15
+.\src\audio\al\alSoundDevice.h                      7             21             14
+.\main.cpp                                         17             54             14
 .\src\graphics.h                                    3             21             13
-.\main.cpp                                          4             23             13
+.\src\audio\al\alCall.h                             6             21             13
 .\src\graphics\videoMode.h                          6             21             12
 .\tst\game\player.h                                 7             21             12
 .\src\graphics\camera.h                             6             21             11
@@ -62,10 +71,10 @@ File                                            blank        comment           c
 .\src\game.h                                        3             21              6
 .\src\graphics\gl.h                                 3             21              5
 .\src\util\humanReadable.h                          4             21              5
+.\src\audio\al\alSound.h                            6             21              5
 .\tst\stringTest.h                                  5             21              5
-.\src\game\event.h                                  6             21              5
 .\res\shaders\compile.bat                           0              0              4
-.\src\game\event.cpp                                1             21              1
+.\src\audio\al\alSound.cpp                          1             21              1
 -----------------------------------------------------------------------------------
-SUM:                                             1579           1455           5615
+SUM:                                             1739           1695           6035
 -----------------------------------------------------------------------------------

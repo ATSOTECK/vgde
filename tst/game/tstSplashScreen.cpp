@@ -45,6 +45,8 @@ void TstSplashScreen::show() {
         return;
     }
     
+    _vgde->pauseIfNotFocused(true);
+    
     mouseHide();
     
     _splash.setOrigin(_splash.center());

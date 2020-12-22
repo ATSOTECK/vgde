@@ -58,9 +58,12 @@ public:
 	keep std::vector<VideoMode> videoModes() const;
 	keep VideoMode videoMode() const;
 	keep VideoMode nativeVideoMode() const;
+	
+	keep bool windowVSync() const;
+	void windowSetVSync(bool vsync);
 
 	keep vec2f windowSize() const;
-	void setWindowSize(const vec2f &size);
+	void windowSetSize(const vec2f &size);
 	
 	keep float windowWidth() const;
 	keep float windowHeight() const;
@@ -68,9 +71,14 @@ public:
 	keep vec2f windowCenter() const;
 
 	keep std::string windowTitle() const;
-	void setWindowTitle(const std::string &title);
+	void windowSetTitle(const std::string &title);
 
 	void windowMaximize() const;
+	
+	keep bool windowFocused() const;
+	
+	keep bool pauseIfNotFocused() const;
+	void pauseIfNotFocused(bool pause);
 
 	int fps();
 	keep int32 frameTime() const;
@@ -79,7 +87,7 @@ public:
 	keep float inGameTime() const;
 	keep float totalInGameTime() const;
 	
-	void setScreenshotName(const String &name);
+	void screenshotSetName(const String &name);
 	void screenshot();
 	
 	keep Screen *screen() const;
@@ -96,6 +104,7 @@ public:
 private:
 	friend void windowSizeCallback(GLFWwindow *, int, int);
 	friend void windowCloseCallback(GLFWwindow *);
+	friend void windowFocusCallback(GLFWwindow *, int);
 
 	VGDE();
 	static VGDE *_instance;
@@ -110,10 +119,12 @@ private:
 
 	bool _initialized;
 	GLFWwindow *_window;
+	bool _vsync;
 	float _windowWidth;
 	float _windowHeight;
 	std::string _windowTitle;
 	bool _fullScreen;
+	bool _pauseINF;
 
 	int _frames;
 	int _frameRate;

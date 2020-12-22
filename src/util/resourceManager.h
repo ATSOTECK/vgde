@@ -28,6 +28,7 @@
 #include "graphics/shader.h"
 #include "graphics/texture.h"
 
+#include <al.h>
 #include <map>
 #include <string>
 #include <vector>
@@ -38,6 +39,7 @@ struct ref {
     int count;
 };
 
+class Event;
 class Timer;
 
 class ResourceManager {
@@ -66,6 +68,14 @@ public:
     void removeScreenTimersFor(Screen *screen);
     void removeLambdaTimers();
     
+    void addEvent(Event *event);
+    void removeEvent(Event *event);
+    void checkEvents();
+    void removeScreenEventsFor(Screen *screen);
+    void removeLambdaEvents();
+    
+    //Sound *loadSound(const String &path);
+    
 private:
     ResourceManager();
     static ResourceManager *_resourceManager;
@@ -74,6 +84,7 @@ private:
     std::vector<Shader*> _shaders;
     std::map<std::string, ref<Font*> > _fontMap;
     std::vector<Timer *> _timers;
+    std::vector<Event *> _events;
 
     std::string _imgPath;
     std::string _fontPath;

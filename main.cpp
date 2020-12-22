@@ -25,7 +25,52 @@
 #include "tst/game/tstSplashScreen.h"
 #include "tst/game/tstGameScreen.h"
 
+#include "audio/al/alSoundDevice.h"
+
+/*
+#include <GLFW/glfw3.h>
+#include "graphics/vulkan/vk.h"
+
 int main() {
+    glfwInit();
+    
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "vk", null, null);
+    glfwSetFramebufferSizeCallback(window, vkResize);
+    
+    Vulkan vk{};
+    vk.init(window, VK_DEBUG);
+    vk.displayInfo();
+    
+    int frames = 0;
+    int time = Clock::timeAsMilliseconds();
+    
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+        
+        vk.drawFrame();
+        ++frames;
+        
+        if (Clock::timeAsMilliseconds() > time + 1000) {
+            time = Clock::timeAsMilliseconds();
+            db("fps: " << frames);
+            frames = 0;
+        }
+    }
+    
+    vk.wait();
+    
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    
+    return 0;
+}
+*/
+
+int main() {
+    //AlSoundDevice *al = AlSoundDevice::instance();
+    
+    //return 0;
     ResourceManager::instance()->setResPath("../res");
     VGDE *vgde = VGDE::instance();
     //vgde->init(vgde->nativeVideoMode());

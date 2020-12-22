@@ -38,7 +38,7 @@ void Screen::pause() {
 }
 
 void Screen::resume() {
-    _paused = true;
+    _paused = false;
 }
 
 bool Screen::paused() const {

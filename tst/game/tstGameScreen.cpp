@@ -104,7 +104,9 @@ void TstGameScreen::render(float delta) {
     
     _t->setPosition(mousePosition());
     
-    _tv->rotate(-50.f * delta);
+    if (!paused()) {
+        _tv->rotate(-50.f * delta);
+    }
     _tv->draw();
     
     for (var s : _sprs) {
@@ -138,6 +140,14 @@ void TstGameScreen::render(float delta) {
     
     if (isKeyPressed(vk_f12)) {
         _vgde->screenshot();
+    }
+    
+    if (isKeyPressed(vk_l)) {
+        _vgde->windowSetVSync(false);
+    }
+    
+    if (isKeyPressed(vk_k)) {
+        _vgde->windowSetVSync(true);
     }
 }
 

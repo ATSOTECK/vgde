@@ -14,6 +14,7 @@ include_directories(include/glm/gtx)
 include_directories(include/glm/simd)
 include_directories(include/KHR)
 include_directories(include/vulkan)
+include_directories(include/al)
 include_directories(src)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -504,8 +505,10 @@ add_executable(vgde
         tst/game/tstGameScreen.h
         src/graphics.h
         src/util/timer.cpp
-        src/util/timer.h tst/game/player.cpp tst/game/player.h src/game.h)
+        src/util/timer.h tst/game/player.cpp tst/game/player.h src/game.h src/audio/al/alSound.cpp src/audio/al/alSound.h src/audio/al/alCall.h src/audio/al/alCall.cpp src/audio/al/alSoundDevice.cpp src/audio/al/alSoundDevice.h src/audio/al/alSoundBuffer.cpp src/audio/al/alSoundBuffer.h src/util/vcontainer.h)
 
 target_link_libraries(vgde vulkan-1)
 target_link_libraries(vgde glfw3)
 target_link_libraries(vgde freetype)
+target_link_libraries(vgde OpenAL32)
+target_link_libraries(vgde libsndfile-1)

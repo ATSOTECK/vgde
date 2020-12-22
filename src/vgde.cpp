@@ -33,6 +33,9 @@
 #include <iostream>
 #include <thread>
 
+#define VSYNC_ON 1
+#define VSYNC_OFF 0
+
 VGDE *VGDE::_instance = null;
 
 static void windowSizeCallback(GLFWwindow *window, int w, int h) {
@@ -49,6 +52,20 @@ static void windowCloseCallback(GLFWwindow *) {
     VGDE::instance()->saveInGameTime();
 }
 
+static void windowFocusCallback(GLFWwindow *window, int focus) {
+    VGDE *vgde = VGDE::instance();
+    
+    if (window != vgde->_window || !vgde->pauseIfNotFocused() || vgde->screen() == null) {
+        return;
+    }
+    
+    if (focus) {
+        vgde->screen()->resume();
+    } else {
+        vgde->screen()->pause();
+    }
+}
+
 static void glfwErrorCallback(int, const char *desc) {
 	std::cerr << "glfwError: " << desc << std::endl;
 }
@@ -56,10 +73,12 @@ static void glfwErrorCallback(int, const char *desc) {
 VGDE::VGDE() :
 	_initialized(false),
 	_window(null),
+	_vsync(true),
 	_windowWidth(DEFAULT_WINDOW_WIDTH),
 	_windowHeight(DEFAULT_WINDOW_HEIGHT),
 	_windowTitle("vgde"),
 	_fullScreen(false),
+	_pauseINF(false),
 	_frames(0),
 	_frameRate(0),
 	_time(Clock::timeAsMilliseconds()),
@@ -122,10 +141,11 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 
 	glfwMakeContextCurrent(_window);
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	glfwSwapInterval(1); //Set to 1 to make max fps the screen refresh rate.
+	glfwSwapInterval(VSYNC_ON);
 
 	glfwSetWindowSizeCallback(_window, windowSizeCallback);
 	glfwSetWindowCloseCallback(_window, windowCloseCallback);
+	glfwSetWindowFocusCallback(_window, windowFocusCallback);
 	
 	glInit();
 	drawInit();
@@ -228,11 +248,29 @@ VideoMode VGDE::nativeVideoMode() const {
     return videoModes().back();
 }
 
+bool VGDE::windowVSync() const {
+    return _vsync;
+}
+
+void VGDE::windowSetVSync(bool vsync) {
+    if (_vsync == vsync) {
+        return;
+    }
+    
+    _vsync = vsync;
+    
+    if (_vsync) {
+        glfwSwapInterval(VSYNC_ON);
+    } else {
+        glfwSwapInterval(VSYNC_OFF);
+    }
+}
+
 vec2f VGDE::windowSize() const {
 	return {_windowWidth, _windowHeight};
 }
 
-void VGDE::setWindowSize(const vec2f &size) {
+void VGDE::windowSetSize(const vec2f &size) {
 	glfwSetWindowSize(_window, size.x, size.y);
 }
 
@@ -252,12 +290,24 @@ std::string VGDE::windowTitle() const {
 	return _windowTitle;
 }
 
-void VGDE::setWindowTitle(const std::string &title) {
+void VGDE::windowSetTitle(const std::string &title) {
 	glfwSetWindowTitle(_window, title.c_str());
 }
 
 void VGDE::windowMaximize() const {
 	glfwMaximizeWindow(_window);
+}
+
+bool VGDE::windowFocused() const {
+    return glfwGetWindowAttrib(_window, GLFW_FOCUSED);
+}
+
+bool VGDE::pauseIfNotFocused() const {
+    return _pauseINF;
+}
+
+void VGDE::pauseIfNotFocused(bool pause) {
+    _pauseINF = pause;
 }
 
 int VGDE::fps() {
@@ -286,7 +336,7 @@ float VGDE::totalInGameTime() const {
     return _totalInGameTime + inGameTime();
 }
 
-void VGDE::setScreenshotName(const String &name) {
+void VGDE::screenshotSetName(const String &name) {
     if (!name.empty()) {
         _ssname = name;
     }

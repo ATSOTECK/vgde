@@ -39,6 +39,9 @@
 #define var auto
 #define keep [[nodiscard]]
 
+#define vcatimpl(x,y) x##y
+#define vcat(x,y) vcatimpl(x,y)
+
 typedef int8_t  int8;
 typedef int16_t int16;
 typedef int32_t int32;
@@ -82,11 +85,18 @@ typedef uint64 uchar64;
 #define reinterpretCast(x, y) reinterpret_cast<x>(y)
 #define constCast(x, y)		  const_cast<x>(y)
 
-#define here std::cout << "here line #" << __LINE__ << " " __FILE__ << std::endl;
+#define here std::cout << "here" << __COUNTER__ << " line #" << __LINE__ << " " __FILE__ << std::endl;
+
 #define vgderr(x)\
 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); \
 std::cerr << "Error: '" << x << "' on line #" << __LINE__ << " in " __FILE__ << std::endl; \
 SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);  \
+assert(false)
+
+#define verr(x)\
+SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); \
+std::cerr << "Error: " << x << std::endl; \
+SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); \
 assert(false)
 
 #define vgdewarn(x) SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14); \

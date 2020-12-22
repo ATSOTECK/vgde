@@ -22,6 +22,7 @@
 
 #include "resourceManager.h"
 
+#include "game/event.h"
 #include "graphics/draw.h"
 #include "timer.h"
 
@@ -55,6 +56,10 @@ void ResourceManager::cleanUp() {
     
     for (var t : _timers) {
         removeTimer(t);
+    }
+    
+    for (var e : _events) {
+        removeEvent(e);
     }
 }
 
@@ -187,6 +192,10 @@ void ResourceManager::addTimer(Timer *timer) {
 }
 
 void ResourceManager::removeTimer(Timer *timer) {
+    if (_timers.empty()) {
+        return;
+    }
+    
     var idx = std::find(_timers.begin(), _timers.end(), timer);
     if (idx != _timers.end()) {
         _timers.erase(idx);
@@ -211,6 +220,10 @@ void ResourceManager::checkTimers() {
 }
 
 void ResourceManager::removeScreenTimersFor(Screen *screen) {
+    if (_timers.empty()) {
+        return;
+    }
+    
     for (var timer : _timers) {
         if (timer->screen() == screen) {
             removeTimer(timer);
@@ -219,9 +232,64 @@ void ResourceManager::removeScreenTimersFor(Screen *screen) {
 }
 
 void ResourceManager::removeLambdaTimers() {
+    if (_timers.empty()) {
+        return;
+    }
+    
     for (var timer : _timers) {
         if (timer->lambda()) {
             removeTimer(timer);
         }
+    }
+}
+
+void ResourceManager::addEvent(Event *event) {
+    _events.push_back(event);
+}
+
+void ResourceManager::removeEvent(Event *event) {
+    if (_events.empty()) {
+        return;
+    }
+    
+    var idx = std::find(_events.begin(), _events.end(), event);
+    if (idx != _events.end()) {
+        _events.erase(idx);
+        
+        delete event;
+        event = null;
+    }
+}
+
+void ResourceManager::checkEvents() {
+    if (_events.empty()) {
+        return;
+    }
+    
+    for (var event : _events) {
+        if (event->active() && event->shouldTrigger()) {
+            //send the event, save the sent event in the event log
+            //that way if another event depends on this event it can
+            //check the event log to see if it has been triggered
+            //if it is a single shot event delete the event
+        }
+    }
+}
+
+void ResourceManager::removeScreenEventsFor(Screen *screen) {
+    if (_events.empty()) {
+        return;
+    }
+    
+    for (var event : _events) {
+        if (event->screen() == screen) {
+            removeEvent(event);
+        }
+    }
+}
+
+void ResourceManager::removeLambdaEvents() {
+    if (_events.empty()) {
+        return;
     }
 }

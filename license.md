@@ -28,3 +28,4 @@ freely, subject to the following restrictions:
   * _glm_ is licensed under the Happy Bunny License (Modified MIT) or the MIT License
   * _glad.c_ is public domain
   * _vulkan_ is under the Apache License, Version 2.0
+  * _OpenAL-Soft_ is under the LGPL license

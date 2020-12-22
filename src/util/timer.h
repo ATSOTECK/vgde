@@ -27,59 +27,12 @@
 #include "game/screen.h"
 #include "resourceManager.h"
 #include "vstring.h"
+#include "vcontainer.h"
 #include "vtime.h"
 
 #include <thread>
 
-#define tcatimpl(x,y) x##y
-#define tcat(x,y) tcatimpl(x,y)
-#define TimerCallback var *tcat(_tmpTimer,__COUNTER__) = new Timer
-
-namespace {
-
-struct AbstractLContainer {
-    virtual void call() const = 0;
-    
-    virtual ~AbstractLContainer() = default;
-};
-
-template <class Fn, class ...Args>
-struct LContainerWrapper : AbstractLContainer {
-    explicit LContainerWrapper(Fn &&fn, Args &&...args):
-        _fn(std::move(fn)),
-        _args(args...)
-    {
-        //
-    }
-    
-    void call() const override {
-        std::apply(_fn, _args);
-    }
-
-private:
-    Fn _fn;
-    std::tuple<Args...> _args;
-};
-
-struct LContainer {
-    LContainer() {
-        _ptr = null;
-    }
-    
-    template <class Fn, class ...Args>
-    LContainer(Fn fn, Args ...args) {
-        _ptr = new LContainerWrapper<Fn, Args...>(std::move(fn), args...);
-    }
-    
-    void operator()() const {
-        _ptr->call();
-    }
-
-private:
-    AbstractLContainer *_ptr;
-};
-
-} //namespace
+#define TimerCallback var *vcat(_tmpTimer,__COUNTER__) = new Timer
 
 class Timer {
 public:

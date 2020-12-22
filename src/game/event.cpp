@@ -21,3 +21,57 @@
  */
 
 #include "event.h"
+
+#include "actor.h"
+#include "screen.h"
+
+const bool Event::Repeat = true;
+const bool Event::Single = false;
+
+Event::Event(const String &name, Actor *actor, bool active, bool repeat):
+    _name(name),
+    _actor(actor),
+    _screen(null),
+    _active(active),
+    _repeat(repeat)
+{
+    //
+}
+
+Event::Event(const String &name, Screen *screen, bool active, bool repeat):
+    _name(name),
+    _actor(null),
+    _screen(screen),
+    _active(active),
+    _repeat(repeat)
+{
+    //
+}
+
+bool Event::active() const {
+    return _active;
+}
+
+void Event::active(bool active) {
+    _active = active;
+}
+
+bool Event::shouldTrigger() const {
+    return false;
+}
+
+bool Event::repeat() const {
+    return _repeat;
+}
+
+Actor *Event::actor() const {
+    return _actor;
+}
+
+Screen *Event::screen() const {
+    return _screen;
+}
+
+String Event::name() const {
+    return _name;
+}
