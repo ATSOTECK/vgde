@@ -1,9 +1,9 @@
-http://cloc.sourceforge.net v 1.62  T=0.13 s (583.8 files/s, 77334.6 lines/s)
+http://cloc.sourceforge.net v 1.62  T=0.12 s (589.3 files/s, 79591.6 lines/s)
 -----------------------------------------------------------------------------------
 File                                            blank        comment           code
 -----------------------------------------------------------------------------------
 .\src\graphics\vulkan\vk.cpp                      221             35            876
-.\src\util\vstring.cpp                            161             28            595
+.\src\util\vstring.cpp                            190             35            728
 .\src\vgde.cpp                                    126             24            444
 .\src\input.cpp                                    69             24            352
 .\src\graphics\draw.cpp                            83             28            284
@@ -12,9 +12,9 @@ File                                            blank        comment           c
 .\src\graphics\font.cpp                            50             35            185
 .\src\input.h                                      24             21            182
 .\src\graphics\vulkan\vk.h                         30             22            124
+.\src\util\vstring.h                               39             26            121
 .\src\graphics\renderTexture.cpp                   37             23            118
 .\src\util\timer.cpp                               24             21            114
-.\src\util\vstring.h                               37             26            110
 .\src\graphics\sprite.cpp                          33             31            104
 .\src\graphics\texture.cpp                         29             21            102
 .\src\graphics\shader.cpp                          24             26            100
@@ -23,7 +23,7 @@ File                                            blank        comment           c
 .\src\util\vtime.cpp                               31             23             97
 .\src\vgde.h                                       33             21             93
 .\tst\game\tstGameScreen.cpp                       31             41             90
-.\src\config.h                                     17             21             82
+.\src\config.h                                     18             21             87
 .\src\util\clock.cpp                               29             22             80
 .\src\audio\al\alSoundBuffer.cpp                   22             21             70
 .\src\rect.h                                       15             25             65
@@ -57,9 +57,9 @@ File                                            blank        comment           c
 .\tst\game\tstSplashScreen.h                       10             21             23
 .\tst\game\tstGameScreen.h                         14             21             23
 .\src\game\stage.h                                 13             21             21
+.\main.cpp                                         17             54             15
 .\src\audio\al\alSoundBuffer.h                      8             21             15
 .\src\audio\al\alSoundDevice.h                      7             21             14
-.\main.cpp                                         17             54             14
 .\src\graphics.h                                    3             21             13
 .\src\audio\al\alCall.h                             6             21             13
 .\src\graphics\videoMode.h                          6             21             12
@@ -76,5 +76,5 @@ File                                            blank        comment           c
 .\res\shaders\compile.bat                           0              0              4
 .\src\audio\al\alSound.cpp                          1             21              1
 -----------------------------------------------------------------------------------
-SUM:                                             1784           1697           6189
+SUM:                                             1816           1704           6339
 -----------------------------------------------------------------------------------

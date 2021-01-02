@@ -1,6 +1,6 @@
 /*
  * VGDE - Video Game Development Environment
- * Copyright (c) 2020 Skyler Burwell
+ * Copyright (c) 2020-2021 Skyler Burwell
  * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages

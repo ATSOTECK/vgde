@@ -1,6 +1,6 @@
 /*
  * VGDE - Video Game Development Environment
- * Copyright (c) 2020 Skyler Burwell
+ * Copyright (c) 2020-2021 Skyler Burwell
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -29,16 +29,19 @@
 #include <locale>
 #include <string>
 
+//TODO(Skyler): Add iterator.
 class String {
 public:
     String();
     String(const char *str);
     String(const std::string &str);
     String(const String &str);
+    String(String &&str) noexcept;
     String(int n);
     String(uint32 n);
     String(float n);
     String(double n);
+    ~String() noexcept;
     
     keep size_t length() const;
     keep size_t size() const;
@@ -56,11 +59,13 @@ public:
     keep bool contains(const String &str) const;
     
     static bool isNumber(uchar32 cp);
+    static bool isHexNumber(uchar32 cp);
     static bool isAlpha(uchar32 cp);
     static bool isLower(uchar32 cp);
     static bool isUpper(uchar32 cp);
-    static bool isAlphaNumeric(uchar32 cp);
+    static bool isAlphanumeric(uchar32 cp);
     static bool isWhitespace(uchar32 cp);
+    static bool isNewline(uchar32 cp);
     
     keep bool startsWith(const String &str, bool ignoreWhitespace = false) const;
     keep bool endsWith(const String &str, bool ignoreWhitespace = false) const;
@@ -117,15 +122,20 @@ public:
     void resize(size_t size);
     
     keep size_t offsetForCharIndex(size_t index) const;
+    keep char raw(size_t index) const;
     keep uint32 codepoint(size_t index) const;
     static uchar32 codepointFor(const String &str);
-
+    static String stringFrom(uchar32 cp);
+    
+    static String readFromFile(const String &path);
+    
     operator std::string() const;
     
     String &operator =(const String &other);
+    String &operator =(String &&other) noexcept;
     String &operator =(const char *other);
     String &operator =(const std::string &other);
-    //String &operator =(const char c);
+    String &operator =(char other);
     String operator +(const String &other);
     String operator +(const char *other);
     String operator+=(const String &other);
@@ -151,23 +161,26 @@ private:
     
     friend std::ostream &operator <<(std::ostream &os, String &str);
     friend std::ostream &operator <<(std::ostream &os, const String &str);
-
+    
     char *_str;
     size_t _allocated; //Size in bytes of the memory allocated to the string.
     size_t _bsize; //Minimum number of bytes needed to represent the string.
     size_t _len; //Number of characters in the string.
 };
 
+String operator+(char *lhs, const String &rhs);
+String operator+(const std::string &lhs, const String &rhs);
+
 bool operator==(const String &lhs, const String &rhs);
 bool operator!=(const String &lhs, const String &rhs);
-
-String operator+(char *lhs, String rhs);
-String operator+(std::string lhs, String rhs);
 
 bool operator ==(const String &lhs, const char *rhs);
 bool operator !=(const String &lhs, const char *rhs);
 
 std::ostream &operator <<(std::ostream &os, String &str);
 std::ostream &operator <<(std::ostream &os, const String &str);
+
+bool operator <(const String &lhs, const String &rhs);
+bool operator >(const String &lhs, const String &rhs);
 
 #endif //__VGDE_VSTRING_H__

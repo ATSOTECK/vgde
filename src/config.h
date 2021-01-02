@@ -1,6 +1,6 @@
 /*
  * VGDE - Video Game Development Environment
- * Copyright (c) 2020 Skyler Burwell
+ * Copyright (c) 2020-2021 Skyler Burwell
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -33,11 +33,17 @@
 
 #if defined(WIN32) || defined(_WIN32)
 #   define VWIN
+#   include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#   define VMAC
 #endif
 
 #define null nullptr
 #define var auto
 #define keep [[nodiscard]]
+#define until(x) while(!(x))
 
 #define vcatimpl(x,y) x##y
 #define vcat(x,y) vcatimpl(x,y)

@@ -1,6 +1,6 @@
 /*
  * VGDE - Video Game Development Environment
- * Copyright (c) 2020 Skyler Burwell
+ * Copyright (c) 2020-2021 Skyler Burwell
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
@@ -22,22 +22,38 @@
 
 #include "vstring.h"
 
+#include <fstream>
+
+#ifndef VWIN
+namespace {
+
+inline void strcpy_s(char *dst, size_t dstsz, const char *src) {
+    strncpy(dst, src, dstsz);
+}
+
+inline void strcat_s(char *dst, size_t dstsz, const char *src) {
+    strncat(dst, src, dstsz);
+}
+
+}
+#endif //VWIN
+
 size_t strsize(const char *str) {
-    size_t size = 0;
+    size_t size = 1;
     while (*str++ != '\0') {
         ++size;
     }
     
-    return size + 1;
+    return size;
 }
 
 size_t utf8_strlen(const char *str) {
     if (!str) {
         return 0;
     }
-
+    
     size_t c, i, l;
-
+    
     for (l = 0, i = 0; i < strsize(str) - 1; ++i, ++l) {
         c = (unsigned char)str[i];
         if (c >= 0 && c <= 127) {
@@ -52,7 +68,7 @@ size_t utf8_strlen(const char *str) {
             return 0;
         }
     }
-
+    
     return l;
 }
 
@@ -131,36 +147,92 @@ std::string cptostd(uchar32 cp) {
     return ret;
 }
 
-String::String() {
+String::String():
+        _str(null),
+        _allocated(0),
+        _bsize(0),
+        _len(0)
+{
     init(null);
 }
 
-String::String(const char *str) {
+String::String(const char *str):
+        _str(null),
+        _allocated(0),
+        _bsize(0),
+        _len(0)
+{
     init(str);
 }
 
-String::String(const std::string &str) {
+String::String(const std::string &str):
+        _str(null),
+        _allocated(0),
+        _bsize(0),
+        _len(0)
+{
     init(str.c_str());
 }
 
-String::String(const String &str) {
+String::String(const String &str):
+        _str(null),
+        _allocated(0),
+        _bsize(0),
+        _len(0)
+{
     init(str._str);
 }
 
-String::String(int n) {
+String::String(String &&str) noexcept :
+        _str(str._str),
+        _allocated(str._allocated),
+        _bsize(str._bsize),
+        _len(str._len)
+{
+    str._str = null;
+    str._allocated = 0;
+    str._bsize = 0;
+    str._len = 0;
+}
+
+String::String(int n):
+        _str(null),
+        _allocated(0),
+        _bsize(0),
+        _len(0)
+{
     init(std::to_string(n).c_str());
 }
 
-String::String(uint32 n) {
+String::String(uint32 n):
+        _str(null),
+        _allocated(0),
+        _bsize(0),
+        _len(0)
+{
     init(std::to_string(n).c_str());
 }
 
-String::String(float n) {
+String::String(float n):
+        _str(null),
+        _allocated(0),
+        _bsize(0),
+        _len(0)
+{
     init(std::to_string(n).c_str());
 }
 
-String::String(double n) {
+String::String(double n):
+        _str(null),
+        _allocated(0),
+        _bsize(0),
+        _len(0)
+{
     init(std::to_string(n).c_str());
+}
+
+String::~String() noexcept {
+    delete[] _str;
 }
 
 void String::init(const char *str) {
@@ -182,7 +254,7 @@ void String::init(const char *str) {
 
 void String::reset() {
     if (_str != null) {
-        delete [] _str;
+        delete[] _str;
         _str = null;
     }
     
@@ -220,7 +292,7 @@ int64 String::indexOfNext(uchar32 cp, size_t startFrom) const {
 }
 
 int64 String::indexOfLast(uchar32 cp) const {
-    for (size_t i = _len - 1; i >= 0; --i) {
+    for (int64 i = _len - 1; i >= 0; --i) {
         if (cp == codepoint(i)) {
             return i;
         }
@@ -237,6 +309,10 @@ bool String::isNumber(uchar32 cp) {
     return (cp >= '0' && cp <= '9');
 }
 
+bool String::isHexNumber(uchar32 cp) {
+    return ((cp >= '0' && cp <= '9') || (cp >= 'a' && cp <= 'f') || (cp >= 'A' && cp <= 'F'));
+}
+
 bool String::isAlpha(uchar32 cp) {
     return ((cp >= 'a' && cp <= 'z') || (cp >= 'A' && cp <= 'Z'));
 }
@@ -249,12 +325,16 @@ bool String::isUpper(uchar32 cp) {
     return (cp >= 'A' && cp <= 'Z');
 }
 
-bool String::isAlphaNumeric(uchar32 cp) {
+bool String::isAlphanumeric(uchar32 cp) {
     return (isAlpha(cp) || isNumber(cp));
 }
 
 bool String::isWhitespace(uchar32 cp) {
     return (cp == ' ' || cp == '\t' || cp == '\n' || cp == '\r');
+}
+
+bool String::isNewline(uchar32 cp) {
+    return (cp == '\n');
 }
 
 bool String::startsWith(const String &str, bool ignoreWhitespace) const {
@@ -319,7 +399,7 @@ String String::stringAfterLast(uchar32 cp0, uchar32 cp1) const {
     size_t offset;
     uchar32 cp;
     
-    for (size_t i = _len; i >= 0; --i) {
+    for (int64 i = _len; i >= 0; --i) {
         cp = codepoint(i);
         if (cp == cp0 || cp == cp1) {
             if (i == _len) {
@@ -392,7 +472,7 @@ String String::stringBeforeLast(uchar32 cp0, uchar32 cp1) const {
     String ret;
     uchar32 cp;
     
-    for (size_t i = _len; i >= 0; --i) {
+    for (int64 i = _len; i >= 0; --i) {
         cp = codepoint(i);
         if (cp == cp0 || cp == cp1) {
             if (i == 0) {
@@ -432,7 +512,7 @@ void String::trimLeadingWhitespace() {
 }
 
 void String::trimTrailingWhitespace() {
-    size_t i = 0;
+    int i = 0;
     while (isWhitespace(codepoint(_len + i - 1)) && i >= 0) {
         --i;
     }
@@ -528,7 +608,7 @@ String String::swapCase() const {
 String String::reverse() const {
     String ret;
     ret.reserve(_allocated);
-    TODO("Skyler", "Make work.");
+    //TODO(Skyler): Make work.
     return ret;
 }
 
@@ -541,7 +621,7 @@ std::string String::stdString() const {
 }
 
 int String::toInt(int base) const {
-    return strtol(_str, null, base);
+    return (int)strtol(_str, null, base);
 }
 
 float String::toFloat() const {
@@ -623,6 +703,14 @@ size_t String::offsetForCharIndex(size_t index) const {
     return 0;
 }
 
+char String::raw(size_t index) const {
+    if (index >= _bsize) {
+        return '\0';
+    }
+    
+    return _str[index];
+}
+
 uint32 String::codepoint(size_t index) const {
     if (index > _len) {
         return 0;
@@ -676,6 +764,47 @@ uchar32 String::codepointFor(const String &str) {
     return str.codepoint(0);
 }
 
+String String::stringFrom(uchar32 cp) {
+    int size;
+    return String(cptocstr(cp, size));
+}
+
+String String::readFromFile(const String &path) {
+    String str;
+    
+    std::ifstream file;
+    file.open(path.stdString(), std::ios_base::in);
+    
+    std::string line;
+    if (file.is_open()) {
+        //This method uses less memory for whatever reason.
+        size_t fileSize = 0;
+        until(file.get() == EOF) {
+            ++fileSize;
+        }
+        file.clear();
+        file.seekg(0, std::ios_base::beg);
+        
+        str.resize(fileSize + 1);
+        file.read(str._str, fileSize);
+        file.close();
+        
+        str._str[fileSize] = '\0';
+        str._bsize = strsize(str._str);
+        str._len = utf8_strlen(str._str);
+        
+        /*
+        while (std::getline(file, line)) {
+            str += line + "\n";
+        }
+        file.close();//*/
+    } else {
+        std::cout << "Error unable to load \"" << path << "\"\n";
+    }
+    
+    return str;
+}
+
 String::operator std::string() const {
     return stdString();
 }
@@ -690,6 +819,15 @@ String &String::operator =(const String &other) {
     return *this;
 }
 
+String &String::operator=(String &&other) noexcept {
+    std::swap(_str, other._str);
+    std::swap(_allocated, other._allocated);
+    std::swap(_bsize, other._bsize);
+    std::swap(_len, other._len);
+    
+    return *this;
+}
+
 String &String::operator =(const char *other) {
     reset();
     init(other);
@@ -700,6 +838,13 @@ String &String::operator =(const char *other) {
 String &String::operator =(const std::string &other) {
     reset();
     init(other.c_str());
+    
+    return *this;
+}
+
+String &String::operator=(char other) {
+    reset();
+    *this = stringFrom(other);
     
     return *this;
 }
@@ -752,6 +897,22 @@ uchar32 &String::operator[](size_t index) {
 }
 */
 
+String operator+(const char *lhs, const String &rhs) {
+    String s;
+    s += lhs;
+    s += rhs;
+    
+    return s;
+}
+
+String operator+(const std::string &lhs, const String &rhs) {
+    String s;
+    s += lhs.c_str();
+    s += rhs;
+    
+    return s;
+}
+
 bool operator==(const String &lhs, const String &rhs) {
     if (lhs._len != rhs._len) {
         return false;
@@ -781,4 +942,12 @@ std::ostream &operator <<(std::ostream &os, String &str) {
 std::ostream &operator <<(std::ostream &os, const String &str) {
     os << str._str;
     return os;
+}
+
+bool operator <(const String &lhs, const String &rhs) {
+    return lhs.stdString() < rhs.stdString();
+}
+
+bool operator >(const String &lhs, const String &rhs) {
+    return lhs.stdString() > rhs.stdString();
 }
