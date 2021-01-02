@@ -274,7 +274,7 @@ void String::clear() {
 }
 
 bool String::empty() const {
-    return (_len == 0);
+    return (_str == null || _len == 0);
 }
 
 int64 String::indexOf(uchar32 cp) const {
@@ -934,13 +934,18 @@ bool operator!=(const String &lhs, const char *rhs) {
 }
 
 std::ostream &operator <<(std::ostream &os, String &str) {
-    //os.rdbuf()->sputn(str._str, str._bsize);
-    os << str._str;
+    if (!str.empty()) {
+        os << str._str;
+    }
+    
     return os;
 }
 
 std::ostream &operator <<(std::ostream &os, const String &str) {
-    os << str._str;
+    if (!str.empty()) {
+        os << str._str;
+    }
+    
     return os;
 }
 
