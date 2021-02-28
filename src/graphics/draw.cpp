@@ -291,7 +291,7 @@ void drawCircle(float x, float y, float r, int sides, bool outline) {
 
     drawVerts(verts, sides + 1, outline);
 
-    delete [] verts;
+    delete[] verts;
 }
 
 void drawArc(float x, float y, float r, float a, float a1, int sides, bool radians) {
@@ -327,6 +327,7 @@ void drawArc(float x, float y, float r, float a, float a1, int sides, bool radia
     }
 
     drawVerts(verts, sides + 1, true);
+    delete[] verts;
 
 }
 
@@ -370,7 +371,7 @@ void drawSlice(float x, float y, float r, float a, float a1, int sides, bool out
     }
 
     drawVerts(verts, sides + 3, outline);
-
+    delete[] verts;
 }
 
 float drawText(const String &txt, float x, float y, float scale, const Color &color, Font *font) {

@@ -142,7 +142,9 @@ char *cptocstr(uchar32 cp, int &size) {
 
 std::string cptostd(uchar32 cp) {
     int size;
-    std::string ret = cptocstr(cp, size);
+    char *str = cptocstr(cp, size);
+    std::string ret = str;
+    delete[] str;
     
     return ret;
 }
@@ -545,6 +547,8 @@ void String::append(uchar32 cp, size_t buffSize) {
         _bsize += cps;
     }
     
+    delete[] c;
+    
     ++_len;
 }
 
@@ -766,7 +770,11 @@ uchar32 String::codepointFor(const String &str) {
 
 String String::stringFrom(uchar32 cp) {
     int size;
-    return String(cptocstr(cp, size));
+    char *str = cptocstr(cp, size);
+    String ret(str);
+    delete[] str;
+    
+    return ret;
 }
 
 String String::readFromFile(const String &path) {
