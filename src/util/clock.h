@@ -23,6 +23,7 @@
 #ifndef __VGDE_CLOCK_H__
 #define __VGDE_CLOCK_H__
 
+#include "vstring.h"
 #include "vtime.h"
 
 class Clock {
@@ -34,10 +35,11 @@ public:
     static int32 timeAsMilliseconds();
     static int64 timeAsMicroseconds();
 
-    static int hour(bool use12hr = false);
+    static int hour(bool use12hr = true);
     static int minute();
     static int second();
     static int millisecond();
+    static String timeString(bool use12hr = true); //TODO(Skyler): Formatting.
 
     static bool isAM();
     static bool isPM();

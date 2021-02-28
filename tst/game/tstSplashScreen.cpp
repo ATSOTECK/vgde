@@ -55,11 +55,7 @@ void TstSplashScreen::show() {
     
     _chinese = ResourceManager::instance()->loadFont("SimSun.ttf");
     
-    if (Clock::isPM()) {
-        db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " pm");
-    } else {
-        db(Clock::hour(true) << ":" << Clock::minute() << ":" << Clock::second() << ":" << Clock::millisecond() << " am");
-    }
+    _vgde->debug(Clock::timeString());
     
     var hiTimer = new Timer(this, "hi", Time::seconds(1), Timer::Repeat);
     hiTimer->start();
@@ -100,7 +96,7 @@ void TstSplashScreen::resize(const vec2f &size) {
 
 void TstSplashScreen::ding(const String &name) {
     if (name == "hi") {
-        db("hi from splash screen");
+        _vgde->info("hi from splash screen");
     } else if (active()) {
         _vgde->screenGoto("game", true);
     }

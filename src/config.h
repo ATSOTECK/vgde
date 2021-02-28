@@ -113,8 +113,8 @@ SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15)
 #define dbq(x) std::cout << "'" << x << "'" << std::endl
 #define dbQ(x) std::cout << "\"" << x << "\"" << std::endl
 #define dbln std::cout << std::endl;
-#define trace(x) std::cerr << __FILE__ << ", L" << __LINE__ << ": " << x << std::endl
-#define tracemsg std::cerr << __FILE__ << ", L" << __LINE__ << ": "
+#define vtrace(x) std::cerr << __FILE__ << ", L" << __LINE__ << ": " << x << std::endl
+#define vtracemsg std::cerr << __FILE__ << ", L" << __LINE__ << ": "
 
 #ifdef VDEBUG
 #define TODO(name, msg) std::cerr << "TODO(" << name << "): " << msg << std::endl\

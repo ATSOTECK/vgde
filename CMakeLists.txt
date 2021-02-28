@@ -20,7 +20,7 @@ include_directories(src)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
-add_executable(vgde
+set(sources
         include/glad/glad.h
         include/GLFW/glfw3.h
         include/GLFW/glfw3native.h
@@ -462,7 +462,6 @@ add_executable(vgde
         src/vgde.h
         src/util/vmath.cpp
         src/util/vmath.h
-        main.cpp
         src/graphics/texture.cpp
         src/graphics/texture.h
         src/util/vtime.cpp
@@ -497,18 +496,44 @@ add_executable(vgde
         src/game/stage.h
         src/game/event.cpp
         src/game/event.h
+        src/graphics.h
+        src/util/timer.cpp
+        src/util/timer.h
+        src/game.h
+        src/audio/al/alSound.cpp
+        src/audio/al/alSound.h
+        src/audio/al/alCall.h
+        src/audio/al/alCall.cpp
+        src/audio/al/alSoundDevice.cpp
+        src/audio/al/alSoundDevice.h
+        src/audio/al/alSoundBuffer.cpp
+        src/audio/al/alSoundBuffer.h
+        src/util/vcontainer.h)
+
+add_executable(vgde_exe
+        main.cpp
+        ${sources}
         tst/stringTest.cpp
         tst/stringTest.h
         tst/game/tstSplashScreen.cpp
         tst/game/tstSplashScreen.h
         tst/game/tstGameScreen.cpp
         tst/game/tstGameScreen.h
-        src/graphics.h
-        src/util/timer.cpp
-        src/util/timer.h tst/game/player.cpp tst/game/player.h src/game.h src/audio/al/alSound.cpp src/audio/al/alSound.h src/audio/al/alCall.h src/audio/al/alCall.cpp src/audio/al/alSoundDevice.cpp src/audio/al/alSoundDevice.h src/audio/al/alSoundBuffer.cpp src/audio/al/alSoundBuffer.h src/util/vcontainer.h)
+        tst/game/player.cpp
+        tst/game/player.h)
+
+add_library(vgde ${sources})
+
+target_link_libraries(vgde_exe vulkan-1)
+target_link_libraries(vgde_exe glfw3)
+target_link_libraries(vgde_exe freetype)
+target_link_libraries(vgde_exe OpenAL32)
+target_link_libraries(vgde_exe libsndfile-1)
+target_link_libraries(vgde_exe spdlog)
 
 target_link_libraries(vgde vulkan-1)
 target_link_libraries(vgde glfw3)
 target_link_libraries(vgde freetype)
 target_link_libraries(vgde OpenAL32)
 target_link_libraries(vgde libsndfile-1)
+target_link_libraries(vgde spdlog)

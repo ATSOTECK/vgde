@@ -23,6 +23,7 @@
 #include "font.h"
 
 #include "gl.h"
+#include "vgde.h"
 
 #include <iostream>
 
@@ -47,14 +48,14 @@ void Font::loadFont(const std::string &filename) {
     
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
-        vgderr("Could not init freetype!");
+        VGDE::instance()->vError("Could not init freetype!");
         return;
     }
     _lib = ft;
 
     FT_Face face;
     if (FT_New_Face(ft, filename.c_str(), 0, &face)) {
-        vgderr("Failed to load font!");
+        VGDE::instance()->vError("Failed to load font!");
         return;
     }
 
@@ -62,7 +63,7 @@ void Font::loadFont(const std::string &filename) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     
     if (FT_Select_Charmap(face, FT_ENCODING_UNICODE)) {
-        vgderr("Unable to load font \"" << filename << "\" failed to set the unicode charset.\n");
+        VGDE::instance()->vError("Unable to load font \"{}\" failed to set the unicode charset.", filename);
         FT_Done_Face(face);
         return;
     }
@@ -239,12 +240,12 @@ void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness)
     //auto cp = FT_Get_Char_Index(face, codePoint);
     
     if (FT_Set_Pixel_Sizes(face, 0, size)) {
-        vgderr("Failed to set size! " << size);
+        VGDE::instance()->vError("Failed to set size! {}", size);
         return;
     }
     
     if (FT_Load_Char(face, codePoint, FT_LOAD_RENDER)) {
-        vgderr("Failed to load glyph! " << codePoint);
+        VGDE::instance()->vError("Failed to load glyph! {}", codePoint);
         return;
     }
 

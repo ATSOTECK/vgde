@@ -29,6 +29,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <thread>
@@ -112,9 +113,27 @@ int VGDE::init(VideoMode mode) {
 
 int VGDE::init(int width, int height, const std::string &title, bool fullScreen) {
 	if (_initialized) {
-		vgdewarn("VGDE is already initialized!");
+		vWarn("VGDE is already initialized!");
 		return 0;
 	}
+    
+    var consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+ 
+	_consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+	_fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("log.txt", true);
+	
+    _vgdeLogger = std::make_shared<spdlog::logger>(spdlog::logger("vgde", {consoleSink, _fileSink}));
+    _logger = std::make_shared<spdlog::logger>(spdlog::logger("game", {_consoleSink, _fileSink}));
+    _loggerDebug = false;
+    
+    _loggerPattern = "[%I:%M:%S %p] [%n] [%^%l%$] %v";
+	spdlog::set_default_logger(_logger);
+    spdlog::set_pattern(_loggerPattern.stdString());
+    _vgdeLogger->set_pattern(_loggerPattern.stdString());
+#ifdef VDEBUG
+    showVGDEDebugMessages();
+    showDebugMessages();
+#endif
 
 	glfwSetErrorCallback(glfwErrorCallback);
 
@@ -155,8 +174,10 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 	loadInGameTime();
 
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &_textureSlots);
-	db("OpenGL version " << glGetString(GL_VERSION));
-	db("Texture slots available: " << _textureSlots);
+	vDebug("OpenGL version {}", glGetString(GL_VERSION));
+	vDebug("Texture slots available: {}", _textureSlots);
+    
+    stbi_write_png_compression_level = 0; //Try to speed up saving screenshots.
 
 	_rm = ResourceManager::instance();
 	
@@ -166,7 +187,7 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 
 void VGDE::run() {
     if (!_initialized) {
-        vgderr("Must initialize VGDE before you can run it.");
+        vError("Must initialize VGDE before you can run it.");
         return;
     }
     
@@ -342,7 +363,18 @@ void VGDE::screenshotSetName(const String &name) {
 }
 
 void VGDE::screenshot() {
-    char *name = (_ssname + ".png").c_str();
+    String name = _ssname + ".png";
+    bool exists = true;
+    int count = 1;
+    
+    while (exists) {
+        if (std::filesystem::exists(name.c_str())) {
+            name = _ssname + "_" + String(count++) + ".png";
+        } else {
+            exists = false;
+        }
+    }
+    
     int w = (int)_windowWidth;
     int h = (int)_windowHeight;
     GLsizei size = w * h * 4u;
@@ -360,9 +392,9 @@ void VGDE::screenshot() {
     
     //TODO(Skyler): Is there anyway to make this faster?
     std::thread([=]{
-        stbi_write_png(name, w, h, 4, pixels, 0);
+        stbi_write_png(name.c_str(), w, h, 4, pixels, 0);
+    
         delete[] pixels;
-        delete name;
     }).detach();
 }
 
@@ -388,18 +420,18 @@ void VGDE::screenAdd(Screen *screen) {
 
 void VGDE::screenGoto(Screen *screen, bool cleanup) {
     if (_screens.empty()) {
-        vgdewarn("There are no screens to go to.");
+        vWarn("There are no screens to go to.");
         return;
     }
     
     if (screen == null) {
-        vgdewarn("Given screen is null.");
+        vWarn("Given screen is null.");
         return;
     }
     
     var idx = std::find(_screens.begin(), _screens.end(), screen);
     if (idx == _screens.end()) {
-        vgdewarn("Screen \"" << screen->name() << "\" not found.");
+        vWarn("Screen \"{}\" not found.", screen->name());
         return;
     }
     
@@ -424,7 +456,7 @@ void VGDE::screenGoto(Screen *screen, bool cleanup) {
 
 void VGDE::screenGoto(const String &screen, bool cleanup) {
     if (_screens.empty()) {
-        vgdewarn("There are no screens to go to.");
+        vWarn("There are no screens to go to.");
         return;
     }
     
@@ -435,17 +467,17 @@ void VGDE::screenGoto(const String &screen, bool cleanup) {
         }
     }
     
-    vgdewarn("Screen \"" << screen << "\" not found.");
+    vWarn("Screen \"{}\" not found.", screen);
 }
 
 void VGDE::screenGoto(int index, bool cleanup) {
     if (_screens.empty()) {
-        vgdewarn("There are no screens to go to.");
+        vWarn("There are no screens to go to.");
         return;
     }
     
     if (index >= screenCount()) {
-        vgdewarn("No screen for index" << index << ".");
+        vWarn("No screen for index {}.", index);
         return;
     }
     
@@ -454,7 +486,7 @@ void VGDE::screenGoto(int index, bool cleanup) {
 
 void VGDE::screenGotoFirst() {
     if (_screens.empty()) {
-        vgdewarn("There are no screens to go to.");
+        vWarn("There are no screens to go to.");
         return;
     }
     
@@ -463,7 +495,7 @@ void VGDE::screenGotoFirst() {
 
 void VGDE::screenGotoLast() {
     if (_screens.empty()) {
-        vgdewarn("There are no screens to go to.");
+        vWarn("There are no screens to go to.");
         return;
     }
     
@@ -479,7 +511,7 @@ void VGDE::screenGotoNext(bool cleanup) {
     int index = std::distance(_screens.begin(), idx);
     
     if (index == screenCount() - 1) {
-        vgdewarn("Already at the last screen.");
+        vWarn("Already at the last screen.");
         return;
     }
     
@@ -495,7 +527,7 @@ void VGDE::screenGotoPrevious(bool cleanup) {
     int index = std::distance(_screens.begin(), idx);
     
     if (index == 0) {
-        vgdewarn("Already at the first screen.");
+        vWarn("Already at the first screen.");
         return;
     }
     
@@ -504,6 +536,42 @@ void VGDE::screenGotoPrevious(bool cleanup) {
 
 size_t VGDE::screenCount() const {
     return _screens.size();
+}
+
+void VGDE::loggerSetName(const String &name) {
+    _logger.reset();
+    _logger = std::make_shared<spdlog::logger>(spdlog::logger(name.stdString(), {_consoleSink, _fileSink}));
+    
+    if (_loggerDebug) {
+        _logger->set_level(spdlog::level::debug);
+    }
+}
+
+void VGDE::loggerSetPattern(const String &pattern) {
+    _loggerPattern = pattern;
+    _logger->set_pattern(pattern.stdString());
+}
+
+std::shared_ptr<spdlog::logger> VGDE::logger() const {
+    return _logger;
+}
+
+void VGDE::showVGDEDebugMessages(bool show) {
+    if (show) {
+        _vgdeLogger->set_level(spdlog::level::debug);
+    } else {
+        _vgdeLogger->set_level(spdlog::level::info);
+    }
+}
+
+void VGDE::showDebugMessages(bool show) {
+    _loggerDebug = show;
+    
+    if (_loggerDebug) {
+        _logger->set_level(spdlog::level::debug);
+    } else {
+        _logger->set_level(spdlog::level::info);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -575,17 +643,17 @@ void VGDE::loadInGameTime() {
 
 bool VGDE::screenCheckPN() {
     if (_screens.empty()) {
-        vgdewarn("There are no screens to go to.");
+        vWarn("There are no screens to go to.");
         return false;
     }
     
     if (screenCount() == 1) {
-        vgdewarn("There is only one screen.");
+        vWarn("There is only one screen.");
         return false;
     }
     
     if (_currentScreen == null) {
-        vgdewarn("No screen currently selected. Going to the first screen.");
+        vWarn("No screen currently selected. Going to the first screen.");
         screenGoto(_screens[0]);
         return false;
     }

@@ -897,7 +897,7 @@ uchar32 &String::operator[](size_t index) {
 }
 */
 
-String operator+(const char *lhs, const String &rhs) {
+String operator+(char *lhs, const String &rhs) {
     String s;
     s += lhs;
     s += rhs;

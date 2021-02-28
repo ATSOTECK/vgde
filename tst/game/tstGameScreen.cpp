@@ -149,6 +149,22 @@ void TstGameScreen::render(float delta) {
     if (isKeyPressed(vk_k)) {
         _vgde->windowSetVSync(true);
     }
+    
+    if (isKeyPressed(vk_e)) {
+        _vgde->vError("yeet");
+    }
+    
+    if (isKeyPressed(vk_q)) {
+        _vgde->vInfo("yeet");
+        _vgde->vWarn("yeet");
+        _vgde->vDebug("yeet");
+        _vgde->vInfo("yeeting");
+    
+        _vgde->info("yeet");
+        _vgde->warn("yeet");
+        _vgde->debug("yeet");
+        _vgde->info("yeeting");
+    }
 }
 
 void TstGameScreen::resize(const vec2f &size) {

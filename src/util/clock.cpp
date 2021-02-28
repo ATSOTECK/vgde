@@ -90,6 +90,23 @@ int Clock::millisecond() {
     return time.wMilliseconds;
 }
 
+String Clock::timeString(bool use12hr) {
+    String ret;
+    int h = hour(use12hr);
+    int m = minute();
+    int s = second();
+    
+    ret += h < 10 ? "0" + String(h) + ":" : String(h) + ":";
+    ret += m < 10 ? "0" + String(m) + ":" : String(m) + ":";
+    ret += s < 10 ? "0" + String(s)       : String(s);
+    
+    if (use12hr) {
+        ret += isPM() ? " PM" : " AM";
+    }
+    
+    return ret;
+}
+
 bool Clock::isAM() {
     int h = hour(false);
     int m = minute();

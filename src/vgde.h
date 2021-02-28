@@ -24,6 +24,9 @@
 #define __VGDE_VGDE_H__
 
 #include "graphics/gl.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <string>
 #include <vector>
 
@@ -34,6 +37,8 @@
 #include "util/clock.h"
 #include "util/resourceManager.h"
 #include "util/vstring.h"
+
+#define DEFAULT_PATTERN "[%I:%M:%S %p] [%n] [%^%l%$] %v"
 
 static const int DEFAULT_WINDOW_WIDTH  = 1024;
 static const int DEFAULT_WINDOW_HEIGHT = 600;
@@ -100,6 +105,113 @@ public:
 	void screenGotoNext(bool cleanup = false);
 	void screenGotoPrevious(bool cleanup = false);
 	keep size_t screenCount() const;
+    
+    void showVGDEDebugMessages(bool show = true);
+	void showDebugMessages(bool show = true);
+	
+	void loggerSetName(const String &name);
+	
+    //See https://github.com/gabime/spdlog/wiki/3.-Custom-formatting#pattern-flags for info.
+	void loggerSetPattern(const String &pattern);
+	keep std::shared_ptr<spdlog::logger> logger() const;
+	
+	template <typename T>
+	inline void info(const T &msg) {
+	    _logger->info(msg);
+	}
+    
+    template<typename FormatString, typename... Args>
+    inline void info(const FormatString &fmt, Args&&...args) {
+        _logger->info(fmt, std::forward<Args>(args)...);
+    }
+    
+    template <typename T>
+    inline void warn(const T &msg) {
+        _logger->warn(msg);
+    }
+    
+    template<typename FormatString, typename... Args>
+    inline void warn(const FormatString &fmt, Args&&...args) {
+        _logger->warn(fmt, std::forward<Args>(args)...);
+    }
+    
+    template <typename T>
+    inline void error(const T &msg) {
+        _logger->critical(msg);
+        exit();
+    }
+    
+    template<typename FormatString, typename... Args>
+    inline void error(const FormatString &fmt, Args&&...args) {
+        _logger->critical(fmt, std::forward<Args>(args)...);
+        exit();
+    }
+    
+    template <typename T>
+    inline void debug(const T &msg) {
+        _logger->debug(msg);
+    }
+    
+    template<typename FormatString, typename... Args>
+    inline void debug(const FormatString &fmt, Args&&...args) {
+        _logger->debug(fmt, std::forward<Args>(args)...);
+    }
+    
+    //Meant for internal use.
+    template <typename T>
+    inline void vInfo(const T &msg) {
+        _fileSink->set_pattern(DEFAULT_PATTERN);
+        _vgdeLogger->info(msg);
+        _fileSink->set_pattern(_loggerPattern.stdString());
+    }
+    
+    template<typename FormatString, typename... Args>
+    inline void vInfo(const FormatString &fmt, Args&&...args) {
+        _fileSink->set_pattern(DEFAULT_PATTERN);
+        _vgdeLogger->info(fmt, std::forward<Args>(args)...);
+        _fileSink->set_pattern(_loggerPattern.stdString());
+    }
+    
+    template <typename T>
+    inline void vWarn(const T &msg) {
+        _fileSink->set_pattern(DEFAULT_PATTERN);
+        _vgdeLogger->warn(msg);
+        _fileSink->set_pattern(_loggerPattern.stdString());
+    }
+    
+    template<typename FormatString, typename... Args>
+    inline void vWarn(const FormatString &fmt, Args&&...args) {
+        _fileSink->set_pattern(DEFAULT_PATTERN);
+        _vgdeLogger->warn(fmt, std::forward<Args>(args)...);
+        _fileSink->set_pattern(_loggerPattern.stdString());
+    }
+    
+    template <typename T>
+    inline void vError(const T &msg) {
+        _fileSink->set_pattern(DEFAULT_PATTERN);
+        _vgdeLogger->critical(msg);
+        exit();
+    }
+    
+    template<typename FormatString, typename... Args>
+    inline void vError(const FormatString &fmt, Args&&...args) {
+        _fileSink->set_pattern(DEFAULT_PATTERN);
+        _vgdeLogger->critical(fmt, std::forward<Args>(args)...);
+        exit();
+    }
+    
+    template <typename T>
+    inline void vDebug(const T &msg) {
+        _fileSink->set_pattern(DEFAULT_PATTERN);
+        _vgdeLogger->debug(msg);
+        _fileSink->set_pattern(_loggerPattern.stdString());
+    }
+    
+    template<typename FormatString, typename... Args>
+    inline void vDebug(const FormatString &fmt, Args&&...args) {
+        _fileSink->set_pattern(DEFAULT_PATTERN);
+        _vgdeLogger->debug(fmt, std::forward<Args>(args)...);
+    }
 
 private:
 	friend void windowSizeCallback(GLFWwindow *, int, int);
@@ -114,7 +226,8 @@ private:
 
 	void saveInGameTime() const;
 	void loadInGameTime();
-    
+ 
+	//contains screen checks for screenGotoPrevious/Next
     bool screenCheckPN();
 
 	bool _initialized;
@@ -137,11 +250,18 @@ private:
 	
 	std::vector<Screen *> _screens;
 	Screen *_currentScreen;
-	String _ssname;
+	String _ssname; //screenShotName
 	
 	int _textureSlots;
 	
 	ResourceManager *_rm;
+	std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> _consoleSink;
+	std::shared_ptr<spdlog::sinks::basic_file_sink_mt> _fileSink;
+	std::shared_ptr<spdlog::logger> _vgdeLogger; //Internal
+    std::shared_ptr<spdlog::logger> _logger;
+    String _loggerPattern;
+    
+    bool _loggerDebug;
 };
 
 #endif

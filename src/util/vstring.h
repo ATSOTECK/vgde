@@ -29,6 +29,9 @@
 #include <locale>
 #include <string>
 
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
+
 //TODO(Skyler): Add iterator.
 class String {
 public:

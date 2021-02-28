@@ -76,10 +76,13 @@ int main() {
     VGDE *vgde = VGDE::instance();
     //vgde->init(vgde->nativeVideoMode());
     vgde->init();
+    vgde->loggerSetName("test game");
+    vgde->loggerSetPattern("[%I:%M:%S %p] [%n] [%^-%L-%$] %v");
     vgde->screenAdd(new TstSplashScreen());
     vgde->screenAdd(new TstGameScreen());
     vgde->screenGotoFirst();
     //vgde->screenGoto("splash");
+    
     vgde->run();
     
     return 0;
