@@ -508,7 +508,9 @@ set(sources
         src/audio/al/alSoundDevice.h
         src/audio/al/alSoundBuffer.cpp
         src/audio/al/alSoundBuffer.h
-        src/util/vcontainer.h)
+        src/util/vcontainer.h
+        src/graphics/text.cpp
+        src/graphics/text.h)
 
 add_executable(vgde_exe
         main.cpp

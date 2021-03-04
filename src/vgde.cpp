@@ -224,10 +224,17 @@ void VGDE::postRender() {
 	++_frames;
     _frameTime = _clock.restart().asMilliseconds();
 	_delta = _frameTime / 1000.f; //Convert frame time to seconds.
+    
+    if (Clock::timeAsMilliseconds() >= (_time + 1000)) {
+        _time = Clock::timeAsMilliseconds();
+        _frameRate = _frames;
+        _frames = 0;
+    }
 }
 
 void VGDE::cleanUp() {
     _rm->cleanUp();
+    drawCleanUp();
 	glfwDestroyWindow(_window);
 	glfwTerminate();
 }
@@ -330,13 +337,7 @@ void VGDE::pauseIfNotFocused(bool pause) {
     _pauseINF = pause;
 }
 
-int VGDE::fps() {
-    if (Clock::timeAsMilliseconds() >= (_time + 1000)) {
-        _time = Clock::timeAsMilliseconds();
-        _frameRate = _frames;
-        _frames = 0;
-    }
-
+int VGDE::fps() const {
     return _frameRate;
 }
 

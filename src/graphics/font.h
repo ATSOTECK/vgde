@@ -54,9 +54,13 @@ public:
     
     float draw(const String &txt, float x, float y, float scale, Shader *shader, const Color &color);
     
+    keep uint ibo() const;
+    keep uint vbo() const;
+    
     keep bool loaded() const;
-private:
     void getGlyph(uint codePoint, int size, bool bold = false, float outlineThickness = 0);
+    Character getChar(int size, uchar32 cp);
+private:
 
     void *_lib;
     void *_face;

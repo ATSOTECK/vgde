@@ -230,6 +230,14 @@ float Font::draw(const String &txt, float x, float y, float scale, Shader *shade
     return len;
 }
 
+uint Font::ibo() const {
+    return _ibo;
+}
+
+uint Font::vbo() const {
+    return _vbo;
+}
+
 bool Font::loaded() const {
     return _loaded;
 }
@@ -268,4 +276,8 @@ void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness)
             (uint)face->glyph->advance.x
     };
     _charMap[_size].insert_or_assign(codePoint, character);
+}
+
+Character Font::getChar(int size, uchar32 cp) {
+    return _charMap[size][cp];
 }

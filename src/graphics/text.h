@@ -20,19 +20,43 @@
  *
  */
 
-#ifndef __VGDE_GRAPHICS_H__
-#define __VGDE_GRAPHICS_H__
+#ifndef __VGDE_TEXT_H__
+#define __VGDE_TEXT_H__
 
-#include "graphics/gl.h"
-#include "graphics/color.h"
-#include "graphics/draw.h"
-#include "graphics/font.h"
-#include "graphics/renderTexture.h"
-#include "graphics/shader.h"
-#include "graphics/sprite.h"
-#include "graphics/text.h"
-#include "graphics/texture.h"
-#include "graphics/transform.h"
-#include "graphics/videoMode.h"
+#include "font.h"
+#include "util/vstring.h"
+#include "transform.h"
+#include "shader.h"
 
-#endif //__VGDE_GRAPHICS_H__
+#include <vector>
+
+class Text : public Transform {
+public:
+    explicit Text(const String &str);
+    Text(const String &str, Font *font);
+    ~Text();
+    
+    void setText(const String &txt);
+    keep String text() const;
+    
+    void setFont(Font *font);
+    keep Font *font() const;
+    
+    keep int length() const;
+    
+    void draw();
+private:
+    void calculateVerts();
+    
+    String _text;
+    Font *_font;
+    Shader *_shader;
+    float _scale;
+    Color _color;
+    
+    std::vector<float*> _verts;
+    std::vector<Character> _chars;
+};
+
+
+#endif //__VGDE_TEXT_H__

@@ -48,6 +48,7 @@ public:
 };
 
 void drawInit();
+void drawCleanUp();
 
 glm::mat4 drawGetProjection();
 void drawSetProjection(float left, float right, float bottom, float top, float zNear, float zFar);

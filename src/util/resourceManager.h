@@ -53,6 +53,7 @@ public:
 
     Font *loadFont(const std::string &font);
     void unloadFont(Font *font);
+    keep Font *defaultFont() const;
     
     void setResPath(const std::string &path);
     void setImgPath(const std::string &path);
@@ -88,6 +89,7 @@ private:
 
     std::string _imgPath;
     std::string _fontPath;
+    Font *_defaultFont;
 };
 
 

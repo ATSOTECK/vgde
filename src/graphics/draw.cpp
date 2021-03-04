@@ -44,6 +44,11 @@ Color _color;
 
 Font *_defaultFont;
 
+#define MAX_SIDES 100
+float *_circleVerts;
+float *_arcVerts;
+float *_sliceVerts;
+
 const std::string defaultVertexShader =
 "#version 330 core\n"
 "layout (location = 0) in vec4 pos;\n"
@@ -97,6 +102,10 @@ void drawInit() {
 	_shader = new Shader(defaultVertexShader, defaultFragmentShader, false);
 	_textShader = new Shader(textVertShader, textFragShader, false);
 	_color = Color::White;
+	
+	_circleVerts = new float[VERT_SIZE * (MAX_SIDES + 1)];
+    _arcVerts = new float[VERT_SIZE * (MAX_SIDES + 1)];
+    _sliceVerts = new float[VERT_SIZE * (MAX_SIDES + 3)];
 
 	glGenBuffers(1, &_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
@@ -108,6 +117,12 @@ void drawInit() {
 
 	drawSetProjection(0.0f, (float)_vgde->windowWidth(), (float)_vgde->windowHeight(), 0.0f, -1.0f, 1.0);
 	drawSetClearColor(Color::Black);
+}
+
+void drawCleanUp() {
+    delete[] _circleVerts;
+    delete[] _arcVerts;
+    delete[] _sliceVerts;
 }
 
 glm::mat4 drawGetProjection() {
@@ -268,35 +283,38 @@ void drawRectangle(const rectf &rect, bool outline) {
 void drawCircle(float x, float y, float r, int sides, bool outline) {
     if (sides < 0) {
         sides = 1;
+    } else if (sides > MAX_SIDES) {
+        sides = MAX_SIDES;
     }
+    
+    
     float angleShift = ((float)V_TAU / (float)sides);
     float phi = 0.f;
-
-    float *verts = new float[VERT_SIZE * (sides + 1)];
+    
     for (int i = 0; i < sides; ++i, phi += angleShift) {
-        verts[VERT_SIZE * i]     = x + r * cos(phi);
-        verts[VERT_SIZE * i + 1] = y + r * sin(phi);
-        verts[VERT_SIZE * i + 2] = _color.glR;
-        verts[VERT_SIZE * i + 3] = _color.glG;
-        verts[VERT_SIZE * i + 4] = _color.glB;
-        verts[VERT_SIZE * i + 5] = _color.glA;
+        _circleVerts[VERT_SIZE * i]     = x + r * cos(phi);
+        _circleVerts[VERT_SIZE * i + 1] = y + r * sin(phi);
+        _circleVerts[VERT_SIZE * i + 2] = _color.glR;
+        _circleVerts[VERT_SIZE * i + 3] = _color.glG;
+        _circleVerts[VERT_SIZE * i + 4] = _color.glB;
+        _circleVerts[VERT_SIZE * i + 5] = _color.glA;
     }
+    
+    _circleVerts[VERT_SIZE * sides]     = _circleVerts[0];
+    _circleVerts[VERT_SIZE * sides + 1] = _circleVerts[1];
+    _circleVerts[VERT_SIZE * sides + 2] = _color.glR;
+    _circleVerts[VERT_SIZE * sides + 3] = _color.glG;
+    _circleVerts[VERT_SIZE * sides + 4] = _color.glB;
+    _circleVerts[VERT_SIZE * sides + 5] = _color.glA;
 
-    verts[VERT_SIZE * sides]     = verts[0];
-    verts[VERT_SIZE * sides + 1] = verts[1];
-    verts[VERT_SIZE * sides + 2] = _color.glR;
-    verts[VERT_SIZE * sides + 3] = _color.glG;
-    verts[VERT_SIZE * sides + 4] = _color.glB;
-    verts[VERT_SIZE * sides + 5] = _color.glA;
-
-    drawVerts(verts, sides + 1, outline);
-
-    delete[] verts;
+    drawVerts(_circleVerts, sides + 1, outline);
 }
 
 void drawArc(float x, float y, float r, float a, float a1, int sides, bool radians) {
     if (sides == 0 || a == a1) {
         return;
+    } else if (sides > MAX_SIDES) {
+        sides = MAX_SIDES;
     }
 
     if (!radians) {
@@ -315,25 +333,25 @@ void drawArc(float x, float y, float r, float a, float a1, int sides, bool radia
     }
 
     float phi = a;
-    float *verts = new float[VERT_SIZE * (sides + 1)];
 
     for (int i = 0; i <= sides; ++i, phi += angleShift) {
-        verts[VERT_SIZE * i]     = x + r * cos(phi);
-        verts[VERT_SIZE * i + 1] = y + r * sin(phi);
-        verts[VERT_SIZE * i + 2] = _color.glA;
-        verts[VERT_SIZE * i + 3] = _color.glG;
-        verts[VERT_SIZE * i + 4] = _color.glB;
-        verts[VERT_SIZE * i + 5] = _color.glA;
+        _arcVerts[VERT_SIZE * i]     = x + r * cos(phi);
+        _arcVerts[VERT_SIZE * i + 1] = y + r * sin(phi);
+        _arcVerts[VERT_SIZE * i + 2] = _color.glA;
+        _arcVerts[VERT_SIZE * i + 3] = _color.glG;
+        _arcVerts[VERT_SIZE * i + 4] = _color.glB;
+        _arcVerts[VERT_SIZE * i + 5] = _color.glA;
     }
 
-    drawVerts(verts, sides + 1, true);
-    delete[] verts;
+    drawVerts(_arcVerts, sides + 1, true);
 
 }
 
 void drawSlice(float x, float y, float r, float a, float a1, int sides, bool outline, bool radians) {
     if (sides == 0 || a == a1) {
         return;
+    } else if (sides > MAX_SIDES) {
+        sides = MAX_SIDES;
     }
 
     if (!radians) {
@@ -353,25 +371,23 @@ void drawSlice(float x, float y, float r, float a, float a1, int sides, bool out
 
     float phi = a;
     int vertsSize = (sides + 3) * VERT_SIZE;
-    float *verts = new float[vertsSize];
-    verts[0] = verts[vertsSize - VERT_SIZE] = x;
-    verts[1] = verts[vertsSize - 5] = y;
-    verts[2] = verts[vertsSize - 4] = _color.glR;
-    verts[3] = verts[vertsSize - 3] = _color.glG;
-    verts[4] = verts[vertsSize - 2] = _color.glB;
-    verts[5] = verts[vertsSize - 1] = _color.glA;
+    _sliceVerts[0] = _sliceVerts[vertsSize - VERT_SIZE] = x;
+    _sliceVerts[1] = _sliceVerts[vertsSize - 5] = y;
+    _sliceVerts[2] = _sliceVerts[vertsSize - 4] = _color.glR;
+    _sliceVerts[3] = _sliceVerts[vertsSize - 3] = _color.glG;
+    _sliceVerts[4] = _sliceVerts[vertsSize - 2] = _color.glB;
+    _sliceVerts[5] = _sliceVerts[vertsSize - 1] = _color.glA;
 
     for (int i = 0; i <= sides; ++i, phi += angleShift) {
-        verts[VERT_SIZE * (i + 1)] = x + r * cos(phi);
-        verts[VERT_SIZE * (i + 1) + 1] = y + r * sin(phi);
-        verts[VERT_SIZE * (i + 1) + 2] = _color.glA;
-        verts[VERT_SIZE * (i + 1) + 3] = _color.glG;
-        verts[VERT_SIZE * (i + 1) + 4] = _color.glB;
-        verts[VERT_SIZE * (i + 1) + 5] = _color.glA;
+        _sliceVerts[VERT_SIZE * (i + 1)] = x + r * cos(phi);
+        _sliceVerts[VERT_SIZE * (i + 1) + 1] = y + r * sin(phi);
+        _sliceVerts[VERT_SIZE * (i + 1) + 2] = _color.glA;
+        _sliceVerts[VERT_SIZE * (i + 1) + 3] = _color.glG;
+        _sliceVerts[VERT_SIZE * (i + 1) + 4] = _color.glB;
+        _sliceVerts[VERT_SIZE * (i + 1) + 5] = _color.glA;
     }
 
-    drawVerts(verts, sides + 3, outline);
-    delete[] verts;
+    drawVerts(_sliceVerts, sides + 3, outline);
 }
 
 float drawText(const String &txt, float x, float y, float scale, const Color &color, Font *font) {

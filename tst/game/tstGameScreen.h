@@ -50,6 +50,7 @@ private:
     std::vector<Sprite *> _sprs;
     
     RenderTexture *_t;
+    Text *_text;
     
     Stage *_stage;
 };

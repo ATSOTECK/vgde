@@ -31,6 +31,7 @@ ResourceManager *ResourceManager::_resourceManager = null;
 ResourceManager::ResourceManager() {
     setImgPath("res/img");
     setFontPath("res/fnt");
+    _defaultFont = null;
 }
 
 ResourceManager *ResourceManager::instance() {
@@ -129,6 +130,10 @@ Font *ResourceManager::loadFont(const std::string &path) {
         _fontMap[path].count = 1;
     }
     
+    if (_defaultFont == null) {
+        _defaultFont = font;
+    }
+    
     return font;
 }
 
@@ -136,6 +141,10 @@ void ResourceManager::unloadFont(Font *font) {
     for (var [s, r] : _fontMap) {
         if (r.obj == font) {
             if (r.count <= 1) {
+                if (font == _defaultFont) {
+                    _defaultFont = null;
+                }
+                
                 delete font;
                 _fontMap.erase(s);
                 
@@ -146,6 +155,10 @@ void ResourceManager::unloadFont(Font *font) {
             }
         }
     }
+}
+
+Font *ResourceManager::defaultFont() const {
+    return _defaultFont;
 }
 
 void ResourceManager::setResPath(const std::string &path) {

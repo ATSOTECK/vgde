@@ -85,7 +85,7 @@ public:
 	keep bool pauseIfNotFocused() const;
 	void pauseIfNotFocused(bool pause);
 
-	int fps();
+	keep int fps() const;
 	keep int32 frameTime() const;
 	keep float delta() const;
 

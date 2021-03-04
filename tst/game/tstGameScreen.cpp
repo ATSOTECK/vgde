@@ -50,6 +50,9 @@ void TstGameScreen::show() {
     
     _chinese = ResourceManager::instance()->loadFont("SimSun.ttf");
     
+    _text = new Text("我当然还是[red]爱[]你", _chinese);
+    _text->setPosition({100, 100});
+    
     _tv = new Sprite("tv.png");
     _tv->setOrigin(_tv->center());
     _tv->setPosition(_tv->center());
@@ -108,13 +111,13 @@ void TstGameScreen::render(float delta) {
         _tv->rotate(-50.f * delta);
     }
     _tv->draw();
-    
+    /*
     for (var s : _sprs) {
         s->rotate(random(2));
         s->setScale(random(2) / 8);
         s->setOrigin(s->center());
         //s->draw();
-    }
+    }*/
     
     std::string txt = "fps: " + std::to_string(_vgde->fps()) + "\t[blue]" + std::to_string(_vgde->frameTime()) + "ms\n"
                       + "[cyan]" + secondsToHHMMSS((int)_vgde->totalInGameTime());
@@ -126,6 +129,7 @@ void TstGameScreen::render(float delta) {
     drawLine(x, 0, x, 800);
     
     _t->draw();
+    _text->draw();
     
     _stage->act(delta);
     _stage->draw();
@@ -137,6 +141,10 @@ void TstGameScreen::render(float delta) {
     drawArc(mx, my, 45, 90, 180);
     drawArc(mx, my, 35, 180, 270);
     drawArc(mx, my, 45, 270, 360);
+    
+    if (isKeyPressed(vk_f)) {
+        _vgde->debug(_vgde->fps());
+    }
     
     if (isKeyPressed(vk_f12)) {
         _vgde->screenshot();
