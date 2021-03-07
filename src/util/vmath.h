@@ -29,6 +29,7 @@
 #include <cstdarg>
 #include <cstdlib>
 #include <vector>
+#include<type_traits>
 
 #define V_PI  3.14159265358979323846
 #define V_TAU 6.28318530718
@@ -71,14 +72,14 @@ uint8 clampc(uint8 val);
 float degToRad(float val);
 float radToDeg(float val);
 
-/*
 template<typename T>
-T choose(int count, ...) {
+T choose_(int count, T value, ...) {
 	std::vector<T> retVec;
+	retVec.push_back(value);
 	va_list args;
 
-	va_start(args, count);
-	for (int i = 0; i < count; ++i) {
+	va_start(args, value);
+	for (int i = 0; i < count - 1; ++i) {
 		T t = va_arg(args, T);
 		retVec.push_back(t);
 	}
@@ -86,6 +87,7 @@ T choose(int count, ...) {
 
 	return retVec.at(randomi(count));
 }
-*/
+
+#define choose(x, ...) vexec(choose_<std::remove_const<decltype(x)>::type>, x, __VA_ARGS__)
 
 #endif

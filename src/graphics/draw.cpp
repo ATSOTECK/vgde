@@ -157,7 +157,7 @@ Color drawGetColor() {
 void drawSetColor(const Color &c) {
 	_color = c;
 
-	glColor4f(c.glR, c.glG, c.glB, c.glA);
+	glColor4f(c.glR(), c.glG(), c.glB(), c.glA());
 }
 
 Color drawGetClearColor() {
@@ -170,19 +170,18 @@ Color drawGetClearColor() {
 }
 
 void drawSetClearColor(const Color &c) {
-	glClearColor(c.glR, c.glG, c.glB, c.glA);
+	glClearColor(c.glR(), c.glG(), c.glB(), c.glA());
 }
 
 uint8 drawGetAlpha() {
 	Color c = drawGetColor();
 
-	return c.a;
+	return c.a();
 }
 
 void drawSetAlpha(uint8 a) {
 	Color c = drawGetColor();
-	c.a = a;
-	c.glA = (float)a / 255;
+	c.a(a);
 
 	drawSetColor(c);
 }
@@ -215,10 +214,10 @@ void drawVerts(float *verts, int count, bool outline) {
 }
 
 void drawLine(float x, float y, float x1, float y1) {
-	float r = _color.glR;
-	float g = _color.glG;
-	float b = _color.glB;
-	float a = _color.glA;
+	float r = _color.glR();
+	float g = _color.glG();
+	float b = _color.glB();
+	float a = _color.glA();
 
 	float verts[] = {
 		x, y, r, g, b, a,
@@ -233,10 +232,10 @@ void drawLine(const vec2f &pos, const vec2f &pos1) {
 }
 
 void drawRectangle(float x, float y, float w, float h, bool outline) {
-	float r = _color.glR;
-	float g = _color.glG;
-	float b = _color.glB;
-	float a = _color.glA;
+	float r = _color.glR();
+	float g = _color.glG();
+	float b = _color.glB();
+	float a = _color.glA();
 
 	float verts[] = {
             x,     y + h, r, g, b, a,
@@ -294,18 +293,18 @@ void drawCircle(float x, float y, float r, int sides, bool outline) {
     for (int i = 0; i < sides; ++i, phi += angleShift) {
         _circleVerts[VERT_SIZE * i]     = x + r * cos(phi);
         _circleVerts[VERT_SIZE * i + 1] = y + r * sin(phi);
-        _circleVerts[VERT_SIZE * i + 2] = _color.glR;
-        _circleVerts[VERT_SIZE * i + 3] = _color.glG;
-        _circleVerts[VERT_SIZE * i + 4] = _color.glB;
-        _circleVerts[VERT_SIZE * i + 5] = _color.glA;
+        _circleVerts[VERT_SIZE * i + 2] = _color.glR();
+        _circleVerts[VERT_SIZE * i + 3] = _color.glG();
+        _circleVerts[VERT_SIZE * i + 4] = _color.glB();
+        _circleVerts[VERT_SIZE * i + 5] = _color.glA();
     }
     
     _circleVerts[VERT_SIZE * sides]     = _circleVerts[0];
     _circleVerts[VERT_SIZE * sides + 1] = _circleVerts[1];
-    _circleVerts[VERT_SIZE * sides + 2] = _color.glR;
-    _circleVerts[VERT_SIZE * sides + 3] = _color.glG;
-    _circleVerts[VERT_SIZE * sides + 4] = _color.glB;
-    _circleVerts[VERT_SIZE * sides + 5] = _color.glA;
+    _circleVerts[VERT_SIZE * sides + 2] = _color.glR();
+    _circleVerts[VERT_SIZE * sides + 3] = _color.glG();
+    _circleVerts[VERT_SIZE * sides + 4] = _color.glB();
+    _circleVerts[VERT_SIZE * sides + 5] = _color.glA();
 
     drawVerts(_circleVerts, sides + 1, outline);
 }
@@ -337,10 +336,10 @@ void drawArc(float x, float y, float r, float a, float a1, int sides, bool radia
     for (int i = 0; i <= sides; ++i, phi += angleShift) {
         _arcVerts[VERT_SIZE * i]     = x + r * cos(phi);
         _arcVerts[VERT_SIZE * i + 1] = y + r * sin(phi);
-        _arcVerts[VERT_SIZE * i + 2] = _color.glA;
-        _arcVerts[VERT_SIZE * i + 3] = _color.glG;
-        _arcVerts[VERT_SIZE * i + 4] = _color.glB;
-        _arcVerts[VERT_SIZE * i + 5] = _color.glA;
+        _arcVerts[VERT_SIZE * i + 2] = _color.glA();
+        _arcVerts[VERT_SIZE * i + 3] = _color.glG();
+        _arcVerts[VERT_SIZE * i + 4] = _color.glB();
+        _arcVerts[VERT_SIZE * i + 5] = _color.glA();
     }
 
     drawVerts(_arcVerts, sides + 1, true);
@@ -373,18 +372,18 @@ void drawSlice(float x, float y, float r, float a, float a1, int sides, bool out
     int vertsSize = (sides + 3) * VERT_SIZE;
     _sliceVerts[0] = _sliceVerts[vertsSize - VERT_SIZE] = x;
     _sliceVerts[1] = _sliceVerts[vertsSize - 5] = y;
-    _sliceVerts[2] = _sliceVerts[vertsSize - 4] = _color.glR;
-    _sliceVerts[3] = _sliceVerts[vertsSize - 3] = _color.glG;
-    _sliceVerts[4] = _sliceVerts[vertsSize - 2] = _color.glB;
-    _sliceVerts[5] = _sliceVerts[vertsSize - 1] = _color.glA;
+    _sliceVerts[2] = _sliceVerts[vertsSize - 4] = _color.glR();
+    _sliceVerts[3] = _sliceVerts[vertsSize - 3] = _color.glG();
+    _sliceVerts[4] = _sliceVerts[vertsSize - 2] = _color.glB();
+    _sliceVerts[5] = _sliceVerts[vertsSize - 1] = _color.glA();
 
     for (int i = 0; i <= sides; ++i, phi += angleShift) {
         _sliceVerts[VERT_SIZE * (i + 1)] = x + r * cos(phi);
         _sliceVerts[VERT_SIZE * (i + 1) + 1] = y + r * sin(phi);
-        _sliceVerts[VERT_SIZE * (i + 1) + 2] = _color.glA;
-        _sliceVerts[VERT_SIZE * (i + 1) + 3] = _color.glG;
-        _sliceVerts[VERT_SIZE * (i + 1) + 4] = _color.glB;
-        _sliceVerts[VERT_SIZE * (i + 1) + 5] = _color.glA;
+        _sliceVerts[VERT_SIZE * (i + 1) + 2] = _color.glA();
+        _sliceVerts[VERT_SIZE * (i + 1) + 3] = _color.glG();
+        _sliceVerts[VERT_SIZE * (i + 1) + 4] = _color.glB();
+        _sliceVerts[VERT_SIZE * (i + 1) + 5] = _color.glA();
     }
 
     drawVerts(_sliceVerts, sides + 3, outline);

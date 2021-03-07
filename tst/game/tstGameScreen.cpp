@@ -52,6 +52,7 @@ void TstGameScreen::show() {
     
     _text = new Text("我当然还是[red]爱[]你", _chinese);
     _text->setPosition({100, 100});
+    _text->setColor(choose(Color::White, Color::Red, Color::Blue, Color::Black, Color::random()));
     
     _tv = new Sprite("tv.png");
     _tv->setOrigin(_tv->center());

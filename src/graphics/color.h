@@ -26,6 +26,8 @@
 #include "config.h"
 #include "vec.h"
 
+#include <iostream>
+
 struct SimpleColor {
     float r;
     float g;
@@ -57,21 +59,46 @@ public:
     static const Color Turquoise;
     static const Color Transparent;
     static const Color None;
+    
+    static Color random();
 
     Color &operator=(const Color &other);
-
-    uint8 r;
-    uint8 g;
-    uint8 b;
-    uint8 a;
-
-    float glR;
-    float glG;
-    float glB;
-    float glA;
+    
+    void r(uint8 r);
+    keep uint8 r() const;
+    
+    void g(uint8 g);
+    keep uint8 g() const;
+    
+    void b(uint8 b);
+    keep uint8 b() const;
+    
+    void a(uint8 a);
+    keep uint8 a() const;
+    
+    keep float glR() const;
+    keep float glG() const;
+    keep float glB() const;
+    keep float glA() const;
     
 private:
+    uint8 _r;
+    uint8 _g;
+    uint8 _b;
+    uint8 _a;
+    
+    float _glR;
+    float _glG;
+    float _glB;
+    float _glA;
+    
     friend bool operator ==(const Color &lhs, const Color &rhs);
+    friend Color operator +(const Color &lhs, const Color &rhs);
+    friend Color operator -(const Color &lhs, const Color &rhs);
+    friend Color operator *(const Color &lhs, const Color &rhs);
+    
+    friend std::ostream &operator <<(std::ostream &os, Color &color);
+    friend std::ostream &operator <<(std::ostream &os, const Color &color);
     
     bool _valid;
 };
@@ -84,6 +111,9 @@ Color operator *(const Color &lhs, const Color &rhs);
 Color &operator +=(Color &lhs, const Color &rhs);
 Color &operator -=(Color &lhs, const Color &rhs);
 Color &operator *=(Color &lhs, const Color &rhs);
+
+std::ostream &operator <<(std::ostream &os, Color &color);
+std::ostream &operator <<(std::ostream &os, const Color &color);
 
 
 #endif //__VGDE_COLOR_H__

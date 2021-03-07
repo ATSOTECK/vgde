@@ -40,36 +40,40 @@ const Color Color::Transparent(0, 0, 0, 0);
 const Color Color::None(0, 0, 0, 0, false);
 
 Color::Color(uint8 red, uint8 green, uint8 blue, uint8 alpha, bool valid) :
-    r(red),
-    g(green),
-    b(blue),
-    a(alpha),
+    _r(red),
+    _g(green),
+    _b(blue),
+    _a(alpha),
     _valid(valid)
 {
-    glR = (float)r / 255.f;
-    glG = (float)g / 255.f;
-    glB = (float)b / 255.f;
-    glA = (float)a / 255.f;
+    _glR = (float)_r / 255.f;
+    _glG = (float)_g / 255.f;
+    _glB = (float)_b / 255.f;
+    _glA = (float)_a / 255.f;
 }
 
 vec3f Color::vec3gl() const {
-    return {glR, glG, glB};
+    return {_glR, _glG, _glB};
 }
 
 SimpleColor Color::simple() const {
-    return {(float)r / 255.f, (float)g / 255.f, (float)b / 255.f, (float)a / 255.f};
+    return {(float)_r / 255.f, (float)_g / 255.f, (float)_b / 255.f, (float)_a / 255.f};
 }
 
 void Color::set(uint8 red, uint8 green, uint8 blue, uint8 alpha) {
-    r = red;
-    g = green;
-    b = blue;
-    a = alpha;
+    _r = red;
+    _g = green;
+    _b = blue;
+    _a = alpha;
     
-    glR = (float)r / 255.f;
-    glG = (float)g / 255.f;
-    glB = (float)b / 255.f;
-    glA = (float)a / 255.f;
+    _glR = (float)_r / 255.f;
+    _glG = (float)_g / 255.f;
+    _glB = (float)_b / 255.f;
+    _glA = (float)_a / 255.f;
+}
+
+Color Color::random() {
+    return Color(randomi(255), randomi(255), randomi(255));
 }
 
 Color &Color::operator= (const Color &other) {
@@ -77,26 +81,78 @@ Color &Color::operator= (const Color &other) {
         return *this;
     }
 
-    r = other.r;
-    g = other.g;
-    b = other.b;
-    a = other.a;
+    _r = other._r;
+    _g = other._g;
+    _b = other._b;
+    _a = other._a;
 
-    glR = other.glR;
-    glG = other.glG;
-    glB = other.glB;
-    glA = other.glA;
+    _glR = other._glR;
+    _glG = other._glG;
+    _glB = other._glB;
+    _glA = other._glA;
     
     _valid = other._valid;
 
     return *this;
 }
 
+void Color::r(uint8 r) {
+    _r = r;
+    _glR = (float)_r / 255.f;
+}
+
+uint8 Color::r() const {
+    return _r;
+}
+
+void Color::g(uint8 g) {
+    _g = g;
+    _glG = (float)_g / 255.f;
+}
+
+uint8 Color::g() const {
+    return _g;
+}
+
+void Color::b(uint8 b) {
+    _b = b;
+    _glB = (float)_b / 255.f;
+}
+
+uint8 Color::b() const {
+    return _b;
+}
+
+void Color::a(uint8 a) {
+    _a = a;
+    _glA = (float)_a / 255.f;
+}
+
+uint8 Color::a() const {
+    return _a;
+}
+
+float Color::glR() const {
+    return _glR;
+}
+
+float Color::glG() const {
+    return _glG;
+}
+
+float Color::glB() const {
+    return _glB;
+}
+
+float Color::glA() const {
+    return _glA;
+}
+
 bool operator ==(const Color &lhs, const Color &rhs) {
-    return (lhs.r == rhs.r) &&
-           (lhs.g == rhs.g) &&
-           (lhs.b == rhs.b) &&
-           (lhs.a == rhs.a) &&
+    return (lhs._r == rhs._r) &&
+           (lhs._g == rhs._g) &&
+           (lhs._b == rhs._b) &&
+           (lhs._a == rhs._a) &&
            (lhs._valid == rhs._valid);
 }
 
@@ -105,24 +161,24 @@ bool operator !=(const Color &lhs, const Color &rhs) {
 }
 
 Color operator +(const Color &lhs, const Color &rhs) {
-    return Color(clampc(lhs.r + rhs.r),
-                 clampc(lhs.g + rhs.g),
-                 clampc(lhs.b + rhs.b),
-                 clampc(lhs.a + rhs.a));
+    return Color(clampc(lhs._r + rhs._r),
+                 clampc(lhs._g + rhs._g),
+                 clampc(lhs._b + rhs._b),
+                 clampc(lhs._a + rhs._a));
 }
 
 Color operator -(const Color &lhs, const Color &rhs) {
-    return Color(clampc(lhs.r - rhs.r),
-                 clampc(lhs.g - rhs.g),
-                 clampc(lhs.b - rhs.b),
-                 clampc(lhs.a - rhs.a));
+    return Color(clampc(lhs._r - rhs._r),
+                 clampc(lhs._g - rhs._g),
+                 clampc(lhs._b - rhs._b),
+                 clampc(lhs._a - rhs._a));
 }
 
 Color operator *(const Color &lhs, const Color &rhs) {
-    return Color(clampc(lhs.r * rhs.r),
-                 clampc(lhs.g * rhs.g),
-                 clampc(lhs.b * rhs.b),
-                 clampc(lhs.a * rhs.a));
+    return Color(clampc(lhs._r * rhs._r),
+                 clampc(lhs._g * rhs._g),
+                 clampc(lhs._b * rhs._b),
+                 clampc(lhs._a * rhs._a));
 }
 
 Color &operator +=(Color &lhs, const Color &rhs) {
@@ -135,4 +191,16 @@ Color &operator -=(Color &lhs, const Color &rhs) {
 
 Color &operator *=(Color &lhs, const Color &rhs) {
     return lhs = lhs * rhs;
+}
+
+std::ostream &operator <<(std::ostream &os, Color &color) {
+    os << "(" << (int)color._r << ", " << (int)color._g << ", " << (int)color._b << ", " << (int)color._a << ") " << color._valid;
+    
+    return os;
+}
+
+std::ostream &operator <<(std::ostream &os, const Color &color) {
+    os << "(" << (int)color._r << ", " << (int)color._g << ", " << (int)color._b << ", " << (int)color._a << ") " << color._valid;
+    
+    return os;
 }

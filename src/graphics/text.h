@@ -44,6 +44,9 @@ public:
     
     keep int length() const;
     
+    void setColor(const Color &color);
+    keep Color color() const;
+    
     void draw();
 private:
     void calculateVerts();

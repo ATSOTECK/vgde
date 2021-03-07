@@ -69,14 +69,12 @@ Text::Text(const String &str):
 Text::Text(const String &str, Font *font):
     Transform()
 {
-    _position = {200, 100};
     _font = font;
     _shader = new Shader(textVertShader, textFragShader, false);
     glm::mat4 projection = drawGetProjection();
     _shader->setMat4("projection", projection, true);
     _scale = 1.f;
     setText(str);
-    _color = Color::White;
     //calculateVerts();
 }
 
@@ -124,7 +122,19 @@ int Text::length() const {
     return _text.length();
 }
 
+void Text::setColor(const Color &color) {
+    _color = color;
+}
+
+Color Text::color() const {
+    return _color;
+}
+
 void Text::draw() {
+    if (_updateVerts) {
+        calculateVerts();
+    }
+    
     uint vbo = _font->vbo();
     uint ibo = _font->ibo();
     
@@ -162,6 +172,8 @@ void Text::draw() {
 }
 
 void Text::calculateVerts() {
+    _updateVerts = false;
+    
     float x = _position.x;
     float y = _position.y;
     float ox = x;
