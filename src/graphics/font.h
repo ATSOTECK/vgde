@@ -61,9 +61,9 @@ public:
     void getGlyph(uint codePoint, int size, bool bold = false, float outlineThickness = 0);
     Character getChar(int size, uchar32 cp);
 private:
-
-    void *_lib;
-    void *_face;
+    
+    FT_Library _lib;
+    FT_Face _face;
     uint _ibo;
     uint _vao;
     uint _vbo;

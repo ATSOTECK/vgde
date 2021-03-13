@@ -30,3 +30,4 @@ freely, subject to the following restrictions:
   * _vulkan_ is under the Apache License, Version 2.0
   * _OpenAL-Soft_ is under the LGPL license
   * _spdlog_ is under the MIT license
+  * _toml++_ is under the MIT license

@@ -25,6 +25,8 @@
 
 #include "config.h"
 
+#include <iostream>
+
 template<typename T>
 class vec2 {
 public:
@@ -35,7 +37,7 @@ public:
 		//
 	}
 
-	inline vec2(T _x) :
+	inline explicit vec2(T _x) :
 		x(_x),
 		y(_x) 
 	{
@@ -173,6 +175,20 @@ inline bool operator !=(const vec2<T> &lhs, const vec2<T> &rhs) {
 	return !(lhs == rhs);
 }
 
+template <typename T>
+inline std::ostream &operator <<(std::ostream &os, vec2<T> &vec) {
+    os << "(" << vec.x << ", " << vec.y << ")";
+    
+    return os;
+}
+
+template <typename T>
+inline std::ostream &operator <<(std::ostream &os, const vec2<T> &vec) {
+    os << "(" << vec.x << ", " << vec.y << ")";
+    
+    return os;
+}
+
 template<typename T>
 const vec2<T> vec2<T>::Zero(0, 0);
 
@@ -191,7 +207,7 @@ public:
 		//
 	}
 
-	inline vec3(T _x) :
+	inline explicit vec3(T _x) :
 		x(_x),
 		y(_x),
 		z(_x)
@@ -336,6 +352,20 @@ inline bool operator ==(const vec3<T> &lhs, const vec3<T> &rhs) {
 template<typename T>
 inline bool operator !=(const vec3<T> &lhs, const vec3<T> &rhs) {
 	return !(lhs == rhs);
+}
+
+template <typename T>
+inline std::ostream &operator <<(std::ostream &os, vec3<T> &vec) {
+    os << "(" << vec.x << ", " << vec.y << ", " << vec.z << ")";
+    
+    return os;
+}
+
+template <typename T>
+inline std::ostream &operator <<(std::ostream &os, const vec3<T> &vec) {
+    os << "(" << vec.x << ", " << vec.y << ", " << vec.z << ")";
+    
+    return os;
 }
 
 template<typename T>

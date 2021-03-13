@@ -24,35 +24,40 @@
 
 #include "alCall.h"
 #include "config.h"
+#include "vgde.h"
 
 #include <iostream>
 
 AlSoundDevice *AlSoundDevice::_instance = null;
 
 AlSoundDevice::AlSoundDevice() {
+    VGDE *vgde = VGDE::instance();
+    
     //TODO(Skyler): Have the ability to choose the sound device to use?
     _device = alCall(alcOpenDevice(null)); //Default sound device.
     if (_device == null) {
-        vgderr("Failed to get sound device!");
+        vgde->vError("Failed to get sound device!");
     }
     
     _context = alCall(alcCreateContext(_device, null));
     if (_context == null) {
-        vgderr("Failed to set sound context!");
+        vgde->vError("Failed to set sound context!");
     }
     
     if (!alcMakeContextCurrent(_context)) {
-        vgderr("Failed to make the context current!");
+        vgde->error("Failed to make the context current!");
     }
     
     const ALCchar *name = null;
     if (alcIsExtensionPresent(_device, "ALC_ENUMERATE_ALL_EXT")) {
         name = alcGetString(_device, ALC_ALL_DEVICES_SPECIFIER);
-    } else if (name == null || alcGetError(_device) != AL_NO_ERROR) {
+    }
+    
+    if (name == null || alcGetError(_device) != AL_NO_ERROR) {
         name = alcGetString(_device, ALC_DEVICE_SPECIFIER);
     }
     
-    db("Opened '" << name << "'");
+    vgde->vDebug("Opened '{}'", name);
 }
 
 AlSoundDevice *AlSoundDevice::instance() {

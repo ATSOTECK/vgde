@@ -33,11 +33,11 @@ Font::Font(const std::string &fnt) {
 
 Font::~Font() {
     if (_face) {
-        FT_Done_Face((FT_Face)_face);
+        FT_Done_Face(_face);
     }
     
     if (_lib) {
-        FT_Done_FreeType((FT_Library)_lib);
+        FT_Done_FreeType(_lib);
     }
 }
 
@@ -46,29 +46,24 @@ void Font::loadFont(const std::string &filename) {
     _face = null;
     _loaded = false;
     
-    FT_Library ft;
-    if (FT_Init_FreeType(&ft)) {
+    if (FT_Init_FreeType(&_lib)) {
         VGDE::instance()->vError("Could not init freetype!");
         return;
     }
-    _lib = ft;
-
-    FT_Face face;
-    if (FT_New_Face(ft, filename.c_str(), 0, &face)) {
+    
+    if (FT_New_Face(_lib, filename.c_str(), 0, &_face)) {
         VGDE::instance()->vError("Failed to load font!");
         return;
     }
 
-    FT_Set_Pixel_Sizes(face, 0, DEFAULT_FONT_SIZE);
+    FT_Set_Pixel_Sizes(_face, 0, DEFAULT_FONT_SIZE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     
-    if (FT_Select_Charmap(face, FT_ENCODING_UNICODE)) {
+    if (FT_Select_Charmap(_face, FT_ENCODING_UNICODE)) {
         VGDE::instance()->vError("Unable to load font \"{}\" failed to set the unicode charset.", filename);
-        FT_Done_Face(face);
+        FT_Done_Face(_face);
         return;
     }
-    
-    _face = face;
     
     _size = 24;
     auto chars = std::map<uchar32, Character>();
@@ -243,16 +238,14 @@ bool Font::loaded() const {
 }
 
 void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness) {
-    FT_Face face = (FT_Face)_face;
-    
     //auto cp = FT_Get_Char_Index(face, codePoint);
     
-    if (FT_Set_Pixel_Sizes(face, 0, size)) {
-        VGDE::instance()->vError("Failed to set size! {}", size);
+    if (FT_Set_Pixel_Sizes(_face, 0, size)) {
+        VGDE::instance()->vError("Failed to set font size! {}", size);
         return;
     }
     
-    if (FT_Load_Char(face, codePoint, FT_LOAD_RENDER)) {
+    if (FT_Load_Char(_face, codePoint, FT_LOAD_RENDER)) {
         VGDE::instance()->vError("Failed to load glyph! {}", codePoint);
         return;
     }
@@ -261,8 +254,8 @@ void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness)
     uint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width, face->glyph->bitmap.rows,
-                 0, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, _face->glyph->bitmap.width, _face->glyph->bitmap.rows,
+                 0, GL_RED, GL_UNSIGNED_BYTE, _face->glyph->bitmap.buffer);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -271,9 +264,9 @@ void Font::getGlyph(uint codePoint, int size, bool bold, float outlineThickness)
 
     Character character = {
             texture,
-            {(int)face->glyph->bitmap.width, (int)face->glyph->bitmap.rows},
-            {face->glyph->bitmap_left, face->glyph->bitmap_top},
-            (uint)face->glyph->advance.x
+            {(int)_face->glyph->bitmap.width, (int)_face->glyph->bitmap.rows},
+            {_face->glyph->bitmap_left, _face->glyph->bitmap_top},
+            (uint)_face->glyph->advance.x
     };
     _charMap[_size].insert_or_assign(codePoint, character);
 }

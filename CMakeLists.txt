@@ -510,7 +510,8 @@ set(sources
         src/audio/al/alSoundBuffer.h
         src/util/vcontainer.h
         src/graphics/text.cpp
-        src/graphics/text.h)
+        src/graphics/text.h
+        include/toml.hpp)
 
 add_executable(vgde_exe
         main.cpp

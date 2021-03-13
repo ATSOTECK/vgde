@@ -61,6 +61,7 @@ Text::Text(const String &str):
     _shader = new Shader(textVertShader, textFragShader, false);
     glm::mat4 projection = drawGetProjection();
     _shader->setMat4("projection", projection, true);
+    ResourceManager::instance()->addShader(_shader);
     _scale = 1.f;
     setText(str);
     //calculateVerts();
@@ -73,6 +74,7 @@ Text::Text(const String &str, Font *font):
     _shader = new Shader(textVertShader, textFragShader, false);
     glm::mat4 projection = drawGetProjection();
     _shader->setMat4("projection", projection, true);
+    ResourceManager::instance()->addShader(_shader);
     _scale = 1.f;
     setText(str);
     //calculateVerts();
@@ -84,6 +86,9 @@ Text::~Text() {
     }
     
     _verts.clear();
+    
+    _shader->stop();
+    ResourceManager::instance()->removeShader(_shader);
 }
 
 void Text::setText(const String &txt) {

@@ -67,9 +67,26 @@ int main() {
 }
 */
 
+#include <fstream>
+#define TOML_EXCEPTIONS 0
+#include <toml.hpp>
+
 int main() {
     SetConsoleOutputCP(CP_UTF8);
-    //AlSoundDevice *al = AlSoundDevice::instance();
+    AlSoundDevice *al = AlSoundDevice::instance();
+    
+    toml::parse_result result = toml::parse_file("../tst.toml");
+    if (!result) {
+        db("error");
+        return 0;
+    }
+    
+    var table = result.table();
+    db(table);
+    var opt = table["vgde"]["fullscreen"].value<bool>();
+    if (opt.has_value()) {
+        db(opt.value());
+    }
     
     //return 0;
     ResourceManager::instance()->setResPath("../res");

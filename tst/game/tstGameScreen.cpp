@@ -120,7 +120,7 @@ void TstGameScreen::render(float delta) {
         //s->draw();
     }*/
     
-    std::string txt = "fps: " + std::to_string(_vgde->fps()) + "\t[blue]" + std::to_string(_vgde->frameTime()) + "ms\n"
+    std::string txt = "fps: " + std::to_string(_vgde->fps()) + "\t[blue]" + std::to_string(_vgde->frameTimeMS()) + "ms\n"
                       + "[cyan]" + secondsToHHMMSS((int)_vgde->totalInGameTime());
     drawText(txt, 0, 0, 1, Color::Green);
     
@@ -144,7 +144,7 @@ void TstGameScreen::render(float delta) {
     drawArc(mx, my, 45, 270, 360);
     
     if (isKeyPressed(vk_f)) {
-        _vgde->debug(_vgde->fps());
+        _vgde->debug(delta);
     }
     
     if (isKeyPressed(vk_f12)) {

@@ -92,7 +92,23 @@ VGDE::VGDE() :
     _textureSlots(0),
     _rm(null)
 {
-	//
+    var consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    
+    _consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    _fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("log.txt", true);
+    
+    _vgdeLogger = std::make_shared<spdlog::logger>(spdlog::logger("vgde", {consoleSink, _fileSink}));
+    _logger = std::make_shared<spdlog::logger>(spdlog::logger("game", {_consoleSink, _fileSink}));
+    _loggerDebug = false;
+    
+    _loggerPattern = "[%I:%M:%S %p] [%n] [%^%l%$] %v";
+    spdlog::set_default_logger(_logger);
+    spdlog::set_pattern(_loggerPattern.stdString());
+    _vgdeLogger->set_pattern(_loggerPattern.stdString());
+#ifdef VDEBUG
+    showVGDEDebugMessages();
+    showDebugMessages();
+#endif
 }
 
 VGDE *VGDE::instance() {
@@ -116,24 +132,6 @@ int VGDE::init(int width, int height, const std::string &title, bool fullScreen)
 		vWarn("VGDE is already initialized!");
 		return 0;
 	}
-    
-    var consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
- 
-	_consoleSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-	_fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("log.txt", true);
-	
-    _vgdeLogger = std::make_shared<spdlog::logger>(spdlog::logger("vgde", {consoleSink, _fileSink}));
-    _logger = std::make_shared<spdlog::logger>(spdlog::logger("game", {_consoleSink, _fileSink}));
-    _loggerDebug = false;
-    
-    _loggerPattern = "[%I:%M:%S %p] [%n] [%^%l%$] %v";
-	spdlog::set_default_logger(_logger);
-    spdlog::set_pattern(_loggerPattern.stdString());
-    _vgdeLogger->set_pattern(_loggerPattern.stdString());
-#ifdef VDEBUG
-    showVGDEDebugMessages();
-    showDebugMessages();
-#endif
 
 	glfwSetErrorCallback(glfwErrorCallback);
 
@@ -222,8 +220,8 @@ void VGDE::postRender() {
 	glfwPollEvents();
 
 	++_frames;
-    _frameTime = _clock.restart().asMilliseconds();
-	_delta = _frameTime / 1000.f; //Convert frame time to seconds.
+    _frameTime = _clock.restart().asMicroseconds();
+	_delta = _frameTime / 1000000.f; //Convert frame time to seconds.
     
     if (Clock::timeAsMilliseconds() >= (_time + 1000)) {
         _time = Clock::timeAsMilliseconds();
@@ -341,8 +339,12 @@ int VGDE::fps() const {
     return _frameRate;
 }
 
-int32 VGDE::frameTime() const {
+int64 VGDE::frameTime() const {
     return _frameTime;
+}
+
+int32 VGDE::frameTimeMS() const {
+    return _frameTime / 1000;
 }
 
 float VGDE::delta() const {
@@ -391,7 +393,7 @@ void VGDE::screenshot() {
     
     delete[] data;
     
-    //TODO(Skyler): Is there anyway to make this faster?
+    //TODO(Skyler): Is there any way to make this faster?
     std::thread([=]{
         stbi_write_png(name.c_str(), w, h, 4, pixels, 0);
     

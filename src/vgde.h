@@ -86,7 +86,8 @@ public:
 	void pauseIfNotFocused(bool pause);
 
 	keep int fps() const;
-	keep int32 frameTime() const;
+	keep int64 frameTime() const;
+	keep int32 frameTimeMS() const;
 	keep float delta() const;
 
 	keep float inGameTime() const;
@@ -243,7 +244,7 @@ private:
 	int _frameRate;
 	int _time;
 	Clock _clock;
-	uint32 _frameTime;
+	int64 _frameTime;
 	float _delta;
 	float _startTime;
 	float _totalInGameTime;
